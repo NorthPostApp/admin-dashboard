@@ -1,0 +1,13 @@
+@import "../index.css";
+
+.sidebar-menu__button {
+  @apply hover:cursor-pointer;
+}
+
+.sidebar-group__label {
+  @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:cursor-pointer text-sm;
+}
+
+.sidebar-collapsible__chevron {
+  @apply ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90;
+}
