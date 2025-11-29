@@ -1,13 +1,14 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import RegionProvider from "@/contexts/RegionContext";
 
 export default function AppLayout() {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main>
+    <RegionProvider>
+      <SidebarProvider>
+        <AppSidebar />
         <SidebarTrigger />
-      </main>
-    </SidebarProvider>
+      </SidebarProvider>
+    </RegionProvider>
   );
 }

@@ -37,7 +37,7 @@ export function AppSidebar() {
               >
                 <SidebarGroup>
                   <SidebarGroupLabel asChild className="group/label sidebar-group__label">
-                    <CollapsibleTrigger>
+                    <CollapsibleTrigger asChild>
                       <SidebarMenuButton className="sidebar-menu__button">
                         {service.icon && <service.icon />}
                         <span>{service.title}</span>
