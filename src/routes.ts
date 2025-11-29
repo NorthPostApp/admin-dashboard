@@ -5,5 +5,6 @@ export const router = createBrowserRouter([
   {
     path: "/",
     Component: AppLayout,
+    // children: [{ path: "addresses" }],
   },
 ]);
