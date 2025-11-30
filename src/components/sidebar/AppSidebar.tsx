@@ -10,6 +10,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenuSub,
+  SidebarProvider,
 } from "@/components/ui/sidebar";
 import {
   Collapsible,
@@ -20,7 +21,7 @@ import {
 import { SERVICE_CATALOG } from "@/consts/service-catalog";
 import "./AppSidebar.css";
 
-export function AppSidebar() {
+export default function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader />
@@ -71,3 +72,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+export { SidebarProvider };

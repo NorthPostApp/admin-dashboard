@@ -1,4 +1,4 @@
-@import "../index.css";
+@import "../../index.css";
 
 .header {
   @apply w-full flex items-center justify-between py-3;

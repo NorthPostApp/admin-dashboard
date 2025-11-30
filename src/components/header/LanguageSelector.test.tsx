@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { screen, fireEvent, getByText } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import LanguageSelector from "./LanguageSelector";
 import { SUPPORTED_LANGUAGES } from "@/consts/app-config";
 import { renderWithProviders } from "@/lib/test-wrappers";

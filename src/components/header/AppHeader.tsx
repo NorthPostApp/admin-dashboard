@@ -1,6 +1,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import LanguageSelector from "@/components/LanguageSelector";
+import LanguageSelector from "@/components/header/LanguageSelector";
 import ThemeSelector from "./ThemeSelector";
 import "./AppHeader.css";
 
