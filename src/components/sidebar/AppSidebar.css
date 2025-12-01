@@ -11,3 +11,7 @@
 .sidebar-collapsible__chevron {
   @apply ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90;
 }
+
+.sidebar-menu__button__active {
+  @apply font-semibold underline transition-all duration-100;
+}

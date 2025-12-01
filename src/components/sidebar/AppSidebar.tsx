@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/collapsible";
 
 import { SERVICE_CATALOG } from "@/consts/service-catalog";
+import { NavLink } from "react-router";
 import "./AppSidebar.css";
 
 export default function AppSidebar() {
@@ -51,11 +52,20 @@ export default function AppSidebar() {
                       <SidebarMenuSub>
                         {service.contents.map((content) => (
                           <SidebarMenuItem key={service.title + content.name}>
-                            <SidebarMenuButton
-                              asChild
-                              onClick={() => console.log(content.name)}
-                            >
-                              <a className="hover:cursor-pointer">{content.name}</a>
+                            <SidebarMenuButton asChild>
+                              <NavLink to={content.path}>
+                                {({ isActive }) => {
+                                  return (
+                                    <span
+                                      className={
+                                        isActive ? "sidebar-menu__button__active" : ""
+                                      }
+                                    >
+                                      {content.name}
+                                    </span>
+                                  );
+                                }}
+                              </NavLink>
                             </SidebarMenuButton>
                           </SidebarMenuItem>
                         ))}
