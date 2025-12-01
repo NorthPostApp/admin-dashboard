@@ -8,6 +8,7 @@ interface Service {
 
 interface ServiceContent {
   name: string;
+  path: string;
 }
 
 export const SERVICE_CATALOG: Service[] = [
@@ -15,9 +16,10 @@ export const SERVICE_CATALOG: Service[] = [
     title: "Address Service",
     icon: BookA,
     contents: [
-      { name: "View Addresses" },
-      { name: "Address Requests" },
-      { name: "Lookup & Create" },
+      { name: "Overview", path: "/addresses/overview" },
+      { name: "View Addresses", path: "/addresses/view" },
+      { name: "Address Requests", path: "/addresses/requests" },
+      { name: "Create New Address", path: "/addresses/create" },
     ],
   },
 ];
