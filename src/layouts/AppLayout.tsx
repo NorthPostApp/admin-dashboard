@@ -12,7 +12,9 @@ export default function AppLayout() {
         </nav>
         <main className="flex flex-col w-full">
           <AppHeader />
-          <Outlet />
+          <div className="flex-1 w-full text-center">
+            <Outlet />
+          </div>
         </main>
       </SidebarProvider>
     </AppContextProvider>

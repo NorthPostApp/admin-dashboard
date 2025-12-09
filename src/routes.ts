@@ -21,7 +21,7 @@ export const router = createBrowserRouter([
           { path: "view", Component: ViewAddresses },
           { path: "requests", Component: AddressRequests },
           { path: "create", Component: CreateAddresses },
-          { path: "overview", Component: CreateAddresses },
+          { path: "overview", Component: AddressOverview },
         ],
       },
     ],
