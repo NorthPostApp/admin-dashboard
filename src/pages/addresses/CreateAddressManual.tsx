@@ -21,7 +21,7 @@ export default function CreateAddressesManual() {
   // display section basically displays rendered card
   return (
     <form className="flex flex-col justify-between w-full max-w-140 text-left">
-      <FieldGroup className="flex-1">
+      <FieldGroup>
         <FieldSet>
           <FieldLegend>Basic Info</FieldLegend>
           <FieldDescription>
@@ -91,7 +91,7 @@ export default function CreateAddressesManual() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <Field>
-                <FieldLabel htmlFor="postalCode">Postal Code (Optional)</FieldLabel>
+                <FieldLabel htmlFor="postalCode">Postal Code</FieldLabel>
                 <Input id="postalCode" placeholder="e.g. 347900" />
               </Field>
               <Field>
