@@ -1,24 +1,24 @@
 import { SUPPORTED_LANGUAGES } from "@/consts/app-config";
 import * as z from "zod";
 
-// const AddressItem = z.object({});
-
 const Address = z.object({
-  city: z.string(),
-  country: z.string(),
-  line1: z.string(),
-  line2: z.string().optional(),
-  buildingName: z.string().optional(),
+  city: z.string().min(1, { error: "City field should't be empty." }),
+  country: z.string().min(1, { error: "Country field should't be empty." }),
+  line1: z.string().min(1, { error: "Line1 field should't be empty." }),
+  line2: z.string(),
+  buildingName: z.string(),
   postalCode: z.string(),
-  region: z.string(),
+  region: z.string().min(1, { error: "Region field should't be empty." }),
 });
 
 const NewAddressRequest = z.object({
   language: z.enum(SUPPORTED_LANGUAGES),
-  name: z.string(),
-  tags: z.array(z.string()),
-  briefIntroduction: z.string(),
+  name: z.string().min(1, { error: "Name field shouldn't be empty." }),
+  tags: z.array(z.string()).min(1, { error: "Please provide at least one tag." }),
+  briefIntroduction: z.string().refine((value) => value.split(" ").length >= 5, {
+    error: "The brief introduction should have at least 5 words",
+  }),
   address: Address,
 });
 
-export { NewAddressRequest };
+export { NewAddressRequest, Address };

@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>north-post-admin</title>
+    <script>
+      // initial theme loading to avoid page loading blink
+      const LOCALSTORAGE_KEY = "northpost";
+      const root = window.document.documentElement;
+      root.classList.remove("light", "dark");
+      const localAppConfig = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}");
+      const localTheme = localAppConfig["theme"];
+      if (!localTheme || localTheme === "system") {
+        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        root.classList.add(systemTheme);
+      } else {
+        root.classList.add(localTheme);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

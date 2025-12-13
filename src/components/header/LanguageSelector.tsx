@@ -6,14 +6,13 @@ import {
   SelectValue,
   SelectContent,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { useAppContext } from "@/hooks/useAppContext";
 
 export default function LanguageSelector() {
   const { language, updateLanguage } = useAppContext();
   return (
     <section className="header-selector">
-      <Label>Service Language</Label>
+      <p>Service Language</p>
       <Select
         defaultValue={language}
         onValueChange={(value) => updateLanguage(value as Language)}
