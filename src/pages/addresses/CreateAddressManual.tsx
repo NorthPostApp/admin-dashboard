@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import InputAndButton from "@/components/address/InputAndButton";
 import TagBadge from "@/components/address/TagBadge";
+import { createNewAddress } from "@/api/address";
 
 type FormFields =
   | Exclude<keyof z.infer<typeof NewAddressRequest>, "address">
@@ -30,7 +31,7 @@ export default function CreateAddressesManual() {
       language: language,
       name: "",
       tags: [] as string[],
-      briefIntroduction: "",
+      briefIntro: "",
       address: {
         buildingName: "",
         line1: "",
@@ -45,9 +46,9 @@ export default function CreateAddressesManual() {
     validators: {
       onDynamic: NewAddressRequest,
     },
-    // onSubmit: async ({ value }) => {
-    // console.log(value); // replace this with a real logic
-    // },
+    onSubmit: async ({ value }) => {
+      createNewAddress(value);
+    },
   });
 
   const handleAddTag = (value: string | undefined) => {
@@ -182,7 +183,7 @@ export default function CreateAddressesManual() {
             })}
             {getTagField()}
             {getFormTextField({
-              fieldName: "briefIntroduction",
+              fieldName: "briefIntro",
               label: "Brief Introduction",
               placeholder: "A Russian playwright and short-story writer.",
               type: "textarea",

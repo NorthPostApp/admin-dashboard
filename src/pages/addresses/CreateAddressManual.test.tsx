@@ -9,6 +9,10 @@ vi.mock("@/hooks/useAppContext", () => ({
   })),
 }));
 
+vi.mock("@/api/address", () => ({
+  createNewAddress: vi.fn(),
+}));
+
 describe("CreateAddressesManual", () => {
   beforeEach(() => {
     vi.clearAllMocks();

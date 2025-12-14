@@ -15,7 +15,7 @@ const NewAddressRequest = z.object({
   language: z.enum(SUPPORTED_LANGUAGES),
   name: z.string().min(1, { error: "Name field shouldn't be empty." }),
   tags: z.array(z.string()).min(1, { error: "Please provide at least one tag." }),
-  briefIntroduction: z.string().refine((value) => value.split(" ").length >= 5, {
+  briefIntro: z.string().refine((value) => value.trim().length > 5, {
     error: "The brief introduction should have at least 5 words",
   }),
   address: Address,
