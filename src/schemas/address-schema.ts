@@ -5,9 +5,9 @@ const Address = z.object({
   city: z.string().min(1, { error: "City field should't be empty." }),
   country: z.string().min(1, { error: "Country field should't be empty." }),
   line1: z.string().min(1, { error: "Line1 field should't be empty." }),
-  line2: z.string(),
-  buildingName: z.string(),
-  postalCode: z.string(),
+  line2: z.string().catch(""),
+  buildingName: z.string().catch(""),
+  postalCode: z.string().catch(""),
   region: z.string().min(1, { error: "Region field should't be empty." }),
 });
 

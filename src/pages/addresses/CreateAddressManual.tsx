@@ -1,8 +1,9 @@
 import type z from "zod";
 import { useEffect } from "react";
 import { useForm, revalidateLogic } from "@tanstack/react-form";
-import { useAppContext } from "@/hooks/useAppContext";
+import { createNewAddress } from "@/api/address";
 import { Address, NewAddressRequest } from "@/schemas/address-schema";
+import { useAppContext } from "@/hooks/useAppContext";
 import {
   Field,
   FieldDescription,
@@ -18,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import InputAndButton from "@/components/address/InputAndButton";
 import TagBadge from "@/components/address/TagBadge";
-import { createNewAddress } from "@/api/address";
+import CreateFromJsonDialog from "./CreateFromJsonDialog";
 
 type FormFields =
   | Exclude<keyof z.infer<typeof NewAddressRequest>, "address">
@@ -60,10 +61,25 @@ export default function CreateAddressesManual() {
     const filteredTags = Array.from(new Set([...tags, ...prevTags]));
     form.setFieldValue("tags", filteredTags);
   };
+
   const handleRemoveTag = (tag: string) => {
     const prevTags = form.getFieldValue("tags");
     const newTags = prevTags.filter((currTag) => currTag != tag);
     form.setFieldValue("tags", newTags);
+  };
+
+  const handleJsonImport = (formData: z.infer<typeof NewAddressRequest>) => {
+    form.setFieldValue("language", formData.language);
+    form.setFieldValue("name", formData.name);
+    form.setFieldValue("tags", formData.tags);
+    form.setFieldValue("briefIntro", formData.briefIntro);
+    form.setFieldValue("address.buildingName", formData.address.buildingName);
+    form.setFieldValue("address.line1", formData.address.line1);
+    form.setFieldValue("address.line2", formData.address.line2);
+    form.setFieldValue("address.city", formData.address.city);
+    form.setFieldValue("address.region", formData.address.region);
+    form.setFieldValue("address.postalCode", formData.address.postalCode);
+    form.setFieldValue("address.country", formData.address.country);
   };
 
   // Reusable function to get to convert form's text field into UI elements
@@ -133,6 +149,7 @@ export default function CreateAddressesManual() {
                 id="tags"
                 data-testid="address-form-tag__input"
                 placeholder="Add tags (separate multiple with ;)"
+                buttonSize="icon"
                 onButtonClick={handleAddTag}
               />
               {field.state.value.length > 0 && (
@@ -171,7 +188,10 @@ export default function CreateAddressesManual() {
     >
       <FieldGroup className="address-content__form__group">
         <FieldSet>
-          <FieldLegend>Basic Info</FieldLegend>
+          <FieldLegend>
+            <span>Basic Info</span>
+            <CreateFromJsonDialog handleJsonImport={handleJsonImport} />
+          </FieldLegend>
           <FieldDescription>
             Provide the basic infomation of the person. These fields are important for
             indexing and searching in the database.
@@ -237,7 +257,7 @@ export default function CreateAddressesManual() {
             })}
           </div>
         </FieldSet>
-        <FieldSeparator />
+        <FieldSeparator className="address-content__form__separator" />
         <Field orientation="horizontal">
           <Button type="submit" className="address-content__form__submit">
             Submit

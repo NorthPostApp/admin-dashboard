@@ -9,7 +9,23 @@
 }
 
 .address-content__manual {
-  @apply flex-1 flex justify-center overflow-y-auto;
+  @apply flex-1 flex justify-center overflow-y-auto px-5;
+}
+
+.address-content__dialog__trigger {
+  @apply mx-2 text-xs opacity-50 underline hover:opacity-90 focus:ring-0;
+}
+
+.address-content__dialog__content {
+  @apply sm:max-w-[600px];
+}
+
+.address-content__dialog__warning {
+  @apply text-destructive text-sm;
+}
+
+.address-content__dialog__textarea {
+  @apply h-70;
 }
 
 .address-content__form {
@@ -37,5 +53,5 @@
 }
 
 .address-content__form__submit {
-  @apply mx-auto w-full;
+  @apply mx-auto w-full mb-6;
 }

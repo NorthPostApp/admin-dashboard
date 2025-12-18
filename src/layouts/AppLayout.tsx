@@ -10,7 +10,7 @@ export default function AppLayout() {
         <nav>
           <AppSidebar />
         </nav>
-        <main className="flex flex-col w-full h-svh">
+        <main className="relative flex flex-col w-full h-svh">
           <AppHeader />
           <div className="flex-1 flex w-full text-center max-h-full overflow-y-auto">
             <Outlet />

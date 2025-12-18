@@ -1,5 +1,5 @@
-import type { NewAddressRequest } from "@/schemas/address-schema";
 import type z from "zod";
+import type { NewAddressRequest } from "@/schemas/address-schema";
 
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 const TOKEN = import.meta.env.VITE_BEARER_TOKEN;
