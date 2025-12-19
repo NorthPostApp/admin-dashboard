@@ -33,14 +33,12 @@ type FormFields =
 
 export default function CreateAddressesManual() {
   const { language } = useAppContext();
-  const mutation = useCreateNewAddressMutation();
-  const submitPending = mutation.isPending;
 
   const form = useForm({
     defaultValues: {
       ...getDefaultForm(language),
     } satisfies ZodNewAddressRequest,
-    validationLogic: revalidateLogic({ mode: "blur" }),
+    validationLogic: revalidateLogic({ mode: "blur" }), // validate when focus out the field
     validators: {
       onDynamic: NewAddressRequest,
     },
@@ -48,6 +46,15 @@ export default function CreateAddressesManual() {
       mutation.mutate(value);
     },
   });
+
+  // The clean up function that clean up all fields once
+  // new address created successfully
+  const cleanupFn = () => {
+    form.reset();
+  };
+
+  const mutation = useCreateNewAddressMutation(cleanupFn);
+  const submitPending = mutation.isPending;
 
   const handleAddTag = (value: string | undefined) => {
     if (!value || value.length === 0) {

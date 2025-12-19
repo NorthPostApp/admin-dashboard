@@ -1,7 +1,8 @@
 import { describe, vi, it, expect, beforeEach } from "vitest";
 import { fireEvent, screen, waitFor } from "@testing-library/react";
-import CreateAddressesManual from "./CreateAddressManual";
+import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 import { renderWithProviders } from "@/lib/test-wrappers";
+import CreateAddressesManual from "./CreateAddressManual";
 
 vi.mock("@/hooks/useAppContext", () => ({
   useAppContext: vi.fn(() => ({
@@ -13,9 +14,22 @@ vi.mock("@/api/address", () => ({
   createNewAddress: vi.fn(),
 }));
 
+vi.mock("@/hooks/mutations/useCreateNewAddressMutation", () => ({
+  useCreateNewAddressMutation: vi.fn(),
+}));
+
+const mockMutate = vi.fn();
+
 describe("CreateAddressesManual", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useCreateNewAddressMutation).mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+      isError: false,
+      isSuccess: false,
+      error: null,
+    } as never);
   });
 
   it("renders the form with all required fields", () => {
@@ -163,4 +177,45 @@ describe("CreateAddressesManual", () => {
       expect(preventDefaultSpy).toHaveBeenCalled();
     });
   });
+
+  it("create address from JSON", async () => {
+    renderWithProviders(<CreateAddressesManual />);
+    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    fireEvent.click(triggerButton);
+    const textarea = screen.getByRole("textbox");
+    const validJson = JSON.stringify(mockData);
+    fireEvent.change(textarea, { target: { value: validJson } });
+    const saveButton = screen.getByRole("button", { name: /save changes/i });
+    fireEvent.click(saveButton);
+    await waitFor(() => {
+      expect(screen.getByText(/mockIntroData/i)).toBeTruthy();
+    });
+  });
+
+  it("shows loading state when mutation is pending", () => {
+    vi.mocked(useCreateNewAddressMutation).mockReturnValue({
+      mutate: mockMutate,
+      isPending: true,
+      isError: false,
+      isSuccess: false,
+      error: null,
+    } as never);
+    renderWithProviders(<CreateAddressesManual />);
+    const submitButton = screen.getByRole("button", { name: /loading/i });
+    expect(submitButton).toBeTruthy();
+    expect(submitButton).toHaveProperty("disabled", true);
+  });
 });
+
+const mockData = {
+  name: "name",
+  briefIntro: "mockIntroData",
+  tags: ["a", "b", "c"],
+  address: {
+    city: "city",
+    country: "russia",
+    line1: "line1",
+    postalCode: "347900",
+    region: "region",
+  },
+};

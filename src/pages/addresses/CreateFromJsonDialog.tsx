@@ -45,10 +45,8 @@ export default function CreateFromJsonDialog({
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
-        console.error(error.message);
       } else {
         setErrorMessage(String(error));
-        console.error(error);
       }
     }
   };
@@ -77,7 +75,12 @@ export default function CreateFromJsonDialog({
           id="json-content"
         />
         {errorMessage.length > 0 && (
-          <p className="address-content__dialog__warning">{errorMessage}</p>
+          <p
+            className="address-content__dialog__warning"
+            data-testid="address-content__dialog__warning"
+          >
+            {errorMessage}
+          </p>
         )}
         <DialogFooter>
           <DialogClose asChild>
