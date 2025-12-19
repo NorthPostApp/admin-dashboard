@@ -12,7 +12,6 @@ export default function LanguageSelector() {
   const { language, updateLanguage } = useAppContext();
   return (
     <section className="header-selector">
-      <p>Service Language</p>
       <Select
         defaultValue={language}
         onValueChange={(value) => updateLanguage(value as Language)}

@@ -18,7 +18,6 @@ export default function ThemeSelector() {
   const { theme, updateTheme } = useAppContext();
   return (
     <section className="header-selector">
-      <p>Theme</p>
       <Select defaultValue={theme} onValueChange={(value) => updateTheme(value as Theme)}>
         <SelectTrigger className="header-selector__trigger">
           {getIcon(theme)}

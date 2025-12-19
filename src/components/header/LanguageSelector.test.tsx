@@ -5,11 +5,6 @@ import { SUPPORTED_LANGUAGES } from "@/consts/app-config";
 import { renderWithProviders } from "@/lib/test-wrappers";
 
 describe("LanguageSelector", () => {
-  it("renders language selector with label", () => {
-    renderWithProviders(<LanguageSelector />);
-    expect(screen.getByText("Service Language")).toBeTruthy();
-  });
-
   it("displays the current language in the trigger", () => {
     renderWithProviders(<LanguageSelector />);
     const trigger = screen.getByRole("combobox");

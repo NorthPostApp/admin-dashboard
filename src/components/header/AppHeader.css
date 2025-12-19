@@ -13,5 +13,5 @@
 }
 
 .header-selector__trigger {
-  @apply focus-visible:ring-0 w-20;
+  @apply focus-visible:ring-0 w-18;
 }

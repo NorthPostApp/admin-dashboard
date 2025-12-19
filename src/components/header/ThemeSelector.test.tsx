@@ -15,11 +15,6 @@ vi.mock("lucide-react", async (importOriginal) => {
 });
 
 describe("ThemeSelector", () => {
-  it("renders theme selector with label", () => {
-    renderWithProviders(<ThemeSelector />);
-    expect(screen.getByText("Theme")).toBeTruthy();
-  });
-
   it("renders all theme options from THEMES constant", () => {
     renderWithProviders(<ThemeSelector />);
     const trigger = screen.getByRole("combobox");
