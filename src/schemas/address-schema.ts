@@ -1,4 +1,4 @@
-import { SUPPORTED_LANGUAGES } from "@/consts/app-config";
+import { SUPPORTED_LANGUAGES, type Language } from "@/consts/app-config";
 import * as z from "zod";
 
 const Address = z.object({
@@ -21,4 +21,25 @@ const NewAddressRequest = z.object({
   address: Address,
 });
 
-export { NewAddressRequest, Address };
+type ZodNewAddressRequest = z.infer<typeof NewAddressRequest>;
+
+// Create an empty form with the current language setting
+const getDefaultForm = (language: Language) => {
+  return {
+    language: language,
+    name: "",
+    tags: [] as string[],
+    briefIntro: "",
+    address: {
+      buildingName: "",
+      line1: "",
+      line2: "",
+      city: "",
+      region: "",
+      postalCode: "",
+      country: "",
+    },
+  };
+};
+
+export { NewAddressRequest, Address, getDefaultForm, type ZodNewAddressRequest };

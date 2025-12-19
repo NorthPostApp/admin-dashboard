@@ -1,9 +1,15 @@
 import type z from "zod";
 import { useEffect } from "react";
 import { useForm, revalidateLogic } from "@tanstack/react-form";
-import { createNewAddress } from "@/api/address";
-import { Address, NewAddressRequest } from "@/schemas/address-schema";
+import {
+  Address,
+  NewAddressRequest,
+  getDefaultForm,
+  type ZodNewAddressRequest,
+} from "@/schemas/address-schema";
 import { useAppContext } from "@/hooks/useAppContext";
+import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
+import CreateFromJsonDialog from "@/pages/addresses/CreateFromJsonDialog";
 import {
   Field,
   FieldDescription,
@@ -14,41 +20,32 @@ import {
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
+import InputAndButton from "@/components/address/InputAndButton";
+import TagBadge from "@/components/address/TagBadge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import InputAndButton from "@/components/address/InputAndButton";
-import TagBadge from "@/components/address/TagBadge";
-import CreateFromJsonDialog from "./CreateFromJsonDialog";
+import { Spinner } from "@/components/ui/spinner";
 
 type FormFields =
-  | Exclude<keyof z.infer<typeof NewAddressRequest>, "address">
+  | Exclude<keyof ZodNewAddressRequest, "address">
   | `address.${keyof z.infer<typeof Address>}`;
 
 export default function CreateAddressesManual() {
   const { language } = useAppContext();
+  const mutation = useCreateNewAddressMutation();
+  const submitPending = mutation.isPending;
+
   const form = useForm({
     defaultValues: {
-      language: language,
-      name: "",
-      tags: [] as string[],
-      briefIntro: "",
-      address: {
-        buildingName: "",
-        line1: "",
-        line2: "",
-        city: "",
-        region: "",
-        postalCode: "",
-        country: "",
-      },
-    } satisfies z.infer<typeof NewAddressRequest>,
+      ...getDefaultForm(language),
+    } satisfies ZodNewAddressRequest,
     validationLogic: revalidateLogic({ mode: "blur" }),
     validators: {
       onDynamic: NewAddressRequest,
     },
-    onSubmit: async ({ value }) => {
-      createNewAddress(value);
+    onSubmit: ({ value }) => {
+      mutation.mutate(value);
     },
   });
 
@@ -68,7 +65,7 @@ export default function CreateAddressesManual() {
     form.setFieldValue("tags", newTags);
   };
 
-  const handleJsonImport = (formData: z.infer<typeof NewAddressRequest>) => {
+  const handleJsonImport = (formData: ZodNewAddressRequest) => {
     form.setFieldValue("language", formData.language);
     form.setFieldValue("name", formData.name);
     form.setFieldValue("tags", formData.tags);
@@ -259,8 +256,13 @@ export default function CreateAddressesManual() {
         </FieldSet>
         <FieldSeparator className="address-content__form__separator" />
         <Field orientation="horizontal">
-          <Button type="submit" className="address-content__form__submit">
-            Submit
+          <Button
+            type="submit"
+            className="address-content__form__submit"
+            disabled={submitPending}
+          >
+            {submitPending && <Spinner />}
+            {submitPending ? "Loading" : "Submit"}
           </Button>
         </Field>
       </FieldGroup>

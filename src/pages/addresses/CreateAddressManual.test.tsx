@@ -91,7 +91,7 @@ describe("CreateAddressesManual", () => {
   it("adds a single tag when add button is clicked", async () => {
     renderWithProviders(<CreateAddressesManual />);
     const tagInput = screen.getByTestId("address-form-tag__input");
-    const addButton = screen.getByTestId("input-and-button__button"); // Third button is the add button
+    const addButton = screen.getByTestId("input-and-button__button");
     fireEvent.change(tagInput, { target: { value: "writer" } });
     fireEvent.click(addButton);
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe("CreateAddressesManual", () => {
 
   it("add button is clicked with empty input", async () => {
     renderWithProviders(<CreateAddressesManual />);
-    const addButton = screen.getByTestId("input-and-button__button"); // Third button is the add button
+    const addButton = screen.getByTestId("input-and-button__button");
     fireEvent.click(addButton);
     // await waitFor(() => {
     //   expect(screen.getByText("writer")).toBeTruthy();

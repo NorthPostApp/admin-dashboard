@@ -1,5 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { useRef, useState } from "react";
 import { useAppContext } from "@/hooks/useAppContext";
+import { NewAddressRequest, type ZodNewAddressRequest } from "@/schemas/address-schema";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,12 +13,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useRef, useState } from "react";
-import { NewAddressRequest } from "@/schemas/address-schema";
-import type z from "zod";
 
 type CreateFromJsonDialogProps = {
-  handleJsonImport: (formData: z.infer<typeof NewAddressRequest>) => void;
+  handleJsonImport: (formData: ZodNewAddressRequest) => void;
 };
 
 export default function CreateFromJsonDialog({
@@ -27,6 +26,7 @@ export default function CreateFromJsonDialog({
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  // parse JSON content, throws error when parsing / model inference failed
   const parseContent = () => {
     try {
       setErrorMessage("");
@@ -47,6 +47,7 @@ export default function CreateFromJsonDialog({
         setErrorMessage(error.message);
         console.error(error.message);
       } else {
+        setErrorMessage(String(error));
         console.error(error);
       }
     }
