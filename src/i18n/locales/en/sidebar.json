@@ -1,0 +1,10 @@
+{
+  "application": "Application",
+  "addressService": {
+    "title": "Address Service",
+    "overview": "Overview",
+    "viewAddresses": "View Addresses",
+    "addressRequests": "Address Requests",
+    "newAddress": "Create New Address"
+  }
+}

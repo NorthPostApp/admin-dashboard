@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslation } from "react-i18next";
 
 type CreateFromJsonDialogProps = {
   handleJsonImport: (formData: ZodNewAddressRequest) => void;
@@ -22,6 +23,7 @@ export default function CreateFromJsonDialog({
   handleJsonImport,
 }: CreateFromJsonDialogProps) {
   const { language } = useAppContext();
+  const { t } = useTranslation("address:newAddress");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -55,7 +57,7 @@ export default function CreateFromJsonDialog({
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button variant="link" size="sm" className="address-content__dialog__trigger">
-          Create from JSON
+          {t("json.trigger")}
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -63,11 +65,8 @@ export default function CreateFromJsonDialog({
         container={document.querySelector("main") ?? undefined}
       >
         <DialogHeader>
-          <DialogTitle>Parse address from JSON</DialogTitle>
-          <DialogDescription>
-            Paste a JSON object containing address data. The form fields will be
-            automatically populated with the parsed values.
-          </DialogDescription>
+          <DialogTitle>{t("json.title")}</DialogTitle>
+          <DialogDescription>{t("json.description")}</DialogDescription>
         </DialogHeader>
         <Textarea
           ref={textAreaRef}
@@ -84,9 +83,9 @@ export default function CreateFromJsonDialog({
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{t("json.cancel")}</Button>
           </DialogClose>
-          <Button onClick={parseContent}>Save changes</Button>
+          <Button onClick={parseContent}>{t("json.save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

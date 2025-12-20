@@ -18,20 +18,20 @@ describe("CreateFromJsonDialog", () => {
 
   it("should render the trigger button", () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     expect(triggerButton).toBeTruthy();
   });
 
   it("should open dialog when trigger button is clicked", () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     expect(screen.getByText(/parse address from json/i)).toBeTruthy();
   });
 
   it("should close dialog when cancel button is clicked", async () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     const cancelButton = screen.getByRole("button", { name: /cancel/i });
     fireEvent.click(cancelButton);
@@ -42,7 +42,7 @@ describe("CreateFromJsonDialog", () => {
 
   it("should parse valid JSON and call handleJsonImport", async () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     const textarea = screen.getByRole("textbox");
     const validJson = JSON.stringify(mockData);
@@ -56,7 +56,7 @@ describe("CreateFromJsonDialog", () => {
 
   it("should display error message for invalid JSON", async () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     const textarea = screen.getByRole("textbox");
     const invalidJson = "{ invalid json }";
@@ -71,7 +71,7 @@ describe("CreateFromJsonDialog", () => {
 
   it("should display ZodError message when validation fails", async () => {
     renderWithProviders(<CreateFromJsonDialog handleJsonImport={mockHandleJsonImport} />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     const textarea = screen.getByRole("textbox");
     fireEvent.change(textarea, { target: { value: mockInvalidData } });

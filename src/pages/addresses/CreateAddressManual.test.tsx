@@ -163,8 +163,8 @@ describe("CreateAddressesManual", () => {
     fireEvent.change(line1Input, { target: { value: "112 Darsan Hill Road" } });
     const cityInput = screen.getByPlaceholderText("e.g. Yalta");
     fireEvent.change(cityInput, { target: { value: "Yalta" } });
-    const regionInput = screen.getByPlaceholderText("e.g. Taurida Governorate");
-    fireEvent.change(regionInput, { target: { value: "Taurida Governorate" } });
+    const regionInput = screen.getByPlaceholderText("e.g. Taurine Governorate");
+    fireEvent.change(regionInput, { target: { value: "Taurine Governorate" } });
     const countryInput = screen.getByPlaceholderText("e.g. Russian Empire");
     fireEvent.change(countryInput, { target: { value: "Russian Empire" } });
     // Submit the form
@@ -180,7 +180,7 @@ describe("CreateAddressesManual", () => {
 
   it("create address from JSON", async () => {
     renderWithProviders(<CreateAddressesManual />);
-    const triggerButton = screen.getByRole("button", { name: /create from json/i });
+    const triggerButton = screen.getByRole("button", { name: /import from json/i });
     fireEvent.click(triggerButton);
     const textarea = screen.getByRole("textbox");
     const validJson = JSON.stringify(mockData);

@@ -1,6 +1,7 @@
 import type z from "zod";
 import { useEffect } from "react";
 import { useForm, revalidateLogic } from "@tanstack/react-form";
+import { useTranslation } from "react-i18next";
 import {
   Address,
   NewAddressRequest,
@@ -33,6 +34,7 @@ type FormFields =
 
 export default function CreateAddressesManual() {
   const { language } = useAppContext();
+  const { t } = useTranslation("address:newAddress");
 
   const form = useForm({
     defaultValues: {
@@ -148,25 +150,23 @@ export default function CreateAddressesManual() {
           const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
           return (
             <Field className="address-content__form__field">
-              <FieldLabel htmlFor="tags">Tags</FieldLabel>
+              <FieldLabel htmlFor="tags">{t("form.basicInfo.tags.label")}</FieldLabel>
               <InputAndButton
                 id="tags"
                 data-testid="address-form-tag__input"
-                placeholder="Add tags (separate multiple with ;)"
+                placeholder={t("form.basicInfo.tags.placeholder")}
                 buttonSize="icon"
                 onButtonClick={handleAddTag}
               />
               {field.state.value.length > 0 && (
                 <div className="address-content__form__tags">
-                  {field.state.value.map((tag) => {
-                    return (
-                      <TagBadge
-                        key={tag}
-                        value={tag}
-                        onRemoveTag={() => handleRemoveTag(tag)}
-                      />
-                    );
-                  })}
+                  {field.state.value.map((tag) => (
+                    <TagBadge
+                      key={tag}
+                      value={tag}
+                      onRemoveTag={() => handleRemoveTag(tag)}
+                    />
+                  ))}
                 </div>
               )}
               {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -193,71 +193,64 @@ export default function CreateAddressesManual() {
       <FieldGroup className="address-content__form__group">
         <FieldSet>
           <FieldLegend>
-            <span>Basic Info</span>
+            <span>{t("form.basicInfo.legend")}</span>
             <CreateFromJsonDialog handleJsonImport={handleJsonImport} />
           </FieldLegend>
-          <FieldDescription>
-            Provide the basic infomation of the person. These fields are important for
-            indexing and searching in the database.
-          </FieldDescription>
+          <FieldDescription>{t("form.basicInfo.description")}</FieldDescription>
           <FieldGroup className="address-content__form__group">
             {getFormTextField({
               fieldName: "name",
-              label: "Name",
-              placeholder: "e.g. Anton Chekhov",
+              label: t("form.basicInfo.name.label"),
+              placeholder: t("form.basicInfo.name.placeholder"),
             })}
             {getTagField()}
             {getFormTextField({
               fieldName: "briefIntro",
-              label: "Brief Introduction",
-              placeholder: "A Russian playwright and short-story writer.",
+              label: t("form.basicInfo.briefIntro.label"),
+              placeholder: t("form.basicInfo.briefIntro.placeholder"),
               type: "textarea",
             })}
           </FieldGroup>
         </FieldSet>
         <FieldSeparator className="address-content__form__separator" />
         <FieldSet>
-          <FieldLegend>Address</FieldLegend>
-          <FieldDescription>
-            Provide the person's address. It doesn't necessary to be an very accurate
-            address but should at least reflect the era and the region the person
-            living/lived in.
-          </FieldDescription>
+          <FieldLegend>{t("form.address.legend")}</FieldLegend>
+          <FieldDescription>{t("form.address.description")}</FieldDescription>
           {getFormTextField({
             fieldName: "address.buildingName",
-            label: "Building Name (Optional)",
-            placeholder: "e.g. White Dacha",
+            label: t("form.address.buildingName.label"),
+            placeholder: t("form.address.buildingName.placeholder"),
           })}
           {getFormTextField({
             fieldName: "address.line1",
-            label: "Line 1",
-            placeholder: "e.g. 112 Darsan Hill Road",
+            label: t("form.address.line1.label"),
+            placeholder: t("form.address.line1.placeholder"),
           })}
           {getFormTextField({
             fieldName: "address.line2",
-            label: "Line 2",
-            placeholder: "e.g. (Near Autka Settlement)",
+            label: t("form.address.line2.label"),
+            placeholder: t("form.address.line2.placeholder"),
           })}
           <div className="grid grid-cols-2 gap-4">
             {getFormTextField({
               fieldName: "address.city",
-              label: "City",
-              placeholder: "e.g. Yalta",
+              label: t("form.address.city.label"),
+              placeholder: t("form.address.city.placeholder"),
             })}
             {getFormTextField({
               fieldName: "address.region",
-              label: "Region",
-              placeholder: "e.g. Taurida Governorate",
+              label: t("form.address.region.label"),
+              placeholder: t("form.address.region.placeholder"),
             })}
             {getFormTextField({
               fieldName: "address.postalCode",
-              label: "Postal Code",
-              placeholder: "e.g. 347900",
+              label: t("form.address.postalCode.label"),
+              placeholder: t("form.address.postalCode.placeholder"),
             })}
             {getFormTextField({
               fieldName: "address.country",
-              label: "Country",
-              placeholder: "e.g. Russian Empire",
+              label: t("form.address.country.label"),
+              placeholder: t("form.address.country.placeholder"),
             })}
           </div>
         </FieldSet>
@@ -269,7 +262,7 @@ export default function CreateAddressesManual() {
             disabled={submitPending}
           >
             {submitPending && <Spinner />}
-            {submitPending ? "Loading" : "Submit"}
+            {submitPending ? t("form.loading") : t("form.submit")}
           </Button>
         </Field>
       </FieldGroup>

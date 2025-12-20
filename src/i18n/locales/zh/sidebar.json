@@ -1,0 +1,10 @@
+{
+  "application": "应用服务列表",
+  "addressService": {
+    "title": "地址服务",
+    "overview": "概览",
+    "viewAddresses": "查看地址",
+    "addressRequests": "地址请求",
+    "newAddress": "创建新地址"
+  }
+}

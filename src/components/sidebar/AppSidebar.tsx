@@ -21,19 +21,21 @@ import {
 import { SERVICE_CATALOG } from "@/consts/service-catalog";
 import { NavLink } from "react-router";
 import "./AppSidebar.css";
+import { useTranslation } from "react-i18next";
 
 export default function AppSidebar() {
+  const { t } = useTranslation("sidebar");
   return (
     <Sidebar>
       <SidebarHeader />
       <SidebarGroup>
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        <SidebarGroupLabel>{t("application")}</SidebarGroupLabel>
         <SidebarMenu>
           {SERVICE_CATALOG.map((service) => {
             return (
               <Collapsible
-                key={service.title}
-                title={service.title}
+                key={service.titleKey}
+                title={service.titleKey}
                 defaultOpen
                 className="group/collapsible"
               >
@@ -42,7 +44,9 @@ export default function AppSidebar() {
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton className="sidebar-menu__button">
                         {service.icon && <service.icon />}
-                        <span>{service.title}</span>
+                        <span data-testid={`sidebar-${service.titleKey}`}>
+                          {t(`${service.titleKey}.title`)}
+                        </span>
                         <ChevronRight className="sidebar-collapsible__chevron" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -51,17 +55,18 @@ export default function AppSidebar() {
                     <SidebarGroupContent>
                       <SidebarMenuSub>
                         {service.contents.map((content) => (
-                          <SidebarMenuItem key={service.title + content.name}>
+                          <SidebarMenuItem key={service.titleKey + content.i18nKey}>
                             <SidebarMenuButton asChild>
                               <NavLink to={content.path}>
                                 {({ isActive }) => {
                                   return (
                                     <span
+                                      data-testid={`sidebar-${service.titleKey}-${content.i18nKey}`}
                                       className={
                                         isActive ? "sidebar-menu__button__active" : ""
                                       }
                                     >
-                                      {content.name}
+                                      {t(`${service.titleKey}.${content.i18nKey}`)}
                                     </span>
                                   );
                                 }}

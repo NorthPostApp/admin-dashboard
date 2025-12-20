@@ -1,4 +1,5 @@
 import { beforeEach, vi } from "vitest";
+import "../i18n/config";
 export * from "@testing-library/react";
 
 // Mocking local storage implementation

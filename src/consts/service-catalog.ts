@@ -1,25 +1,25 @@
 import { BookA, type LucideIcon } from "lucide-react";
 
 interface Service {
-  title: string;
+  titleKey: string;
   icon?: LucideIcon;
   contents: ServiceContent[];
 }
 
 interface ServiceContent {
-  name: string;
+  i18nKey: string;
   path: string;
 }
 
 export const SERVICE_CATALOG: Service[] = [
   {
-    title: "Address Service",
+    titleKey: "addressService",
     icon: BookA,
     contents: [
-      { name: "Overview", path: "/addresses/overview" },
-      { name: "View Addresses", path: "/addresses/view" },
-      { name: "Address Requests", path: "/addresses/requests" },
-      { name: "Create New Address", path: "/addresses/create" },
+      { i18nKey: "overview", path: "/addresses/overview" },
+      { i18nKey: "viewAddresses", path: "/addresses/view" },
+      { i18nKey: "addressRequests", path: "/addresses/requests" },
+      { i18nKey: "newAddress", path: "/addresses/create" },
     ],
   },
 ];

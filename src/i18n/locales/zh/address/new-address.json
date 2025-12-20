@@ -1,0 +1,66 @@
+{
+  "tabs": {
+    "prompt": "提示词",
+    "manual": "手动添加"
+  },
+  "form": {
+    "basicInfo": {
+      "legend": "基本信息",
+      "description": "提供人物的基本信息。这些字段有助于数据库中的索引和搜索。",
+      "name": {
+        "label": "姓名",
+        "placeholder": "例如：契诃夫"
+      },
+      "tags": {
+        "label": "标签",
+        "placeholder": "添加标签（多个标签用 ; 分隔）"
+      },
+      "briefIntro": {
+        "label": "简介",
+        "placeholder": "俄国剧作家和短篇小说作家。"
+      }
+    },
+    "address": {
+      "legend": "地址",
+      "description": "提供人物的地址。地址不必非常精确，但应该反映该人物生活/曾经生活的时代和地区。",
+      "buildingName": {
+        "label": "建筑名称（可选）",
+        "placeholder": "例如：白色别墅"
+      },
+      "line1": {
+        "label": "街道",
+        "placeholder": "例如：达尔桑山路112号"
+      },
+      "line2": {
+        "label": "地址注释或单元号",
+        "placeholder": "例如：（阿特玛定居点附近）"
+      },
+      "city": {
+        "label": "城市",
+        "placeholder": "例如：雅尔塔"
+      },
+      "region": {
+        "label": "地区",
+        "placeholder": "例如：陶里德省"
+      },
+      "postalCode": {
+        "label": "邮政编码",
+        "placeholder": "例如：347900"
+      },
+      "country": {
+        "label": "国家",
+        "placeholder": "例如：俄罗斯帝国"
+      }
+    },
+    "submit": "提交",
+    "loading": "加载中",
+    "importFromJson": "从 JSON 导入"
+  },
+  "json": {
+    "trigger": "从 JSON 导入",
+    "title": "JSON 地址解析",
+    "description": "粘贴包含地址数据的JSON数据。表单内容将在解析后自动填充。",
+    "cancel": "取消",
+    "save": "保存更改"
+  }
+}

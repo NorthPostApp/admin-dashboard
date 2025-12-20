@@ -1,13 +1,16 @@
 import { useState, useEffect, createContext } from "react";
+import { useTranslation } from "react-i18next";
 import {
   getCountryAddressFormat,
-  LOCALSTORAGE_KEY,
+  DEFAULT_LANGUAGE,
+  DEFAULT_THEME,
+  getLocalAppConfig,
+  updateLocalAppConfig,
   type AddressFormat,
   type Language,
   type Theme,
 } from "@/consts/app-config";
 
-// Types
 interface AppContextType {
   theme: Theme;
   language: Language;
@@ -16,29 +19,16 @@ interface AppContextType {
   updateTheme: (newTheme: Theme) => void;
 }
 
-interface AppConfigLocalstorageType {
-  language?: Language;
-  theme?: Theme;
-}
-
 type ServiceInfo = {
   language: Language;
   addressFormat: AddressFormat;
 };
 
-const DEFAULT_LANGUAGE: Language = "EN";
-const DEFAULT_THEME: Theme = "system";
-
 // Check local AppConfig, if localStorage or field miss, fill default value
-const updateLocalStorage = (newAppConfig: AppConfigLocalstorageType) => {
-  localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(newAppConfig));
-};
-const localAppConfig: AppConfigLocalstorageType = JSON.parse(
-  localStorage.getItem(LOCALSTORAGE_KEY) || "{}"
-);
+const localAppConfig = getLocalAppConfig();
 if (!localAppConfig["language"]) {
   localAppConfig["language"] = DEFAULT_LANGUAGE;
-  updateLocalStorage(localAppConfig);
+  updateLocalAppConfig(localAppConfig);
 }
 if (!localAppConfig["theme"]) {
   localAppConfig["theme"] = DEFAULT_THEME;
@@ -58,6 +48,7 @@ const AppContext = createContext<AppContextType>({
 });
 
 export default function AppContextProvider({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation();
   // wrap region and address information into a single state to avoid
   // unnecessary re-renderings
   const [serviceInfo, setServiceInfo] = useState<ServiceInfo>({
@@ -73,20 +64,20 @@ export default function AppContextProvider({ children }: { children: React.React
       addressFormat: getCountryAddressFormat(newLanguage),
     }));
     localAppConfig["language"] = newLanguage;
-    updateLocalStorage(localAppConfig);
+    i18n.changeLanguage(newLanguage.toLowerCase());
+    updateLocalAppConfig(localAppConfig);
   };
 
   const updateTheme = (newTheme: Theme) => {
     setTheme(newTheme);
     localAppConfig["theme"] = newTheme;
-    updateLocalStorage(localAppConfig);
+    updateLocalAppConfig(localAppConfig);
   };
 
   // use an useEffect hook to control theme
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
-
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
@@ -96,6 +87,11 @@ export default function AppContextProvider({ children }: { children: React.React
     }
     root.classList.add(theme);
   }, [theme]);
+
+  // use an useEffect hook to control html lang setting, to apply different font style
+  useEffect(() => {
+    document.documentElement.lang = serviceInfo.language.toLowerCase(); // test
+  }, [serviceInfo.language]);
 
   return (
     <AppContext.Provider

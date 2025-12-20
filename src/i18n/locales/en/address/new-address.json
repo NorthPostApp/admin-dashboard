@@ -1,0 +1,65 @@
+{
+  "tabs": {
+    "prompt": "Prompt",
+    "manual": "Manual"
+  },  
+  "form": {
+    "basicInfo": {
+      "legend": "Basic Info",
+      "description": "Provide the basic information of the person. These fields are important for indexing and searching in the database.",
+      "name": {
+        "label": "Name",
+        "placeholder": "e.g. Anton Chekhov"
+      },
+      "tags": {
+        "label": "Tags",
+        "placeholder": "Add tags (separate multiple with ;)"
+      },
+      "briefIntro": {
+        "label": "Brief Introduction",
+        "placeholder": "A Russian playwright and short-story writer."
+      }
+    },
+    "address": {
+      "legend": "Address",
+      "description": "Provide the person's address. It doesn't necessary to be an very accurate address but should at least reflect the era and the region the person living/lived in.",
+      "buildingName": {
+        "label": "Building Name (Optional)",
+        "placeholder": "e.g. White Dacha"
+      },
+      "line1": {
+        "label": "Line 1",
+        "placeholder": "e.g. 112 Darsan Hill Road"
+      },
+      "line2": {
+        "label": "Line 2",
+        "placeholder": "e.g. (Near Atma Settlement)"
+      },
+      "city": {
+        "label": "City",
+        "placeholder": "e.g. Yalta"
+      },
+      "region": {
+        "label": "Region",
+        "placeholder": "e.g. Taurine Governorate"
+      },
+      "postalCode": {
+        "label": "Postal Code",
+        "placeholder": "e.g. 347900"
+      },
+      "country": {
+        "label": "Country",
+        "placeholder": "e.g. Russian Empire"
+      }
+    },
+    "submit": "Submit",
+    "loading": "Loading"
+  },
+  "json": {
+    "trigger": "Import from JSON",
+    "title": "Parse address from JSON",
+    "description": "Paste a JSON object containing address data. The form fields will be automatically populated with the parsed values.",
+    "cancel": "Cancel",
+    "save": "Save changes"
+  }
+}

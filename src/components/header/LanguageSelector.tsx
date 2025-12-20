@@ -10,6 +10,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 
 export default function LanguageSelector() {
   const { language, updateLanguage } = useAppContext();
+
   return (
     <section className="header-selector">
       <Select
