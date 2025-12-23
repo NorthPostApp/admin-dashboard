@@ -1,7 +1,7 @@
 @import "../../index.css";
 
 .address-tab {
-  @apply flex-1;
+  @apply flex-1 max-h-full overflow-y-auto;
 }
 
 .address-tab__list {

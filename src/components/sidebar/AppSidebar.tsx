@@ -1,3 +1,6 @@
+import { NavLink } from "react-router";
+import { useTranslation } from "react-i18next";
+import { SERVICE_CATALOG } from "@/consts/service-catalog";
 import { ChevronRight } from "lucide-react";
 import {
   Sidebar,
@@ -5,10 +8,10 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarGroupContent,
   SidebarMenuSub,
   SidebarProvider,
 } from "@/components/ui/sidebar";
@@ -17,19 +20,17 @@ import {
   CollapsibleTrigger,
   CollapsibleContent,
 } from "@/components/ui/collapsible";
-
-import { SERVICE_CATALOG } from "@/consts/service-catalog";
-import { NavLink } from "react-router";
 import "./AppSidebar.css";
-import { useTranslation } from "react-i18next";
 
 export default function AppSidebar() {
   const { t } = useTranslation("sidebar");
   return (
-    <Sidebar>
+    <Sidebar className="sidebar" collapsible="icon">
       <SidebarHeader />
       <SidebarGroup>
-        <SidebarGroupLabel>{t("application")}</SidebarGroupLabel>
+        <SidebarGroupLabel className="sidebar-group__label">
+          {t("application")}
+        </SidebarGroupLabel>
         <SidebarMenu>
           {SERVICE_CATALOG.map((service) => {
             return (
@@ -39,45 +40,42 @@ export default function AppSidebar() {
                 defaultOpen
                 className="group/collapsible"
               >
-                <SidebarGroup>
-                  <SidebarGroupLabel asChild className="group/label sidebar-group__label">
-                    <CollapsibleTrigger asChild>
-                      <SidebarMenuButton className="sidebar-menu__button">
-                        {service.icon && <service.icon />}
-                        <span data-testid={`sidebar-${service.titleKey}`}>
-                          {t(`${service.titleKey}.title`)}
-                        </span>
-                        <ChevronRight className="sidebar-collapsible__chevron" />
-                      </SidebarMenuButton>
-                    </CollapsibleTrigger>
-                  </SidebarGroupLabel>
-                  <CollapsibleContent>
-                    <SidebarGroupContent>
-                      <SidebarMenuSub>
-                        {service.contents.map((content) => (
-                          <SidebarMenuItem key={service.titleKey + content.i18nKey}>
-                            <SidebarMenuButton asChild>
-                              <NavLink to={content.path}>
-                                {({ isActive }) => {
-                                  return (
-                                    <span
-                                      data-testid={`sidebar-${service.titleKey}-${content.i18nKey}`}
-                                      className={
-                                        isActive ? "sidebar-menu__button__active" : ""
-                                      }
-                                    >
-                                      {t(`${service.titleKey}.${content.i18nKey}`)}
-                                    </span>
-                                  );
-                                }}
-                              </NavLink>
-                            </SidebarMenuButton>
-                          </SidebarMenuItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </SidebarGroupContent>
-                  </CollapsibleContent>
-                </SidebarGroup>
+                <CollapsibleTrigger asChild>
+                  <SidebarMenuButton className="sidebar-menu__button">
+                    {service.icon && <service.icon />}
+                    <span
+                      data-testid={`sidebar-${service.titleKey}`}
+                      className="sidebar-menu__button__text"
+                    >
+                      {t(`${service.titleKey}.title`)}
+                    </span>
+                    <ChevronRight className="sidebar-collapsible__chevron" />
+                  </SidebarMenuButton>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    {service.contents.map((content) => (
+                      <SidebarMenuSubItem key={service.titleKey + content.i18nKey}>
+                        <SidebarMenuSubButton asChild>
+                          <NavLink to={content.path}>
+                            {({ isActive }) => {
+                              return (
+                                <span
+                                  data-testid={`sidebar-${service.titleKey}-${content.i18nKey}`}
+                                  className={
+                                    isActive ? "sidebar-menu__button__active" : ""
+                                  }
+                                >
+                                  {t(`${service.titleKey}.${content.i18nKey}`)}
+                                </span>
+                              );
+                            }}
+                          </NavLink>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    ))}
+                  </SidebarMenuSub>
+                </CollapsibleContent>
               </Collapsible>
             );
           })}

@@ -5,6 +5,8 @@ import AppSidebar, { SidebarProvider } from "@/components/sidebar/AppSidebar";
 import AppHeader from "@/components/header/AppHeader";
 import { Toaster } from "@/components/ui/sonner";
 
+import "./AppLayout.css";
+
 const queryClient = new QueryClient();
 
 export default function AppLayout() {
@@ -15,10 +17,12 @@ export default function AppLayout() {
           <nav>
             <AppSidebar />
           </nav>
-          <main className="relative flex flex-col w-full h-svh">
+          <main className="applayout-main">
             <AppHeader />
-            <div className="flex-1 flex w-full text-center max-h-full overflow-y-auto">
-              <Outlet />
+            <div className="applayout-body__outer">
+              <div className="applayout-body__inner">
+                <Outlet />
+              </div>
             </div>
             <Toaster position="bottom-right" />
           </main>

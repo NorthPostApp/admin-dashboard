@@ -1,11 +1,15 @@
 @import "../../index.css";
 
+.sidebar {
+  @apply border-none;
+}
+
 .sidebar-menu__button {
-  @apply hover:cursor-pointer;
+  @apply hover:cursor-pointer z-20;
 }
 
 .sidebar-group__label {
-  @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:cursor-pointer text-sm;
+  @apply min-w-40 overflow-hidden text-xs;
 }
 
 .sidebar-collapsible__chevron {
@@ -14,4 +18,8 @@
 
 .sidebar-menu__button__active {
   @apply font-semibold underline transition-all duration-100;
+}
+
+.sidebar-menu__button__text {
+  @apply min-w-40;
 }

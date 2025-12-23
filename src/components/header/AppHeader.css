@@ -1,11 +1,15 @@
 @import "../../index.css";
 
 .header {
-  @apply w-full flex items-center justify-between py-3 px-5;
+  @apply w-full flex items-center justify-between py-1.5 px-5;
 }
 
 .header-configs {
   @apply flex gap-3 h-full;
+}
+
+.header-sidebar__trigger {
+  @apply z-10;
 }
 
 .header-selector {
@@ -13,5 +17,5 @@
 }
 
 .header-selector__trigger {
-  @apply focus-visible:ring-0 w-18;
+  @apply focus-visible:ring-0 w-18 h-8 text-sm;
 }
