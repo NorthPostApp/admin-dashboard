@@ -7,7 +7,7 @@ import "./AppHeader.css";
 export default function AppHeader() {
   return (
     <header className="header">
-      <SidebarTrigger />
+      <SidebarTrigger className="header-sidebar__trigger" />
       <section className="header-configs">
         <LanguageSelector />
         <Separator orientation="vertical" />
