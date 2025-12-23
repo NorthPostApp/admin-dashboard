@@ -55,6 +55,15 @@
     "submit": "Submit",
     "loading": "Loading"
   },
+  "errors": {
+    "cityField": "City field shouldn't be empty",
+    "countryField": "Country field shouldn't be empty",
+    "line1Field": "Line1 field shouldn't be empty",
+    "regionField": "Region field shouldn't be empty",
+    "nameField": "Name field shouldn't be empty",
+    "tagsField": "Please provide at least one tag",
+    "briefIntroField": "The brief introduction should have at least 5 words"
+  },
   "json": {
     "trigger": "Import from JSON",
     "title": "Parse address from JSON",

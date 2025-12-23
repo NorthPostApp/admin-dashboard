@@ -48,7 +48,7 @@ const AppContext = createContext<AppContextType>({
 });
 
 export default function AppContextProvider({ children }: { children: React.ReactNode }) {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation("webpage");
   // wrap region and address information into a single state to avoid
   // unnecessary re-renderings
   const [serviceInfo, setServiceInfo] = useState<ServiceInfo>({
@@ -91,7 +91,8 @@ export default function AppContextProvider({ children }: { children: React.React
   // use an useEffect hook to control html lang setting, to apply different font style
   useEffect(() => {
     document.documentElement.lang = serviceInfo.language.toLowerCase(); // test
-  }, [serviceInfo.language]);
+    document.title = t("title");
+  }, [serviceInfo.language, t]);
 
   return (
     <AppContext.Provider

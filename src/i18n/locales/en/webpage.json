@@ -1,0 +1,8 @@
+{
+  "title": "NorthPost Admin",
+  "theme": {
+    "light": "light",
+    "dark": "dark",
+    "system":"system"
+  }
+}

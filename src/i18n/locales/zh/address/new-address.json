@@ -56,6 +56,15 @@
     "loading": "加载中",
     "importFromJson": "从 JSON 导入"
   },
+  "errors": {
+    "cityField": "城市字段不能为空",
+    "countryField": "国家字段不能为空",
+    "line1Field": "街道字段不能为空",
+    "regionField": "地区字段不能为空",
+    "nameField": "姓名字段不能为空",
+    "tagsField": "请至少提供一个标签",
+    "briefIntroField": "简介内容不少于5个字"
+  },
   "json": {
     "trigger": "从 JSON 导入",
     "title": "JSON 地址解析",

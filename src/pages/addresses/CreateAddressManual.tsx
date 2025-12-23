@@ -4,7 +4,7 @@ import { useForm, revalidateLogic } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
 import {
   Address,
-  NewAddressRequest,
+  createNewAddressRequestSchema,
   getDefaultForm,
   type ZodNewAddressRequest,
 } from "@/schemas/address-schema";
@@ -42,7 +42,7 @@ export default function CreateAddressesManual() {
     } satisfies ZodNewAddressRequest,
     validationLogic: revalidateLogic({ mode: "blur" }), // validate when focus out the field
     validators: {
-      onDynamic: NewAddressRequest,
+      onDynamic: createNewAddressRequestSchema(t),
     },
     onSubmit: ({ value }) => {
       mutation.mutate(value);
