@@ -8,12 +8,12 @@
   @apply mx-auto w-64 my-2;
 }
 
-.address-content__manual {
+.address-create {
   @apply flex-1 flex justify-center overflow-y-auto px-5;
 }
 
 .address-content__dialog__trigger {
-  @apply mx-2 text-xs opacity-50 underline hover:opacity-90 focus:ring-0;
+  @apply mx-2 text-xs h-full opacity-50 underline hover:opacity-90 focus:ring-0;
 }
 
 .address-content__dialog__content {

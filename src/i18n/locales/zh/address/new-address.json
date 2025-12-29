@@ -3,6 +3,19 @@
     "prompt": "提示词",
     "manual": "手动添加"
   },
+  "prompt": {
+    "legend": "通过提示词创建地址",
+    "description": "通过提供提示词生成新地址。选择大语言模型和推理力度以自定义结果。",
+    "userPrompt": "用户提示词",
+    "models": {
+      "label": "GPT模型",
+      "description": "更大的模型能生成更好的结果，但速度更慢。"
+    },
+    "effort": {
+      "label": "推理力度",
+      "description": "更高的力度意味着更深入的思考分析，但速度更慢。"
+    }
+  },
   "form": {
     "basicInfo": {
       "legend": "基本信息",
@@ -25,7 +38,7 @@
       "description": "提供人物的地址。地址不必非常精确，但应该反映该人物生活/曾经生活的时代和地区。",
       "buildingName": {
         "label": "建筑名称（可选）",
-        "placeholder": "例如：白色别墅"
+        "placeholder": "例如：约瑟夫楼"
       },
       "line1": {
         "label": "街道",

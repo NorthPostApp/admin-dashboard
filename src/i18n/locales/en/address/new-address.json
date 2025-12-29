@@ -2,7 +2,20 @@
   "tabs": {
     "prompt": "Prompt",
     "manual": "Manual"
-  },  
+  }, 
+  "prompt": {
+    "legend": "Create address from prompt",
+    "description": "Generate a new address by providing a prompt. Select the LLM model and reasoning effort to customize the result.",
+    "userPrompt": "User prompt",
+    "models": {
+      "label": "Models",
+      "description": "Larger models are more capable but may be slower."
+    },
+    "effort": {
+      "label": "Reasoning Effort",
+      "description": "Higher effort means thoughtful answers but slower."
+    }
+  },
   "form": {
     "basicInfo": {
       "legend": "Basic Info",

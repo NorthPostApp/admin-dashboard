@@ -1,0 +1,21 @@
+@import "../../index.css";
+
+.address-component__prompt {
+  @apply border rounded-lg p-2 focus-within:shadow-md transition-shadow duration-200;
+}
+
+.address-component__prompt__actions {
+  @apply flex justify-between items-center;
+}
+
+.address-component__prompt__action__sub {
+  @apply flex gap-1.5;
+}
+
+.address-component__prompt__textarea {
+  @apply shadow-none max-h-60 h-30 border-none resize-none focus-visible:ring-0 dark:bg-transparent;
+}
+
+.address-component__prompt__trigger {
+  @apply text-primary/70 px-2 text-left;
+}

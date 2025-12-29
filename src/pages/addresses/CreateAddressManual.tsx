@@ -1,5 +1,5 @@
 import type z from "zod";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm, revalidateLogic } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,6 +11,12 @@ import {
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 import CreateFromJsonDialog from "@/pages/addresses/CreateFromJsonDialog";
+import InputAndButton from "@/components/address/InputAndButton";
+import TagBadge from "@/components/address/TagBadge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Field,
   FieldDescription,
@@ -21,12 +27,6 @@ import {
   FieldSeparator,
   FieldSet,
 } from "@/components/ui/field";
-import InputAndButton from "@/components/address/InputAndButton";
-import TagBadge from "@/components/address/TagBadge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Spinner } from "@/components/ui/spinner";
 
 type FormFields =
   | Exclude<keyof ZodNewAddressRequest, "address">
@@ -51,9 +51,9 @@ export default function CreateAddressesManual() {
 
   // The clean up function that clean up all fields once
   // new address created successfully
-  const cleanupFn = () => {
+  const cleanupFn = useCallback(() => {
     form.reset();
-  };
+  }, [form]);
 
   const mutation = useCreateNewAddressMutation(cleanupFn);
   const submitPending = mutation.isPending;
@@ -180,7 +180,8 @@ export default function CreateAddressesManual() {
   // update form language when language updated
   useEffect(() => {
     form.setFieldValue("language", language);
-  }, [language, form]);
+    cleanupFn();
+  }, [language, form, cleanupFn]);
 
   return (
     <form
