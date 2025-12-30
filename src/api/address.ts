@@ -1,8 +1,10 @@
 import type z from "zod";
 import type { NewAddressRequest } from "@/schemas/address-schema";
+import type { Language } from "@/consts/app-config";
 
+type AddressServiceError = { error: string };
 type CreateNewAddressResponse = { id: string };
-type CreateNewAddressError = { error: string };
+type GetSystemPromptResponse = { data: string };
 
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 const TOKEN = import.meta.env.VITE_BEARER_TOKEN;
@@ -18,7 +20,7 @@ async function createNewAddress(data: z.infer<typeof NewAddressRequest>) {
   });
 
   if (!response.ok) {
-    const errorData = (await response.json()) as CreateNewAddressError;
+    const errorData = (await response.json()) as AddressServiceError;
     const errorMessage =
       errorData.error || `Error creating new address: ${response.status}`;
     throw new Error(errorMessage);
@@ -26,4 +28,26 @@ async function createNewAddress(data: z.infer<typeof NewAddressRequest>) {
   return (await response.json()) as CreateNewAddressResponse;
 }
 
-export { createNewAddress, type CreateNewAddressResponse };
+async function getSystemPrompt(language: Language, signal?: AbortSignal) {
+  const response = await fetch(`${BASE_URL}/prompt/system/address?language=${language}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+    },
+    signal,
+  });
+  if (!response.ok) {
+    const errorData = (await response.json()) as AddressServiceError;
+    const errorMessage =
+      errorData.error || `Error getting system prompt: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+  return (await response.json()) as GetSystemPromptResponse;
+}
+
+export {
+  createNewAddress,
+  getSystemPrompt,
+  type CreateNewAddressResponse,
+  type GetSystemPromptResponse,
+};

@@ -1,9 +1,9 @@
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
-import { Button } from "../ui/button";
-import { Check } from "lucide-react";
 import { type PropsWithChildren } from "react";
-import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { cn } from "@/lib/utils";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
 type PopoverSelectorProps<T> = {
   options: readonly T[];
@@ -27,11 +27,11 @@ export function PopoverSelector<T>({
     <Popover>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
       <PopoverContent
-        className={cn("p-2 flex flex-col items-baseline", popOverClassName)}
+        className={cn("address-component__popover__body", popOverClassName)}
       >
-        <div className="px-2 border-b w-full pb-2">
-          <p className="text-sm font-bold">{title}</p>
-          <p className="text-xs opacity-60 pt-1">{description}</p>
+        <div className="address-component__popover__header">
+          <p className="address-component__popover__header__title">{title}</p>
+          <p className="address-component__popover__header__description">{description}</p>
         </div>
         {options.map((item) => {
           return (
@@ -39,7 +39,7 @@ export function PopoverSelector<T>({
               <Button
                 variant={item === value ? "secondary" : "ghost"}
                 className={cn(
-                  "w-full flex justify-between gap-4",
+                  "address-component__popover__body__button",
                   item === value ? "opacity-100" : "opacity-50"
                 )}
                 onClick={() => onSelect(item)}

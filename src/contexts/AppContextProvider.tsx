@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, useCallback, createContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
   getCountryAddressFormat,
@@ -10,6 +10,7 @@ import {
   type Language,
   type Theme,
 } from "@/consts/app-config";
+import AddressContextProvider from "@/contexts/AddressContextProvider";
 
 interface AppContextType {
   theme: Theme;
@@ -39,13 +40,7 @@ const themeConfig = localAppConfig["theme"] as Theme;
 const addressFormat = getCountryAddressFormat(languageConfig);
 
 // Create App context
-const AppContext = createContext<AppContextType>({
-  theme: themeConfig,
-  language: languageConfig,
-  addressFormat: addressFormat,
-  updateLanguage: () => {},
-  updateTheme: () => {},
-});
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export default function AppContextProvider({ children }: { children: React.ReactNode }) {
   const { i18n, t } = useTranslation("webpage");
@@ -58,21 +53,24 @@ export default function AppContextProvider({ children }: { children: React.React
   const [theme, setTheme] = useState<Theme>(themeConfig);
 
   // context update methods
-  const updateLanguage = (newLanguage: Language) => {
-    setServiceInfo(() => ({
-      language: newLanguage,
-      addressFormat: getCountryAddressFormat(newLanguage),
-    }));
-    localAppConfig["language"] = newLanguage;
-    i18n.changeLanguage(newLanguage.toLowerCase());
-    updateLocalAppConfig(localAppConfig);
-  };
+  const updateLanguage = useCallback(
+    (newLanguage: Language) => {
+      setServiceInfo(() => ({
+        language: newLanguage,
+        addressFormat: getCountryAddressFormat(newLanguage),
+      }));
+      localAppConfig["language"] = newLanguage;
+      i18n.changeLanguage(newLanguage.toLowerCase());
+      updateLocalAppConfig(localAppConfig);
+    },
+    [i18n]
+  );
 
-  const updateTheme = (newTheme: Theme) => {
+  const updateTheme = useCallback((newTheme: Theme) => {
     setTheme(newTheme);
     localAppConfig["theme"] = newTheme;
     updateLocalAppConfig(localAppConfig);
-  };
+  }, []);
 
   // use an useEffect hook to control theme
   useEffect(() => {
@@ -103,7 +101,7 @@ export default function AppContextProvider({ children }: { children: React.React
         updateTheme,
       }}
     >
-      {children}
+      <AddressContextProvider>{children}</AddressContextProvider>
     </AppContext.Provider>
   );
 }

@@ -1,13 +1,13 @@
+import { useTranslation } from "react-i18next";
 import {
   Field,
   FieldDescription,
   FieldGroup,
-  FieldLabel,
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import PromptInput from "@/components/address/PromptInput";
-import { useTranslation } from "react-i18next";
+import UserPromptInput from "@/components/address/UserPromptInput";
+import SystemPromptInput from "@/components/address/SystemPromptInput";
 
 export default function CreateAddressPrompt() {
   const { t } = useTranslation("address:newAddress");
@@ -16,7 +16,6 @@ export default function CreateAddressPrompt() {
       className="address-content__form"
       onSubmit={(e) => {
         e.preventDefault();
-        console.log("submitted");
       }}
     >
       <FieldGroup className="address-content__form__group">
@@ -24,8 +23,10 @@ export default function CreateAddressPrompt() {
           <FieldLegend>{t("prompt.legend")}</FieldLegend>
           <FieldDescription>{t("prompt.description")}</FieldDescription>
           <Field>
-            <FieldLabel htmlFor="prompt">{t("prompt.userPrompt")}</FieldLabel>
-            <PromptInput />
+            <SystemPromptInput />
+          </Field>
+          <Field>
+            <UserPromptInput />
           </Field>
         </FieldSet>
       </FieldGroup>

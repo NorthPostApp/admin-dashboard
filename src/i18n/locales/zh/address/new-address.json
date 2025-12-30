@@ -7,6 +7,7 @@
     "legend": "通过提示词创建地址",
     "description": "通过提供提示词生成新地址。选择大语言模型和推理力度以自定义结果。",
     "userPrompt": "用户提示词",
+    "systemPrompt": "系统提示词",
     "models": {
       "label": "GPT模型",
       "description": "更大的模型能生成更好的结果，但速度更慢。"
@@ -14,6 +15,11 @@
     "effort": {
       "label": "推理力度",
       "description": "更高的力度意味着更深入的思考分析，但速度更慢。"
+    },
+    "controls": {
+      "edit": "编辑",
+      "save": "保存",
+      "cancel": "取消"
     }
   },
   "form": {

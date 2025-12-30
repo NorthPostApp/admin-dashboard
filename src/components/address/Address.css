@@ -19,3 +19,27 @@
 .address-component__prompt__trigger {
   @apply text-primary/70 px-2 text-left;
 }
+
+.address-component__edit__button {
+  @apply text-xs h-full px-2 opacity-50 hover:opacity-90 focus:ring-0 mx-1;
+}
+
+.address-component__popover__body {
+  @apply p-2 flex flex-col items-baseline;
+}
+
+.address-component__popover__body__button {
+  @apply w-full flex justify-between gap-4;
+}
+
+.address-component__popover__header {
+  @apply px-2 border-b w-full pb-2;
+}
+
+.address-component__popover__header__title {
+  @apply text-sm font-bold;
+}
+
+.address-component__popover__header__description {
+  @apply text-xs opacity-60 pt-1;
+}
