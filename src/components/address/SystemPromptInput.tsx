@@ -14,6 +14,7 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
   return (
     <Button
       variant="outline"
+      type="button"
       size="sm"
       className="address-component__edit__button"
       onClick={callbackFn}
@@ -81,7 +82,7 @@ export default function SystemPromptInput() {
 
   return (
     <>
-      <FieldLabel htmlFor="prompt" className="w-full flex justify-between">
+      <FieldLabel htmlFor="system-prompt" className="w-full flex justify-between">
         <span>{t("prompt.systemPrompt")}</span>
         {getEditButtons()}
       </FieldLabel>

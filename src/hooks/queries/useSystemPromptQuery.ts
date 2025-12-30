@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 // this is a lazy query that requires refetch to get data
 export function useSystemPromptQuery(language: Language) {
   const query = useQuery({
-    queryKey: ["address", language],
+    queryKey: ["address", "systemPrompt", language],
     queryFn: async ({ signal }) => await getSystemPrompt(language, signal),
     enabled: false,
   });

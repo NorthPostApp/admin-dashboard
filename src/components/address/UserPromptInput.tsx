@@ -111,7 +111,7 @@ export default function UserPromptInput() {
             >
               <BrushCleaning />
             </Button>
-            <Button size="icon-sm" role="submit">
+            <Button size="icon-sm" type="submit">
               <Sparkles />
             </Button>
           </div>
