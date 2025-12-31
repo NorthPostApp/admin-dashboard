@@ -1,13 +1,5 @@
-import { useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  DEFAULT_EFFORT,
-  DEFAULT_MODEL,
-  GPT_MODELS,
-  REASONING_EFFORTS,
-  type GPTModel,
-  type ReasonEffort,
-} from "@/consts/app-config";
 import {
   Sparkles,
   HeartOff,
@@ -17,10 +9,22 @@ import {
   HeartPulse,
   BrushCleaning,
 } from "lucide-react";
+import {
+  GPT_MODELS,
+  REASONING_EFFORTS,
+  DEFAULT_MODEL,
+  DEFAULT_EFFORT,
+  type GPTModel,
+  type ReasonEffort,
+} from "@/consts/app-config";
+import type { ZodGenerateAddressesRequest } from "@/schemas/address-schema";
+import { useAddressContext } from "@/hooks/useAddressContext";
+import { useGenerateAddressesMutation } from "@/hooks/mutations/useGenerateAddressesMutation";
+import { PopoverSelector } from "@/components/address/PopoverSelector";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { PopoverSelector } from "@/components/address/PopoverSelector";
 import { FieldLabel } from "@/components/ui/field";
+import { Spinner } from "@/components/ui/spinner";
 import "./Address.css";
 
 const getEffortIcon = (effort: ReasonEffort) => {
@@ -41,21 +45,52 @@ const getEffortIcon = (effort: ReasonEffort) => {
 };
 
 export default function UserPromptInput() {
+  const { systemPrompt, userPrompt, updateUserPrompt, saveGeneratedAddresses } =
+    useAddressContext();
+  const { mutate, isPending } = useGenerateAddressesMutation(saveGeneratedAddresses);
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
   const [gptModel, setGptModel] = useState<GPTModel>(DEFAULT_MODEL);
   const [reasonEffort, setReasonEffort] = useState<ReasonEffort>(DEFAULT_EFFORT);
   const handleChangeModel = (model: GPTModel) => setGptModel(model);
   const handleChangeEffort = (effort: ReasonEffort) => setReasonEffort(effort);
-  const clearInput = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+
+  const onBlur = () => {
     if (textareaRef.current) {
-      textareaRef.current!.value = "";
+      updateUserPrompt(textareaRef.current.value);
     }
   };
+
+  const clearInput = () => {
+    if (textareaRef.current) {
+      textareaRef.current.value = "";
+      updateUserPrompt("");
+    }
+  };
+
   const effortEnabled = () => {
     return gptModel.startsWith("gpt-5"); // only gpt-5 models accept reasoning effort parameters
   };
+
+  const submitRequest = () => {
+    if (!systemPrompt || userPrompt.length === 0) return;
+    const requestBody: ZodGenerateAddressesRequest = {
+      language: systemPrompt.language,
+      systemPrompt: systemPrompt.prompt,
+      prompt: userPrompt,
+      model: gptModel,
+      reasoningEffort: reasonEffort,
+    };
+    mutate(requestBody);
+  };
+
+  // load saved prompt from app's address context
+  useEffect(() => {
+    if (textareaRef.current && userPrompt.length !== 0) {
+      textareaRef.current.value = userPrompt;
+    }
+  }, [userPrompt]);
 
   return (
     <>
@@ -63,7 +98,9 @@ export default function UserPromptInput() {
       <div className="address-component__prompt">
         <Textarea
           id="prompt"
+          onBlur={onBlur}
           ref={textareaRef}
+          disabled={isPending}
           className="address-component__prompt__textarea"
         />
         <div className="address-component__prompt__actions">
@@ -79,7 +116,7 @@ export default function UserPromptInput() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="address-component__prompt__trigger w-26"
+                className="address-component__prompt__trigger w-24 font-normal"
               >
                 {gptModel}
               </Button>
@@ -107,12 +144,18 @@ export default function UserPromptInput() {
               size="icon-sm"
               variant="ghost"
               className="address-component__prompt__trigger"
+              type="button"
               onClick={clearInput}
             >
               <BrushCleaning />
             </Button>
-            <Button size="icon-sm" type="submit">
-              <Sparkles />
+            <Button
+              size="icon-sm"
+              type="button" // we don't use submit which will cause the form submission event
+              onClick={submitRequest}
+              disabled={isPending}
+            >
+              {isPending ? <Spinner /> : <Sparkles />}
             </Button>
           </div>
         </div>

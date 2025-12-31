@@ -1,15 +1,18 @@
-import type z from "zod";
-import type { NewAddressRequest } from "@/schemas/address-schema";
+import type {
+  ZodGenerateAddressesRequest,
+  ZodGenerateAddressesResponse,
+  ZodNewAddressRequest,
+} from "@/schemas/address-schema";
 import type { Language } from "@/consts/app-config";
 
-type AddressServiceError = { error: string };
+type ServiceError = { error: string };
 type CreateNewAddressResponse = { id: string };
 type GetSystemPromptResponse = { data: string };
 
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 const TOKEN = import.meta.env.VITE_BEARER_TOKEN;
 
-async function createNewAddress(data: z.infer<typeof NewAddressRequest>) {
+async function createNewAddress(data: ZodNewAddressRequest) {
   const response = await fetch(BASE_URL + "/address", {
     method: "PUT",
     headers: {
@@ -20,12 +23,30 @@ async function createNewAddress(data: z.infer<typeof NewAddressRequest>) {
   });
 
   if (!response.ok) {
-    const errorData = (await response.json()) as AddressServiceError;
+    const errorData = (await response.json()) as ServiceError;
     const errorMessage =
       errorData.error || `Error creating new address: ${response.status}`;
     throw new Error(errorMessage);
   }
   return (await response.json()) as CreateNewAddressResponse;
+}
+
+async function generateAddresses(requestBody: ZodGenerateAddressesRequest) {
+  const response = await fetch(`${BASE_URL}/address/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${TOKEN}`,
+    },
+    body: JSON.stringify(requestBody),
+  });
+  if (!response.ok) {
+    const errorData = (await response.json()) as ServiceError;
+    const errorMessage =
+      errorData.error || `Error generating new address: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+  return (await response.json()).data as ZodGenerateAddressesResponse;
 }
 
 async function getSystemPrompt(language: Language, signal?: AbortSignal) {
@@ -37,7 +58,7 @@ async function getSystemPrompt(language: Language, signal?: AbortSignal) {
     signal,
   });
   if (!response.ok) {
-    const errorData = (await response.json()) as AddressServiceError;
+    const errorData = (await response.json()) as ServiceError;
     const errorMessage =
       errorData.error || `Error getting system prompt: ${response.status}`;
     throw new Error(errorMessage);
@@ -48,6 +69,7 @@ async function getSystemPrompt(language: Language, signal?: AbortSignal) {
 export {
   createNewAddress,
   getSystemPrompt,
+  generateAddresses,
   type CreateNewAddressResponse,
   type GetSystemPromptResponse,
 };

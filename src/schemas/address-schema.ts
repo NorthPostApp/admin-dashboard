@@ -1,4 +1,9 @@
-import { SUPPORTED_LANGUAGES, type Language } from "@/consts/app-config";
+import {
+  GPT_MODELS,
+  REASONING_EFFORTS,
+  SUPPORTED_LANGUAGES,
+  type Language,
+} from "@/consts/app-config";
 import type { TFunction } from "i18next";
 import * as z from "zod";
 
@@ -13,15 +18,34 @@ const Address = z.object({
   region: z.string().min(1),
 });
 
-const NewAddressRequest = z.object({
-  language: z.enum(SUPPORTED_LANGUAGES),
+const AddressItem = z.object({
   name: z.string().min(1),
   tags: z.array(z.string()).min(1),
   briefIntro: z.string().refine((value) => value.trim().length > 5),
   address: Address,
 });
 
+const NewAddressRequest = AddressItem.extend({
+  language: z.enum(SUPPORTED_LANGUAGES),
+});
+
+const GenerateAddressesRequest = z.object({
+  language: z.enum(SUPPORTED_LANGUAGES),
+  systemPrompt: z.string().min(10),
+  prompt: z.string().min(10),
+  model: z.enum(GPT_MODELS),
+  reasoningEffort: z.enum(REASONING_EFFORTS),
+});
+
+const GeneratedAddress = AddressItem.extend({
+  id: z.string().min(3),
+});
+
+const GenerateAddressesResponse = z.array(GeneratedAddress);
+
 type ZodNewAddressRequest = z.infer<typeof NewAddressRequest>;
+type ZodGenerateAddressesRequest = z.infer<typeof GenerateAddressesRequest>;
+type ZodGenerateAddressesResponse = z.infer<typeof GenerateAddressesResponse>;
 
 // Extend error messages based on the i18n language
 const extendAddressSchema = (t: TFunction) =>
@@ -63,8 +87,12 @@ const getDefaultForm = (language: Language) => {
 
 export {
   NewAddressRequest,
+  GenerateAddressesRequest,
+  GenerateAddressesResponse,
   Address,
   createNewAddressRequestSchema,
   getDefaultForm,
   type ZodNewAddressRequest,
+  type ZodGenerateAddressesRequest,
+  type ZodGenerateAddressesResponse,
 };
