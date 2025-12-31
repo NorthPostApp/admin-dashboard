@@ -27,7 +27,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          "vender-react": ["react", "react-dom", "react-router"],
+          "vendor-react": ["react", "react-dom", "react-router"],
           "vendor-form": ["@tanstack/react-form", "@tanstack/react-query"],
           "vendor-i18n": ["i18next", "react-i18next", "i18next-resources-to-backend"],
           lucide: ["lucide-react"],

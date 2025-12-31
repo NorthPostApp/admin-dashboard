@@ -70,7 +70,7 @@ export default function SystemPromptInput() {
           updateSystemPrompt(language, result.data.data);
           fetchedPrompt = result.data.data;
         } else if (result.error) {
-          // the tanstack query doesn't "throw: error by default
+          // the tanstack query doesn't "throw" error by default
           // so we use result.error instead of catch
           // update this to i18n
           updateSystemPrompt(language, "fetching failed, please provide your prompt");
