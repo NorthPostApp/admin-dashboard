@@ -6,7 +6,7 @@ import {
   Address,
   createNewAddressRequestSchema,
   getDefaultForm,
-  type ZodNewAddressRequest,
+  type NewAddressRequestSchema,
 } from "@/schemas/address-schema";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/field";
 
 type FormFields =
-  | Exclude<keyof ZodNewAddressRequest, "address">
+  | Exclude<keyof NewAddressRequestSchema, "address">
   | `address.${keyof z.infer<typeof Address>}`;
 
 export default function CreateAddressesManual() {
@@ -39,7 +39,7 @@ export default function CreateAddressesManual() {
   const form = useForm({
     defaultValues: {
       ...getDefaultForm(language),
-    } satisfies ZodNewAddressRequest,
+    } satisfies NewAddressRequestSchema,
     validationLogic: revalidateLogic({ mode: "blur" }), // validate when focus out the field
     validators: {
       onDynamic: createNewAddressRequestSchema(t),
@@ -74,7 +74,7 @@ export default function CreateAddressesManual() {
     form.setFieldValue("tags", newTags);
   };
 
-  const handleJsonImport = (formData: ZodNewAddressRequest) => {
+  const handleJsonImport = (formData: NewAddressRequestSchema) => {
     form.setFieldValue("language", formData.language);
     form.setFieldValue("name", formData.name);
     form.setFieldValue("tags", formData.tags);

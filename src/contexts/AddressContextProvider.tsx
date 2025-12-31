@@ -1,5 +1,5 @@
 import { type Language } from "@/consts/app-config";
-import type { ZodGenerateAddressesResponse } from "@/schemas/address-schema";
+import type { GenerateAddressesResponseSchema } from "@/schemas/address-schema";
 import { useState, createContext, useCallback } from "react";
 
 type SystemPrompt = {
@@ -12,10 +12,10 @@ type UserPrompt = string;
 interface AddressContextType {
   systemPrompt: SystemPrompt | undefined;
   userPrompt: UserPrompt;
-  generatedAddresses: ZodGenerateAddressesResponse;
+  generatedAddresses: GenerateAddressesResponseSchema;
   updateSystemPrompt: (language: Language, prompt: string) => void;
   updateUserPrompt: (prompt: UserPrompt) => void;
-  saveGeneratedAddresses: (addresses: ZodGenerateAddressesResponse) => void;
+  saveGeneratedAddresses: (addresses: GenerateAddressesResponseSchema) => void;
 }
 
 const AddressContext = createContext<AddressContextType | undefined>(undefined);
@@ -28,7 +28,7 @@ export default function AddressContextProvider({
   const [systemPrompt, setSystemPrompt] = useState<SystemPrompt | undefined>(undefined);
   const [userPrompt, setUserPrompt] = useState<UserPrompt>("");
   const [generatedAddresses, setGeneratedAddresses] =
-    useState<ZodGenerateAddressesResponse>([]);
+    useState<GenerateAddressesResponseSchema>([]);
   const updateSystemPrompt = useCallback((language: Language, prompt: string) => {
     setSystemPrompt({ language, prompt });
   }, []);
@@ -40,7 +40,7 @@ export default function AddressContextProvider({
     [userPrompt]
   );
   const saveGeneratedAddresses = useCallback(
-    (addresses: ZodGenerateAddressesResponse) => {
+    (addresses: GenerateAddressesResponseSchema) => {
       setGeneratedAddresses(addresses);
     },
     []

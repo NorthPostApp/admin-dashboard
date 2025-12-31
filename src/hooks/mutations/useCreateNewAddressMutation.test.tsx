@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useCreateNewAddressMutation } from "./useCreateNewAddressMutation";
 import { createNewAddress } from "@/api/address";
-import { getDefaultForm, type ZodNewAddressRequest } from "@/schemas/address-schema";
+import { getDefaultForm, type NewAddressRequestSchema } from "@/schemas/address-schema";
 import type { CreateNewAddressResponse } from "@/api/address";
 
 vi.mock("sonner");
@@ -35,7 +35,7 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(), {
       wrapper: createWrapper(),
     });
-    const requestData: ZodNewAddressRequest = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(createNewAddress).toHaveBeenCalledWith(requestData);
@@ -51,7 +51,7 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(cleanupFn), {
       wrapper: createWrapper(),
     });
-    const requestData: ZodNewAddressRequest = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(cleanupFn).toHaveBeenCalled();
@@ -63,7 +63,7 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(), {
       wrapper: createWrapper(),
     });
-    const requestData: ZodNewAddressRequest = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
