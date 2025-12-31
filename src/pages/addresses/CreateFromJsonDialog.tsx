@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
 import { useAppContext } from "@/hooks/useAppContext";
-import { NewAddressRequest, type ZodNewAddressRequest } from "@/schemas/address-schema";
+import {
+  NewAddressRequest,
+  type NewAddressRequestSchema,
+} from "@/schemas/address-schema";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "react-i18next";
 
 type CreateFromJsonDialogProps = {
-  handleJsonImport: (formData: ZodNewAddressRequest) => void;
+  handleJsonImport: (formData: NewAddressRequestSchema) => void;
 };
 
 export default function CreateFromJsonDialog({

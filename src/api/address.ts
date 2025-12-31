@@ -1,7 +1,7 @@
 import type {
-  ZodGenerateAddressesRequest,
-  ZodGenerateAddressesResponse,
-  ZodNewAddressRequest,
+  GenerateAddressesRequestSchema,
+  GenerateAddressesResponseSchema,
+  NewAddressRequestSchema,
 } from "@/schemas/address-schema";
 import type { Language } from "@/consts/app-config";
 
@@ -12,7 +12,7 @@ type GetSystemPromptResponse = { data: string };
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 const TOKEN = import.meta.env.VITE_BEARER_TOKEN;
 
-async function createNewAddress(data: ZodNewAddressRequest) {
+async function createNewAddress(data: NewAddressRequestSchema) {
   const response = await fetch(BASE_URL + "/address", {
     method: "PUT",
     headers: {
@@ -31,7 +31,7 @@ async function createNewAddress(data: ZodNewAddressRequest) {
   return (await response.json()) as CreateNewAddressResponse;
 }
 
-async function generateAddresses(requestBody: ZodGenerateAddressesRequest) {
+async function generateAddresses(requestBody: GenerateAddressesRequestSchema) {
   const response = await fetch(`${BASE_URL}/address/generate`, {
     method: "POST",
     headers: {
@@ -46,7 +46,7 @@ async function generateAddresses(requestBody: ZodGenerateAddressesRequest) {
       errorData.error || `Error generating new address: ${response.status}`;
     throw new Error(errorMessage);
   }
-  return (await response.json()).data as ZodGenerateAddressesResponse;
+  return (await response.json()).data as GenerateAddressesResponseSchema;
 }
 
 async function getSystemPrompt(language: Language, signal?: AbortSignal) {

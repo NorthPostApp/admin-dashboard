@@ -94,13 +94,11 @@ describe("AppContextProvider", () => {
         <TestComponent />
       </AppContextProvider>
     );
-
     const changeENButton = screen.getByTestId("en-button");
     fireEvent.click(changeENButton);
     let storedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}");
     expect(storedData.language).toEqual("EN");
     expect(screen.getByText("EN")).toBeTruthy();
-
     const changeZHButton = screen.getByTestId("zh-button");
     fireEvent.click(changeZHButton);
     storedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}");
@@ -132,9 +130,15 @@ describe("AppContextProvider", () => {
         <LocalTestComponent />
       </AppContextProvider>
     );
-
     expect(screen.getByText("EN")).toBeTruthy();
     expect(screen.getByText("building-first")).toBeTruthy();
     expect(screen.getByText("dark")).toBeTruthy();
+  });
+
+  it("throws error when useAppContext is used outside provider", () => {
+    // Suppress console.error for this test
+    expect(() => {
+      render(<TestComponent />);
+    }).toThrow("useAppContext hook must be used within AppContextProvider");
   });
 });

@@ -27,7 +27,7 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
 export default function SystemPromptInput() {
   const { language } = useAppContext();
   const { systemPrompt, updateSystemPrompt } = useAddressContext();
-  const { isFetching, refetch } = useSystemPromptQuery(language);
+  const { isFetching, isSuccess, refetch } = useSystemPromptQuery(language);
   const { t } = useTranslation("address:newAddress");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -64,19 +64,25 @@ export default function SystemPromptInput() {
   useEffect(() => {
     // only do auto refetch when system language changed
     if (!systemPrompt || systemPrompt.language !== language) {
-      refetch()
-        .then((result) => {
-          if (result.data?.data) {
-            updateSystemPrompt(language, result.data.data);
-          }
-        })
-        .catch((err) => {
-          console.error(err);
+      refetch().then((result) => {
+        let fetchedPrompt = "";
+        if (result.data?.data) {
+          updateSystemPrompt(language, result.data.data);
+          fetchedPrompt = result.data.data;
+        } else if (result.error) {
+          // the tanstack query doesn't "throw: error by default
+          // so we use result.error instead of catch
+          // update this to i18n
           updateSystemPrompt(language, "fetching failed, please provide your prompt");
-        });
+          fetchedPrompt = "fetching failed, please provide your prompt";
+        }
+        if (textareaRef && textareaRef.current) {
+          textareaRef.current.value = fetchedPrompt;
+        }
+      });
     }
     if (textareaRef && textareaRef.current) {
-      textareaRef.current!.value = systemPrompt?.prompt || "";
+      textareaRef.current.value = systemPrompt?.prompt || "";
     }
   }, [language, systemPrompt, refetch, updateSystemPrompt]);
 
@@ -92,7 +98,7 @@ export default function SystemPromptInput() {
         disabled={!editing}
         className={cn(
           "resize-none transition-all duration-150",
-          isFetching ? "h-4" : "h-80"
+          isFetching || !isSuccess ? "h-4" : "h-80"
         )}
       />
     </>

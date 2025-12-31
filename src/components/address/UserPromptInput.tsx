@@ -17,7 +17,7 @@ import {
   type GPTModel,
   type ReasonEffort,
 } from "@/consts/app-config";
-import type { ZodGenerateAddressesRequest } from "@/schemas/address-schema";
+import type { GenerateAddressesRequestSchema } from "@/schemas/address-schema";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { useGenerateAddressesMutation } from "@/hooks/mutations/useGenerateAddressesMutation";
 import { PopoverSelector } from "@/components/address/PopoverSelector";
@@ -75,7 +75,7 @@ export default function UserPromptInput() {
 
   const submitRequest = () => {
     if (!systemPrompt || userPrompt.length === 0) return;
-    const requestBody: ZodGenerateAddressesRequest = {
+    const requestBody: GenerateAddressesRequestSchema = {
       language: systemPrompt.language,
       systemPrompt: systemPrompt.prompt,
       prompt: userPrompt,
