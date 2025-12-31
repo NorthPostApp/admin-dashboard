@@ -29,18 +29,16 @@ import "./Address.css";
 
 const getEffortIcon = (effort: ReasonEffort) => {
   switch (effort) {
-    case "none":
-      return <HeartOff />;
     case "low":
-      return <HeartMinus />;
+      return <HeartMinus data-testid="effort-low" />;
     case "medium":
-      return <Heart />;
+      return <Heart data-testid="effort-medium" />;
     case "high":
-      return <HeartPlus />;
+      return <HeartPlus data-testid="effort-high" />;
     case "xhigh":
-      return <HeartPulse />;
+      return <HeartPulse data-testid="effort-xhigh" />;
     default:
-      return <HeartOff />;
+      return <HeartOff data-testid="effort-none" />;
   }
 };
 
@@ -132,6 +130,7 @@ export default function UserPromptInput() {
               <Button
                 size="icon-sm"
                 variant="ghost"
+                data-testid="address-userprompt-effort"
                 className="address-component__prompt__trigger"
                 disabled={!effortEnabled()}
               >
@@ -144,6 +143,7 @@ export default function UserPromptInput() {
               size="icon-sm"
               variant="ghost"
               className="address-component__prompt__trigger"
+              data-testid="address-userprompt-clear"
               type="button"
               onClick={clearInput}
             >
@@ -151,6 +151,7 @@ export default function UserPromptInput() {
             </Button>
             <Button
               size="icon-sm"
+              data-testid="address-userprompt-submit"
               type="button" // we don't use submit which will cause the form submission event
               onClick={submitRequest}
               disabled={isPending}

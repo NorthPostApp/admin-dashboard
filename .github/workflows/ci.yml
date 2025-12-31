@@ -1,4 +1,4 @@
-name: Unit Test
+name: CI
 
 on:
   push:
@@ -26,6 +26,6 @@ jobs:
       - name: Run linter
         run: npm run lint
       - name: Run tests
-        run: npm test
+        run: npm run coverage
       - name: Run build
         run: npm run build
