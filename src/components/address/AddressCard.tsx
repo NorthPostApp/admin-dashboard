@@ -18,7 +18,7 @@ type AddressCardProps = {
   onDelete?: () => void;
 };
 
-// Address will be in the internaltion format
+// Address will be in the international format
 // because the user will send the letter to the person in different country/era
 const formatAddressLines = (addressItem: AddressItemSchema) => {
   const lines = [];
@@ -55,7 +55,7 @@ export default function AddressCard({
         </div>
         <div className="flex flex-wrap gap-1">
           {addressItem.tags.map((tag) => (
-            <TagBadge key={`${addressItem.id}-${tag}}`} value={tag} />
+            <TagBadge key={`${addressItem.id}-${tag}`} value={tag} />
           ))}
         </div>
       </CardContent>

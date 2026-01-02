@@ -97,7 +97,7 @@ describe("UserPromptInput", () => {
     expect(addressApi.generateAddresses).not.toHaveBeenCalled();
     fireEvent.change(textarea, { target: { value: "Generate addresses" } });
     fireEvent.blur(textarea);
-    // Change model to gpt-5-nano
+    // Change model to gpt-5-mini
     const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
     await waitFor(() => {
@@ -111,9 +111,7 @@ describe("UserPromptInput", () => {
       const highOption = screen.getByText("high");
       fireEvent.click(highOption);
     });
-    // Would submit with model: "gpt-5-nano", reasoningEffort: "high"
     fireEvent.click(submitButton);
-    // Wait for API call
     await waitFor(() => {
       expect(addressApi.generateAddresses).toHaveBeenCalledWith({
         language: "EN",

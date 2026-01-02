@@ -20,7 +20,8 @@ export default function Timer({ label, interval }: TimerProps) {
     return () => {
       clearInterval(timeout);
     };
-  }, [interval]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="flex items-center justify-between w-full max-w-70 h-12 text-primary/50 text-sm mx-auto">
       <div className="flex justify-center items-center gap-3">

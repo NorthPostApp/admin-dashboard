@@ -17,7 +17,7 @@ export default function GeneratedAddresses() {
     return <Timer label={"Generating address"} interval={25} />;
   }
 
-  if (generatedAddresses.length != 0) {
+  if (generatedAddresses.length !== 0) {
     return (
       <Carousel
         opts={{
