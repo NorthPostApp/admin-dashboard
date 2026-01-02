@@ -14,8 +14,6 @@ export const REASONING_EFFORTS = ["none", "low", "medium", "high", "xhigh"] as c
 
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 export type GPTModel = (typeof GPT_MODELS)[number];
-export type AddressFormat = "building-first" | "country-first";
-export type CountryAddressFormat = Record<Language, AddressFormat>;
 export type Theme = (typeof THEMES)[number];
 export type ReasonEffort = (typeof REASONING_EFFORTS)[number];
 export interface AppConfigLocalstorageType {
@@ -23,7 +21,7 @@ export interface AppConfigLocalstorageType {
   theme?: Theme;
 }
 
-export const DEFAULT_MODEL: GPTModel = "gpt-5-mini";
+export const DEFAULT_MODEL: GPTModel = "gpt-5-nano";
 export const DEFAULT_LANGUAGE: Language = "EN";
 export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
@@ -33,15 +31,4 @@ export function getLocalAppConfig(): AppConfigLocalstorageType {
 }
 export function updateLocalAppConfig(newAppConfig: AppConfigLocalstorageType) {
   localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(newAppConfig));
-}
-
-export function getCountryAddressFormat(language: Language): AddressFormat {
-  switch (language) {
-    case "ZH":
-      return "country-first";
-    case "EN":
-      return "building-first";
-    default:
-      return "building-first";
-  }
 }

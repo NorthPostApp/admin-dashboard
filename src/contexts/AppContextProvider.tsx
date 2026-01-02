@@ -1,12 +1,10 @@
 import { useState, useEffect, useCallback, createContext } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  getCountryAddressFormat,
   DEFAULT_LANGUAGE,
   DEFAULT_THEME,
   getLocalAppConfig,
   updateLocalAppConfig,
-  type AddressFormat,
   type Language,
   type Theme,
 } from "@/consts/app-config";
@@ -15,14 +13,12 @@ import AddressContextProvider from "@/contexts/AddressContextProvider";
 interface AppContextType {
   theme: Theme;
   language: Language;
-  addressFormat: AddressFormat;
   updateLanguage: (newLanguage: Language) => void;
   updateTheme: (newTheme: Theme) => void;
 }
 
 type ServiceInfo = {
   language: Language;
-  addressFormat: AddressFormat;
 };
 
 // Check local AppConfig, if localStorage or field miss, fill default value
@@ -37,7 +33,6 @@ if (!localAppConfig["theme"]) {
 
 const languageConfig = localAppConfig["language"] as Language;
 const themeConfig = localAppConfig["theme"] as Theme;
-const addressFormat = getCountryAddressFormat(languageConfig);
 
 // Create App context
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -48,7 +43,6 @@ export default function AppContextProvider({ children }: { children: React.React
   // unnecessary re-renderings
   const [serviceInfo, setServiceInfo] = useState<ServiceInfo>({
     language: languageConfig,
-    addressFormat: addressFormat,
   });
   const [theme, setTheme] = useState<Theme>(themeConfig);
 
@@ -57,7 +51,6 @@ export default function AppContextProvider({ children }: { children: React.React
     (newLanguage: Language) => {
       setServiceInfo(() => ({
         language: newLanguage,
-        addressFormat: getCountryAddressFormat(newLanguage),
       }));
       localAppConfig["language"] = newLanguage;
       i18n.changeLanguage(newLanguage.toLowerCase());

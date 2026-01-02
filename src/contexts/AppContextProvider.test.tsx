@@ -6,12 +6,11 @@ import { LOCALSTORAGE_KEY } from "@/consts/app-config";
 
 // Test component that uses the context
 function TestComponent() {
-  const { theme, language, addressFormat, updateLanguage, updateTheme } = useAppContext();
+  const { theme, language, updateLanguage, updateTheme } = useAppContext();
 
   return (
     <div>
       <div data-testid="region">{language}</div>
-      <div data-testid="format">{addressFormat}</div>
       <div data-testid="theme">{theme}</div>
       <button data-testid="en-button" onClick={() => updateLanguage("EN")}>
         Change to US
@@ -44,7 +43,6 @@ describe("AppContextProvider", () => {
       </AppContextProvider>
     );
     expect(screen.getByText("EN")).toBeTruthy();
-    expect(screen.getByText("building-first")).toBeTruthy();
     expect(screen.getByText("system")).toBeTruthy();
   });
 
@@ -57,12 +55,10 @@ describe("AppContextProvider", () => {
     const changeUSButton = screen.getByTestId("en-button");
     fireEvent.click(changeUSButton);
     expect(screen.getByText("EN")).toBeTruthy();
-    expect(screen.getByText("building-first")).toBeTruthy();
 
     const changeCNButton = screen.getByTestId("zh-button");
     fireEvent.click(changeCNButton);
     expect(screen.getByText("ZH")).toBeTruthy();
-    expect(screen.getByText("country-first")).toBeTruthy();
   });
 
   it("updates them when updateTheme is called", async () => {
@@ -116,11 +112,10 @@ describe("AppContextProvider", () => {
     const { default: AppContextProvider } = await import("./AppContextProvider");
     const { useAppContext } = await import("../hooks/useAppContext");
     function LocalTestComponent() {
-      const { language, addressFormat, theme } = useAppContext();
+      const { language, theme } = useAppContext();
       return (
         <div>
           <div data-testid="region">{language}</div>
-          <div data-testid="format">{addressFormat}</div>
           <div data-testid="theme">{theme}</div>
         </div>
       );
@@ -131,7 +126,6 @@ describe("AppContextProvider", () => {
       </AppContextProvider>
     );
     expect(screen.getByText("EN")).toBeTruthy();
-    expect(screen.getByText("building-first")).toBeTruthy();
     expect(screen.getByText("dark")).toBeTruthy();
   });
 

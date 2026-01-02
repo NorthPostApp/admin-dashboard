@@ -43,11 +43,16 @@ const getEffortIcon = (effort: ReasonEffort) => {
 };
 
 export default function UserPromptInput() {
-  const { systemPrompt, userPrompt, updateUserPrompt, saveGeneratedAddresses } =
-    useAddressContext();
+  const {
+    systemPrompt,
+    userPrompt,
+    updateUserPrompt,
+    saveGeneratedAddresses,
+    setGeneratingState,
+  } = useAddressContext();
   const { mutate, isPending } = useGenerateAddressesMutation(saveGeneratedAddresses);
   const { t } = useTranslation("address:newAddress");
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering
 
   const [gptModel, setGptModel] = useState<GPTModel>(DEFAULT_MODEL);
   const [reasonEffort, setReasonEffort] = useState<ReasonEffort>(DEFAULT_EFFORT);
@@ -89,6 +94,11 @@ export default function UserPromptInput() {
       textareaRef.current.value = userPrompt;
     }
   }, [userPrompt]);
+
+  // change generating state when running queries
+  useEffect(() => {
+    setGeneratingState(isPending);
+  }, [isPending, setGeneratingState]);
 
   return (
     <>

@@ -3,7 +3,7 @@ import * as addressApi from "@/api/address";
 import { screen, fireEvent, waitFor } from "@/lib/test-utils";
 import UserPromptInput from "./UserPromptInput";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { REASONING_EFFORTS } from "@/consts/app-config";
+import { DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { useEffect } from "react";
 
@@ -22,7 +22,7 @@ describe("UserPromptInput", () => {
     expect(screen.getByText(/User prompt/)).toBeTruthy();
     expect(screen.getByRole("textbox")).toBeTruthy();
     expect(buttons.length).toBeGreaterThanOrEqual(4);
-    expect(screen.getByText("gpt-5-mini")).toBeTruthy();
+    expect(screen.getByText(DEFAULT_MODEL)).toBeTruthy();
   });
 
   it("updates textarea value and saves to context on blur", () => {
@@ -58,7 +58,7 @@ describe("UserPromptInput", () => {
   it("disables reasoning effort selector for non-gpt-5 models", async () => {
     renderWithProviders(<UserPromptInput />);
     // Change to gpt-4.1-mini model
-    const modelButton = screen.getByText("gpt-5-mini");
+    const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
     await waitFor(() => {
       const option = screen.getByText("gpt-4.1-mini");
@@ -98,10 +98,10 @@ describe("UserPromptInput", () => {
     fireEvent.change(textarea, { target: { value: "Generate addresses" } });
     fireEvent.blur(textarea);
     // Change model to gpt-5-nano
-    const modelButton = screen.getByText("gpt-5-mini");
+    const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
     await waitFor(() => {
-      const option = screen.getByText("gpt-5-nano");
+      const option = screen.getByText("gpt-5-mini");
       fireEvent.click(option);
     });
     // Change effort to high
@@ -119,7 +119,7 @@ describe("UserPromptInput", () => {
         language: "EN",
         systemPrompt: "some prompt",
         prompt: "Generate addresses",
-        model: "gpt-5-nano",
+        model: "gpt-5-mini",
         reasoningEffort: "high",
       });
     });

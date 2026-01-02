@@ -28,7 +28,7 @@
   @apply h-70;
 }
 
-.address-content__form {
+.address-content__body {
   @apply flex flex-col justify-between w-full max-w-180 text-left;
 }
 

@@ -43,9 +43,11 @@ const GeneratedAddress = AddressItem.extend({
 
 const GenerateAddressesResponse = z.array(GeneratedAddress);
 
+type AddressItemSchema = z.infer<typeof AddressItem>;
 type NewAddressRequestSchema = z.infer<typeof NewAddressRequest>;
 type GenerateAddressesRequestSchema = z.infer<typeof GenerateAddressesRequest>;
 type GenerateAddressesResponseSchema = z.infer<typeof GenerateAddressesResponse>;
+type GeneratedAddressSchema = z.infer<typeof GeneratedAddress>;
 
 // Extend error messages based on the i18n language
 const extendAddressSchema = (t: TFunction) =>
@@ -92,7 +94,9 @@ export {
   Address,
   createNewAddressRequestSchema,
   getDefaultForm,
+  type AddressItemSchema,
   type NewAddressRequestSchema,
   type GenerateAddressesRequestSchema,
   type GenerateAddressesResponseSchema,
+  type GeneratedAddressSchema,
 };

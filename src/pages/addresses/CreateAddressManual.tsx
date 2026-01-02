@@ -185,7 +185,7 @@ export default function CreateAddressesManual() {
 
   return (
     <form
-      className="address-content__form"
+      className="address-content__body"
       onSubmit={(e) => {
         e.preventDefault();
         form.handleSubmit();
