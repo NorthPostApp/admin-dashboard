@@ -11,13 +11,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useTranslation } from "react-i18next";
 
 export default function GeneratedAddresses() {
   const isMobile = useIsMobile();
   const { generating, generatedAddresses } = useAddressContext();
+  const { t } = useTranslation("address:newAddress");
 
   if (generating) {
-    return <Timer label={"Generating address"} interval={25} />;
+    return <Timer label={t("prompt.state.generating")} interval={25} />;
   }
 
   if (generatedAddresses.length !== 0) {

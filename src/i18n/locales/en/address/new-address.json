@@ -20,6 +20,9 @@
       "edit": "Edit",
       "save": "Save",
       "cancel": "Cancel"
+    },
+    "state": {
+      "generating": "Generating addresses"
     }
   },
   "form": {
@@ -82,6 +85,13 @@
     "nameField": "Name field shouldn't be empty",
     "tagsField": "Please provide at least one tag",
     "briefIntroField": "The brief introduction should have at least 5 words"
+  },
+  "success": {
+    "saved": "Address item has been saved",
+    "generated": "Addresses generated successfully"
+  },
+  "failed": {
+    "generated": "Failed to recognize the user prompt, got 0 results"
   },
   "json": {
     "trigger": "Import from JSON",

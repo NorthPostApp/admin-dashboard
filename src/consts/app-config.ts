@@ -10,7 +10,7 @@ export const GPT_MODELS = [
 ] as const;
 // reference: https://platform.openai.com/docs/guides/latest-model#gpt-5-2-parameter-compatibility
 // https://github.com/openai/openai-go/blob/1094636e1d496ed46d2f9e3b8cb5ee8614e443e9/shared/shared.go#L914
-export const REASONING_EFFORTS = ["none", "low", "medium", "high", "xhigh"] as const;
+export const REASONING_EFFORTS = ["low", "medium", "high", "xhigh"] as const;
 
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
 export type GPTModel = (typeof GPT_MODELS)[number];

@@ -20,6 +20,9 @@
       "edit": "编辑",
       "save": "保存",
       "cancel": "取消"
+    },
+    "state": {
+      "generating": "生成地址中"
     }
   },
   "form": {
@@ -83,6 +86,13 @@
     "nameField": "姓名字段不能为空",
     "tagsField": "请至少提供一个标签",
     "briefIntroField": "简介内容不少于5个字"
+  },
+  "success": {
+    "saved": "地址项已保存",
+    "generated": "地址已成功生成"
+    },
+    "failed": {
+    "generated": "无法识别用户提示词，未获得任何结果"
   },
   "json": {
     "trigger": "从 JSON 导入",

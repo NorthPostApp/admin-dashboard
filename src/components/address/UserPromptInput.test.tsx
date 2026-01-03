@@ -3,7 +3,7 @@ import * as addressApi from "@/api/address";
 import { screen, fireEvent, waitFor } from "@/lib/test-utils";
 import UserPromptInput from "./UserPromptInput";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
+import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { useEffect } from "react";
 
@@ -120,6 +120,110 @@ describe("UserPromptInput", () => {
         model: "gpt-5-mini",
         reasoningEffort: "high",
       });
+    });
+  });
+
+  it("blurs textarea when Escape key is pressed", () => {
+    renderWithProviders(<UserPromptInput />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    textarea.focus();
+    expect(document.activeElement).toBe(textarea);
+    fireEvent.keyDown(textarea, { key: "Escape" });
+    expect(document.activeElement).not.toBe(textarea);
+  });
+
+  it("inserts newline when Shift+Enter is pressed", () => {
+    renderWithProviders(<UserPromptInput />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "Line 1" } });
+    textarea.selectionStart = textarea.selectionEnd = 6; // Position cursor at end
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: true,
+    });
+    expect(textarea.value).toBe("Line 1\n");
+  });
+
+  it("inserts newline in middle of text when Shift+Enter is pressed", () => {
+    renderWithProviders(<UserPromptInput />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "HelloWorld" } });
+    textarea.selectionStart = textarea.selectionEnd = 5; // Position cursor after "Hello"
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: true,
+    });
+    expect(textarea.value).toBe("Hello\nWorld");
+    expect(textarea.selectionStart).toBe(6);
+    expect(textarea.selectionEnd).toBe(6);
+  });
+
+  it("submits form when Enter key is pressed without shift", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: false,
+    });
+    await waitFor(() => {
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith({
+        language: "EN",
+        systemPrompt: "system prompt",
+        prompt: "Generate addresses",
+        model: DEFAULT_MODEL,
+        reasoningEffort: DEFAULT_EFFORT,
+      });
+    });
+  });
+
+  it("does not submit when Enter is pressed with empty prompt", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: false,
+    });
+    await waitFor(() => {
+      expect(addressApi.generateAddresses).not.toHaveBeenCalled();
+    });
+  });
+
+  it("displays spinner when submission is pending", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    // Mock the API to delay response so we can check pending state
+    vi.mocked(addressApi.generateAddresses).mockImplementation(
+      () => new Promise((resolve) => setTimeout(() => resolve([]), 100))
+    );
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const submitButton = screen.getByTestId("address-userprompt-submit");
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    fireEvent.blur(textarea);
+    fireEvent.click(submitButton);
+    // Check that Spinner is displayed while pending
+    await waitFor(() => {
+      expect(screen.getByTestId("address-userprompt-spinner")).toBeTruthy();
     });
   });
 });

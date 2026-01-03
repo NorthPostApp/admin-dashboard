@@ -5,10 +5,12 @@ import type {
   GenerateAddressesRequestSchema,
   GenerateAddressesResponseSchema,
 } from "@/schemas/address-schema";
+import { useTranslation } from "react-i18next";
 
 export function useGenerateAddressesMutation(
   saveResultFn: (results: GenerateAddressesResponseSchema) => void
 ) {
+  const { t } = useTranslation("address:newAddress");
   const mutation = useMutation({
     mutationFn: (requestBody: GenerateAddressesRequestSchema) => {
       return generateAddresses(requestBody);
@@ -19,11 +21,11 @@ export function useGenerateAddressesMutation(
     onSuccess: (data: GenerateAddressesResponseSchema) => {
       const names = data.map((address) => address.name);
       if (names.length === 0) {
-        toast.error(`failed to recognize the user prompt, got 0 result.`);
+        toast.error(`${t("failed.generated")}`);
         return;
       }
       saveResultFn(data);
-      toast.success(`addresses generated successfully: ${names.join(", ")}`);
+      toast.success(`${t("success.generated")}: ${names.join(", ")}`);
     },
   });
   return mutation;
