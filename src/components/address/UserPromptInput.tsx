@@ -27,7 +27,7 @@ import { FieldLabel } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import "./Address.css";
 
-const getEffortIcon = (effort: ReasonEffort) => {
+const getEffortIcon = (effort: ReasonEffort | "none") => {
   switch (effort) {
     case "low":
       return <HeartMinus data-testid="effort-low" />;
@@ -196,7 +196,11 @@ export default function UserPromptInput() {
               onClick={() => submitRequest()}
               disabled={isPending}
             >
-              {isPending ? <Spinner /> : <Sparkles />}
+              {isPending ? (
+                <Spinner data-testid="address-userprompt-spinner" />
+              ) : (
+                <Sparkles />
+              )}
             </Button>
           </div>
         </div>

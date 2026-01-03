@@ -39,7 +39,7 @@ describe("useCreateNewAddressMutation", () => {
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(createNewAddress).toHaveBeenCalledWith(requestData);
-    expect(toast.success).toHaveBeenCalledWith("Address item 123 has been created.");
+    expect(toast.success).toHaveBeenCalledWith("Address item has been saved: 123");
   });
 
   it("should call clean up function when succeeded", async () => {
