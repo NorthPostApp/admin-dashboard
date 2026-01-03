@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import "./Address.css";
 
 type TagBadgeProps = {
   value: string;
@@ -9,7 +10,7 @@ type TagBadgeProps = {
 export default function TagBadge({ value, onRemoveTag }: TagBadgeProps) {
   return (
     <Badge asChild>
-      <div className="flex gap-2 items-center h-5 bg-primary/80">
+      <div className="address-component__tag">
         <p>{value}</p>
         {onRemoveTag && (
           <div className="hover:cursor-pointer">

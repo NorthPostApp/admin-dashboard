@@ -43,3 +43,39 @@
 .address-component__popover__header__description {
   @apply text-xs opacity-60 pt-1;
 }
+
+.address-component__card {
+  @apply gap-3 p-2.5 h-full;
+}
+
+.address-component__card__header {
+  @apply px-1;
+}
+
+.address-component__card__title {
+  @apply w-full flex justify-between gap-2 items-center;
+}
+
+.address-component__card__description {
+  @apply text-xs text-primary/50;
+}
+
+.address-component__card__content {
+  @apply flex flex-col gap-3 px-1;
+}
+
+.address-component__card__content__lines {
+  @apply text-sm text-primary/60;
+}
+
+.address-component__card__content__tags {
+  @apply w-full flex flex-wrap gap-1;
+}
+
+.address-component__carousel {
+  @apply w-full mx-auto my-2;
+}
+
+.address-component__tag {
+  @apply flex gap-2 items-center h-5 bg-primary/80;
+}

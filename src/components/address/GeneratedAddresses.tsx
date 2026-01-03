@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -11,7 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useTranslation } from "react-i18next";
+import "./Address.css";
 
 export default function GeneratedAddresses() {
   const isMobile = useIsMobile();
@@ -29,7 +30,7 @@ export default function GeneratedAddresses() {
           align: "start",
         }}
         orientation={isMobile ? "vertical" : "horizontal"}
-        className={cn("w-full mx-auto my-2", !isMobile && "max-w-[88%]")}
+        className={cn("address-component__carousel", !isMobile && "max-w-[88%]")}
       >
         <CarouselContent className="mb-2">
           {generatedAddresses.map((addressItem) => {
