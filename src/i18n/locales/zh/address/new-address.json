@@ -90,8 +90,8 @@
   "success": {
     "saved": "地址项已保存",
     "generated": "地址已成功生成"
-    },
-    "failed": {
+  },
+  "failed": {
     "generated": "无法识别用户提示词，未获得任何结果"
   },
   "json": {

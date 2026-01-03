@@ -35,23 +35,23 @@ export default function AddressCard({ addressItem, actions }: AddressCardProps) 
   const addressLines = formatAddressLines(addressItem as AddressItemSchema);
 
   return (
-    <Card className="gap-3 p-2.5 h-full">
-      <CardHeader className="px-1">
-        <CardTitle className="w-full flex justify-between gap-2 items-center">
+    <Card className="address-component__card">
+      <CardHeader className="address-component__card__header">
+        <CardTitle className="address-component__card__title">
           <p>{addressItem.name}</p>
           {actions}
         </CardTitle>
-        <CardDescription className="text-xs text-primary/50">
+        <CardDescription className="address-component__card__description">
           {addressItem.briefIntro}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-3 px-1">
-        <div className="text-sm text-primary/60">
+      <CardContent className="address-component__card__content">
+        <div className="address-component__card__content__lines">
           {addressLines.map((line) => {
             return <p key={`${addressItem.id}-${line}`}>{line}</p>;
           })}
         </div>
-        <div className="flex flex-wrap gap-1">
+        <div className="address-component__card__content__tags">
           {addressItem.tags.map((tag) => (
             <TagBadge key={`${addressItem.id}-${tag}`} value={tag} />
           ))}
