@@ -24,12 +24,14 @@ export default defineConfig({
     },
   },
   build: {
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom", "react-router"],
           "vendor-form": ["@tanstack/react-form", "@tanstack/react-query"],
           "vendor-i18n": ["i18next", "react-i18next", "i18next-resources-to-backend"],
+          "vendor-firebase": ["firebase/auth", "firebase/app"],
           lucide: ["lucide-react"],
           zod: ["zod"],
         },
