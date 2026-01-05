@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, createContext } from "react";
+import { useState, useEffect, useCallback, createContext, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   DEFAULT_LANGUAGE,
@@ -8,7 +8,7 @@ import {
   type Language,
   type Theme,
 } from "@/consts/app-config";
-import AddressContextProvider from "@/contexts/AddressContextProvider";
+import AuthContextProvider from "./AuthContextProvider";
 
 interface AppContextType {
   theme: Theme;
@@ -85,16 +85,19 @@ export default function AppContextProvider({ children }: { children: React.React
     document.title = t("title");
   }, [serviceInfo.language, t]);
 
+  const contextValue: AppContextType = useMemo(
+    () => ({
+      language: serviceInfo.language,
+      theme,
+      updateLanguage,
+      updateTheme,
+    }),
+    [theme, updateLanguage, updateTheme, serviceInfo.language]
+  );
+
   return (
-    <AppContext.Provider
-      value={{
-        ...serviceInfo,
-        theme,
-        updateLanguage,
-        updateTheme,
-      }}
-    >
-      <AddressContextProvider>{children}</AddressContextProvider>
+    <AppContext.Provider value={contextValue}>
+      <AuthContextProvider>{children}</AuthContextProvider>
     </AppContext.Provider>
   );
 }

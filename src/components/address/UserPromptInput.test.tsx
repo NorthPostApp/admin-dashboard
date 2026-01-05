@@ -100,17 +100,12 @@ describe("UserPromptInput", () => {
     // Change model to gpt-5-mini
     const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
-    await waitFor(() => {
-      const option = screen.getByText("gpt-5-mini");
-      fireEvent.click(option);
-    });
-    // Change effort to high
+    const option = screen.getByText("gpt-5-mini");
+    fireEvent.click(option);
     const effortButton = screen.getByTestId("address-userprompt-effort");
     fireEvent.click(effortButton);
-    await waitFor(() => {
-      const highOption = screen.getByText("high");
-      fireEvent.click(highOption);
-    });
+    const highOption = screen.getByText("high");
+    fireEvent.click(highOption);
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(addressApi.generateAddresses).toHaveBeenCalledWith({

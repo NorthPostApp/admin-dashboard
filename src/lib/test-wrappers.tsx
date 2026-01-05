@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppContextProvider from "@/contexts/AppContextProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import AddressContextProvider from "@/contexts/AddressContextProvider";
 
 export function renderWithProviders(children: React.ReactNode) {
   const queryClient = new QueryClient({
@@ -16,10 +17,12 @@ export function renderWithProviders(children: React.ReactNode) {
   });
 
   return render(
-    <AppContextProvider>
-      <QueryClientProvider client={queryClient}>
-        <SidebarProvider>{children}</SidebarProvider>
-      </QueryClientProvider>
-    </AppContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AppContextProvider>
+        <AddressContextProvider>
+          <SidebarProvider>{children}</SidebarProvider>
+        </AddressContextProvider>
+      </AppContextProvider>
+    </QueryClientProvider>
   );
 }
