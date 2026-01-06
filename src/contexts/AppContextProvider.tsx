@@ -8,7 +8,7 @@ import {
   type Language,
   type Theme,
 } from "@/consts/app-config";
-import AuthContextProvider from "./AuthContextProvider";
+import AuthContextProvider from "@/contexts/AuthContextProvider";
 
 interface AppContextType {
   theme: Theme;

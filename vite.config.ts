@@ -20,7 +20,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/lib/test-utils.ts",
     coverage: {
-      exclude: ["**/components/ui/**", "*.css", "**/i18n/", "src/api/"],
+      exclude: ["**/components/ui/**", "*.css", "**/i18n/", "src/api/", "src/lib/"],
     },
   },
   build: {

@@ -1,7 +1,7 @@
 @import "../../index.css";
 
 .sidebar {
-  @apply border-none;
+  @apply border-none p-2;
 }
 
 .sidebar-menu__button {

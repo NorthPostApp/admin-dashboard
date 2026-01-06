@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
 import AppLayout from "@/layouts/AppLayout";
-import RootLayout from "./layouts/RootLayout";
+import ProtectedRoute from "@/layouts/ProtectedRoute";
 
 // lazy imports for chunk size reduction
 // home
@@ -16,7 +16,7 @@ const AddressOverview = lazy(() => import("@/pages/addresses/Overview"));
 
 export const router = createBrowserRouter([
   {
-    Component: RootLayout,
+    Component: ProtectedRoute,
     children: [
       {
         path: "/login",

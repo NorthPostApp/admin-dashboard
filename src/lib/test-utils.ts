@@ -36,25 +36,37 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 // Mock Firebase Auth module
-vi.mock("firebase/auth", () => ({
-  getAuth: vi.fn(() => ({
-    currentUser: null,
-  })),
-  setPersistence: vi.fn(async () => {}),
-  browserLocalPersistence: {},
-  onAuthStateChanged: vi.fn((_, callback) => {
-    // Immediately call with null user for tests
-    callback(null);
-    return vi.fn(); // return unsubscribe function
-  }),
-  signInWithEmailAndPassword: vi.fn(),
-  signOut: vi.fn(),
-}));
+vi.mock("firebase/auth", () => {
+  return {
+    getAuth: vi.fn(() => ({
+      currentUser: null,
+    })),
+    setPersistence: vi.fn(async () => {}),
+    browserLocalPersistence: {},
+    onAuthStateChanged: vi.fn((_, callback) => {
+      // Immediately call with null user for tests
+      callback(null);
+      return vi.fn(); // return unsubscribe function
+    }),
+    signInWithEmailAndPassword: vi.fn(),
+    signOut: vi.fn(),
+  };
+});
 
 // Mock Firebase App module
-vi.mock("firebase/app", () => ({
-  initializeApp: vi.fn(() => ({})),
-}));
+vi.mock("firebase/app", () => {
+  return {
+    initializeApp: vi.fn(() => ({})),
+    FirebaseError: class FirebaseError extends Error {
+      code: string;
+      constructor(code: string, message: string) {
+        super(message);
+        this.name = "FirebaseError";
+        this.code = code;
+      }
+    },
+  };
+});
 
 beforeEach(() => {
   localStorage.clear();
