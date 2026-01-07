@@ -1,0 +1,28 @@
+{
+  "title": "NorthPost Admin System",
+  "description": "Sign in your admin account to continue",
+  "fields": {
+    "account": {
+      "label": "Account",
+      "placeholder": "you@example.com"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    }
+  },
+  "button": {
+    "submit": "Sign In",
+    "submitting": "Signing in..."
+  },
+  "toast": {
+    "welcome": "welcome back"
+  },
+  "errors": {
+    "default": "Failed to sign in. Please try again",
+    "user-disabled": "This account has been disabled",
+    "user-not-found": "No account found with this email",
+    "invalid-credential": "Invalid log in credential",
+    "too-many-requests": "Too many failed attempts. Please try again later"
+  }
+}
