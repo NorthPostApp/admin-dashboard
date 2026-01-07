@@ -1,11 +1,11 @@
+import { useEffect } from "react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import * as addressApi from "@/api/address";
-import { screen, fireEvent, waitFor } from "@/lib/test-utils";
-import UserPromptInput from "./UserPromptInput";
+import { screen, fireEvent, waitFor, MOCK_ID_TOKEN } from "@/lib/test-utils";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
 import { useAddressContext } from "@/hooks/useAddressContext";
-import { useEffect } from "react";
+import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
+import UserPromptInput from "./UserPromptInput";
 
 // Mock the address API
 vi.mock("@/api/address");
@@ -108,13 +108,16 @@ describe("UserPromptInput", () => {
     fireEvent.click(highOption);
     fireEvent.click(submitButton);
     await waitFor(() => {
-      expect(addressApi.generateAddresses).toHaveBeenCalledWith({
-        language: "EN",
-        systemPrompt: "some prompt",
-        prompt: "Generate addresses",
-        model: "gpt-5-mini",
-        reasoningEffort: "high",
-      });
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith(
+        {
+          language: "EN",
+          systemPrompt: "some prompt",
+          prompt: "Generate addresses",
+          model: "gpt-5-mini",
+          reasoningEffort: "high",
+        },
+        MOCK_ID_TOKEN
+      );
     });
   });
 
@@ -169,13 +172,16 @@ describe("UserPromptInput", () => {
       shiftKey: false,
     });
     await waitFor(() => {
-      expect(addressApi.generateAddresses).toHaveBeenCalledWith({
-        language: "EN",
-        systemPrompt: "system prompt",
-        prompt: "Generate addresses",
-        model: DEFAULT_MODEL,
-        reasoningEffort: DEFAULT_EFFORT,
-      });
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith(
+        {
+          language: "EN",
+          systemPrompt: "system prompt",
+          prompt: "Generate addresses",
+          model: DEFAULT_MODEL,
+          reasoningEffort: DEFAULT_EFFORT,
+        },
+        MOCK_ID_TOKEN
+      );
     });
   });
 

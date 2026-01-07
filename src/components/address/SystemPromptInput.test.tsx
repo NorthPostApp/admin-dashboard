@@ -84,7 +84,9 @@ describe("SystemPromptInput", () => {
     });
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
     await waitFor(() => {
-      expect(textarea.value).toBe("fetching failed, please provide your prompt");
+      expect(textarea.value).toBe(
+        "Failed to fetch system prompt, please check the login or server status"
+      );
     });
   });
 });

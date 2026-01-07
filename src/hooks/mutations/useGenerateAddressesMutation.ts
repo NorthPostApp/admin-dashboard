@@ -6,14 +6,17 @@ import type {
   GenerateAddressesResponseSchema,
 } from "@/schemas/address-schema";
 import { useTranslation } from "react-i18next";
+import { useAuthContext } from "../useAuthContext";
 
 export function useGenerateAddressesMutation(
   saveResultFn: (results: GenerateAddressesResponseSchema) => void
 ) {
   const { t } = useTranslation("address:newAddress");
+  const { user } = useAuthContext();
   const mutation = useMutation({
-    mutationFn: (requestBody: GenerateAddressesRequestSchema) => {
-      return generateAddresses(requestBody);
+    mutationFn: async (requestBody: GenerateAddressesRequestSchema) => {
+      const idToken = (await user?.getIdToken()) || "";
+      return generateAddresses(requestBody, idToken);
     },
     onError: (error) => {
       toast.error(error.message);

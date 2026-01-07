@@ -8,6 +8,8 @@ import type {
   GenerateAddressesRequestSchema,
   GenerateAddressesResponseSchema,
 } from "@/schemas/address-schema";
+import AuthContextProvider from "@/contexts/AuthContextProvider";
+import { MOCK_ID_TOKEN } from "@/lib/test-utils";
 
 vi.mock("sonner");
 vi.mock("@/api/address");
@@ -28,7 +30,9 @@ const createWrapper = () => {
     },
   });
   return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>{children}</AuthContextProvider>
+    </QueryClientProvider>
   );
 };
 
@@ -77,7 +81,7 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY);
+    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
     expect(saveResultFn).toHaveBeenCalledWith(mockResponse);
     expect(toast.success).toHaveBeenCalled();
   });
@@ -91,7 +95,7 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY);
+    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
     expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
@@ -106,7 +110,7 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY);
+    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
     expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
     expect(toast.success).not.toHaveBeenCalled();

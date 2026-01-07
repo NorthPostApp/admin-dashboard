@@ -72,9 +72,8 @@ export default function SystemPromptInput() {
         } else if (result.error) {
           // the tanstack query doesn't "throw" error by default
           // so we use result.error instead of catch
-          // update this to i18n
-          updateSystemPrompt(language, "fetching failed, please provide your prompt");
-          fetchedPrompt = "fetching failed, please provide your prompt";
+          updateSystemPrompt(language, t("failed.fetch"));
+          fetchedPrompt = t("failed.fetch");
         }
         if (textareaRef && textareaRef.current) {
           textareaRef.current.value = fetchedPrompt;
@@ -84,7 +83,7 @@ export default function SystemPromptInput() {
     if (textareaRef && textareaRef.current) {
       textareaRef.current.value = systemPrompt?.prompt || "";
     }
-  }, [language, systemPrompt, refetch, updateSystemPrompt]);
+  }, [language, systemPrompt, refetch, updateSystemPrompt, t]);
 
   return (
     <>
