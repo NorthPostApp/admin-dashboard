@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { FirebaseError } from "firebase/app";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import z from "zod";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -25,6 +26,7 @@ type LoginFormSchema = z.infer<typeof LoginForm>;
 export default function Login() {
   const { signIn } = useAuthContext();
   const navigate = useNavigate();
+  const { t } = useTranslation("login");
 
   const form = useForm({
     defaultValues: {
@@ -39,25 +41,25 @@ export default function Login() {
       try {
         await signIn(value.account, value.password);
         // toast.success(`welcome back: ${userCredential.user.displayName}`); // will update this
-        toast.success("welcome back");
+        toast.success(t("toast.welcome"));
         navigate("/");
       } catch (err) {
-        let errorMessage = "Failed to sign in. Please try again";
+        let errorMessage = t("errors.default");
         if (err instanceof FirebaseError) {
           switch (err.code) {
             case "auth/user-disabled":
-              errorMessage = "This account has been disabled";
+              errorMessage = t("errors.user-disabled");
               break;
             case "auth/user-not-found":
-              errorMessage = "No account found with this email";
+              errorMessage = t("errors.user-not-found");
               break;
             case "auth/wrong-password":
             case "auth/invalid-credential":
             case "auth/invalid-email":
-              errorMessage = "Invalid log in credential";
+              errorMessage = t("errors.invalid-credential");
               break;
             case "auth/too-many-requests":
-              errorMessage = "Too many failed attempts. Please try again later";
+              errorMessage = t("errors.too-many-requests");
               break;
           }
         }
@@ -69,8 +71,8 @@ export default function Login() {
 
   const getFormField = (name: keyof LoginFormSchema) => {
     const type = name === "account" ? "email" : "password";
-    const placeholder = type === "email" ? "you@example.com" : "Enter your password";
-    const label = name[0].toUpperCase() + name.slice(1);
+    const placeholder = t(`fields.${name}.placeholder`);
+    const label = t(`fields.${name}.label`);
     return (
       <form.Field
         name={name}
@@ -101,8 +103,8 @@ export default function Login() {
     <div className="w-full h-full flex justify-center items-center">
       <Card className="w-md">
         <CardHeader>
-          <CardTitle>NorthPost Admin System</CardTitle>
-          <CardDescription>Sign in your admin account to continue</CardDescription>
+          <CardTitle>{t("title")}</CardTitle>
+          <CardDescription>{t("description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form
@@ -123,7 +125,7 @@ export default function Login() {
                   disabled={isSubmitting}
                 >
                   {isSubmitting && <Spinner />}
-                  {isSubmitting ? "Signing in..." : "Sign In"}
+                  {isSubmitting ? t("button.submitting") : t("button.submit")}
                 </Button>
               )}
             />

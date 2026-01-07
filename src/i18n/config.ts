@@ -15,6 +15,8 @@ i18n
           return import(`./locales/${language.toLowerCase()}/webpage.json`);
         case "sidebar":
           return import(`./locales/${language.toLowerCase()}/sidebar.json`);
+        case "login":
+          return import(`./locales/${language.toLowerCase()}/login/login.json`);
         case "address:newAddress":
           return import(`./locales/${language.toLowerCase()}/address/new-address.json`);
       }
@@ -23,7 +25,7 @@ i18n
   .init({
     lng: initialLanguage.toLowerCase(),
     fallbackLng: "en",
-    ns: ["webpage", "sidebar", "address:newAddress"],
+    ns: ["webpage", "sidebar", "login", "address:newAddress"],
     debug: import.meta.env.Mode === "development",
     interpolation: {
       escapeValue: false,
