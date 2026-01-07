@@ -91,7 +91,8 @@
     "generated": "Addresses generated successfully"
   },
   "failed": {
-    "generated": "Failed to recognize the user prompt, got 0 results"
+    "generated": "Failed to recognize the user prompt, got 0 results",
+    "fetch": "Failed to fetch system prompt, please check the login or server status"
   },
   "json": {
     "trigger": "Import from JSON",

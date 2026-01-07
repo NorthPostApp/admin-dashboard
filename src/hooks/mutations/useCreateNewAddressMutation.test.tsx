@@ -6,6 +6,8 @@ import { useCreateNewAddressMutation } from "./useCreateNewAddressMutation";
 import { createNewAddress } from "@/api/address";
 import { getDefaultForm, type NewAddressRequestSchema } from "@/schemas/address-schema";
 import type { CreateNewAddressResponse } from "@/api/address";
+import AuthContextProvider from "@/contexts/AuthContextProvider";
+import { MOCK_ID_TOKEN } from "@/lib/test-utils";
 
 vi.mock("sonner");
 vi.mock("@/api/address");
@@ -18,7 +20,9 @@ const createWrapper = () => {
     },
   });
   return ({ children }: { children: React.ReactNode }) => (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>{children}</AuthContextProvider>
+    </QueryClientProvider>
   );
 };
 
@@ -38,7 +42,7 @@ describe("useCreateNewAddressMutation", () => {
     const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(createNewAddress).toHaveBeenCalledWith(requestData);
+    expect(createNewAddress).toHaveBeenCalledWith(requestData, MOCK_ID_TOKEN);
     expect(toast.success).toHaveBeenCalledWith("Address item has been saved: 123");
   });
 

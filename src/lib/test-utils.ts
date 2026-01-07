@@ -2,6 +2,8 @@ import { beforeEach, vi } from "vitest";
 import "../i18n/config";
 export * from "@testing-library/react";
 
+export const MOCK_ID_TOKEN = "mock.id.token";
+
 // Mocking local storage implementation
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
@@ -44,8 +46,13 @@ vi.mock("firebase/auth", () => {
     setPersistence: vi.fn(async () => {}),
     browserLocalPersistence: {},
     onAuthStateChanged: vi.fn((_, callback) => {
-      // Immediately call with null user for tests
-      callback(null);
+      // Mock user with getIdToken method for tests
+      const mockUser = {
+        uid: "test-user-id",
+        email: "test@example.com",
+        getIdToken: vi.fn().mockResolvedValue(MOCK_ID_TOKEN),
+      };
+      callback(mockUser);
       return vi.fn(); // return unsubscribe function
     }),
     signInWithEmailAndPassword: vi.fn(),

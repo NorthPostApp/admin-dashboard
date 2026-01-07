@@ -10,14 +10,13 @@ type CreateNewAddressResponse = { id: string };
 type GetSystemPromptResponse = { data: string };
 
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
-const TOKEN = import.meta.env.VITE_BEARER_TOKEN;
 
-async function createNewAddress(data: NewAddressRequestSchema) {
+async function createNewAddress(data: NewAddressRequestSchema, idToken: string) {
   const response = await fetch(BASE_URL + "/address", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify(data),
   });
@@ -31,12 +30,15 @@ async function createNewAddress(data: NewAddressRequestSchema) {
   return (await response.json()) as CreateNewAddressResponse;
 }
 
-async function generateAddresses(requestBody: GenerateAddressesRequestSchema) {
+async function generateAddresses(
+  requestBody: GenerateAddressesRequestSchema,
+  idToken: string
+) {
   const response = await fetch(`${BASE_URL}/address/generate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify(requestBody),
   });
@@ -49,11 +51,15 @@ async function generateAddresses(requestBody: GenerateAddressesRequestSchema) {
   return (await response.json()).data as GenerateAddressesResponseSchema;
 }
 
-async function getSystemPrompt(language: Language, signal?: AbortSignal) {
+async function getSystemPrompt(
+  language: Language,
+  idToken: string,
+  signal?: AbortSignal
+) {
   const response = await fetch(`${BASE_URL}/prompt/system/address?language=${language}`, {
     method: "GET",
     headers: {
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${idToken}`,
     },
     signal,
   });
