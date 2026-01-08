@@ -29,7 +29,7 @@
 }
 
 .address-content__body {
-  @apply flex flex-col justify-between w-full max-w-180 text-left;
+  @apply flex flex-col justify-between w-full max-w-240 text-left;
 }
 
 .address-content__form__group {
