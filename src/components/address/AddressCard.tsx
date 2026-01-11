@@ -1,8 +1,5 @@
 import type { ReactNode } from "react";
-import {
-  type GeneratedAddressSchema,
-  type AddressItemSchema,
-} from "@/schemas/address-schema";
+import { type GeneratedAddressSchema, type AddressItemSchema } from "@/schemas/address";
 import TagBadge from "@/components/address/TagBadge";
 import {
   Card,

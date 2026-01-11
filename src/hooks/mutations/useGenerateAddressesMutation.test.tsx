@@ -7,7 +7,7 @@ import { generateAddresses } from "@/api/address";
 import type {
   GenerateAddressesRequestSchema,
   GenerateAddressesResponseSchema,
-} from "@/schemas/address-schema";
+} from "@/schemas/address";
 import AuthContextProvider from "@/contexts/AuthContextProvider";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";
 

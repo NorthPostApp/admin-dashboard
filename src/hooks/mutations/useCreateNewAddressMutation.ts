@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import type { NewAddressRequestSchema } from "@/schemas/address-schema";
+import type { NewAddressRequestSchema } from "@/schemas/address";
 import { createNewAddress, type CreateNewAddressResponse } from "@/api/address";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../useAuthContext";

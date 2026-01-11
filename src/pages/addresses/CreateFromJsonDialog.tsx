@@ -1,9 +1,6 @@
 import { useRef, useState } from "react";
 import { useAppContext } from "@/hooks/useAppContext";
-import {
-  NewAddressRequest,
-  type NewAddressRequestSchema,
-} from "@/schemas/address-schema";
+import { NewAddressRequest, type NewAddressRequestSchema } from "@/schemas/address";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

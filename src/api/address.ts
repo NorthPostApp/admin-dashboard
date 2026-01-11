@@ -2,7 +2,7 @@ import type {
   GenerateAddressesRequestSchema,
   GenerateAddressesResponseSchema,
   NewAddressRequestSchema,
-} from "@/schemas/address-schema";
+} from "@/schemas/address";
 import type { Language } from "@/consts/app-config";
 
 type ServiceError = { error: string };

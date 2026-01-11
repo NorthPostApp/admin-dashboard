@@ -5,9 +5,12 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
+  type UserCredential,
 } from "firebase/auth";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import AuthContextProvider from "./AuthContextProvider";
+import type { AdminUserData } from "@/schemas/user";
+import { signInAdminUser } from "@/api/user";
 
 // Mock Firebase auth
 vi.mock("firebase/auth", async () => {
@@ -23,6 +26,15 @@ vi.mock("firebase/auth", async () => {
 vi.mock("@/lib/firebase", () => ({
   auth: {},
 }));
+
+// Mock the user API
+vi.mock("@/api/user", () => ({
+  signInAdminUser: vi.fn(),
+}));
+
+const mockGetIdToken: (forceRefresh?: boolean) => Promise<string> = vi
+  .fn()
+  .mockResolvedValue("mock-id-token");
 
 // Test component that uses the context
 function TestComponent() {
@@ -126,6 +138,31 @@ describe("AuthContextProvider", () => {
       }
       return unsubscribeMock;
     });
+
+    // Mock signInWithEmailAndPassword to return a proper UserCredential
+    // const mockGetIdToken = vi.fn<[], Promise<string>>().mockResolvedValue("mock-id-token");
+    const mockUserCredential: UserCredential = {
+      user: {
+        uid: "123",
+        email: "test@example.com",
+        getIdToken: mockGetIdToken,
+      } as User,
+      providerId: null,
+      operationType: "signIn",
+    };
+    vi.mocked(signInWithEmailAndPassword).mockResolvedValue(mockUserCredential);
+
+    // Mock signInAdminUser API
+    const mockAdminUserData: AdminUserData = {
+      displayName: "Test User",
+      email: "test@example.com",
+      lastLogin: Date.now(),
+      imageUrl: null,
+    };
+    vi.mocked(signInAdminUser).mockResolvedValue({
+      data: mockAdminUserData,
+    });
+
     render(
       <AuthContextProvider>
         <TestComponent />

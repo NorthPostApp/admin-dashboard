@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useCreateNewAddressMutation } from "./useCreateNewAddressMutation";
 import { createNewAddress } from "@/api/address";
-import { getDefaultForm, type NewAddressRequestSchema } from "@/schemas/address-schema";
+import { getDefaultForm, type NewAddressRequestSchema } from "@/schemas/address";
 import type { CreateNewAddressResponse } from "@/api/address";
 import AuthContextProvider from "@/contexts/AuthContextProvider";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";

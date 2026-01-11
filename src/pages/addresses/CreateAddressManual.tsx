@@ -7,7 +7,7 @@ import {
   createNewAddressRequestSchema,
   getDefaultForm,
   type NewAddressRequestSchema,
-} from "@/schemas/address-schema";
+} from "@/schemas/address";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 import CreateFromJsonDialog from "@/pages/addresses/CreateFromJsonDialog";

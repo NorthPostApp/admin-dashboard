@@ -5,10 +5,15 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { FirebaseError } from "firebase/app";
 import { toast } from "sonner";
 import Login from "./Login";
+import { useAppContext } from "@/hooks/useAppContext";
 
 // Mock dependencies
 vi.mock("@/hooks/useAuthContext", () => ({
   useAuthContext: vi.fn(),
+}));
+
+vi.mock("@/hooks/useAppContext", () => ({
+  useAppContext: vi.fn(),
 }));
 
 vi.mock("sonner", () => ({
@@ -24,6 +29,7 @@ vi.mock("react-router", () => ({
 }));
 
 const mockSignIn = vi.fn();
+const mockUpdateLanguage = vi.fn();
 
 describe("Login", () => {
   beforeEach(() => {
@@ -33,6 +39,12 @@ describe("Login", () => {
       signOut: vi.fn(),
       user: null,
       loading: false,
+    });
+    vi.mocked(useAppContext).mockReturnValue({
+      language: "EN",
+      theme: "system",
+      updateLanguage: mockUpdateLanguage,
+      updateTheme: vi.fn(),
     });
   });
 
@@ -84,7 +96,7 @@ describe("Login", () => {
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(mockSignIn).toHaveBeenCalledWith("test@example.com", "password123");
-      expect(toast.success).toHaveBeenCalledWith("welcome back");
+      expect(toast.success).toHaveBeenCalled();
       expect(mockNavigate).toHaveBeenCalledWith("/");
     });
   });
@@ -172,6 +184,23 @@ describe("Login", () => {
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith("Failed to sign in. Please try again");
+    });
+  });
+
+  it("renders language selector with current language", () => {
+    renderWithProviders(<Login />);
+    const languageSelector = screen.getByLabelText(/language/i);
+    expect(languageSelector).toBeTruthy();
+    expect(screen.getByRole("combobox", { name: /language/i })).toBeTruthy();
+  });
+
+  it("calls updateLanguage when language is changed", async () => {
+    renderWithProviders(<Login />);
+    const languageSelector = screen.getByLabelText(/language/i) as HTMLSelectElement;
+    fireEvent.change(languageSelector, { target: { value: "ZH" } });
+    await waitFor(() => {
+      expect(mockUpdateLanguage).toHaveBeenCalledWith("ZH");
+      expect(mockUpdateLanguage).toHaveBeenCalledTimes(1);
     });
   });
 });

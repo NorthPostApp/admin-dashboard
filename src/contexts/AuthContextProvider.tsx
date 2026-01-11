@@ -4,14 +4,15 @@ import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   type User,
-  type UserCredential,
 } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { signInAdminUser } from "@/api/user";
+import { clearLocalUserData, updateLocalUserData } from "@/consts/app-config";
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<UserCredential>;
+  signIn: (email: string, password: string) => Promise<string>;
   signOut: () => Promise<void>;
 }
 
@@ -24,6 +25,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   useEffect(() => {
     // subscribes to auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) clearLocalUserData();
       setUser(user);
       setLoading(false);
     });
@@ -32,11 +34,17 @@ export default function AuthContextProvider({ children }: { children: React.Reac
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
-    return await signInWithEmailAndPassword(auth, email, password);
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const idToken = await userCredential.user.getIdToken();
+    const uid = userCredential.user.uid;
+    const adminUserData = (await signInAdminUser(idToken, uid)).data;
+    updateLocalUserData(adminUserData);
+    return adminUserData.displayName;
   }, []);
 
   const signOut = useCallback(async () => {
     await firebaseSignOut(auth);
+    clearLocalUserData();
   }, []);
 
   const contextValue: AuthContextType = useMemo(

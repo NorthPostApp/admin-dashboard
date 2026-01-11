@@ -2,9 +2,11 @@ import { useNavigate } from "react-router";
 import { revalidateLogic, useForm } from "@tanstack/react-form";
 import { FirebaseError } from "firebase/app";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
 import z from "zod";
+import { toast } from "sonner";
+import { SUPPORTED_LANGUAGES, type Language } from "@/consts/app-config";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { useAppContext } from "@/hooks/useAppContext";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -25,6 +27,7 @@ type LoginFormSchema = z.infer<typeof LoginForm>;
 
 export default function Login() {
   const { signIn } = useAuthContext();
+  const { language: currLanguage, updateLanguage } = useAppContext();
   const navigate = useNavigate();
   const { t } = useTranslation("login");
 
@@ -39,9 +42,8 @@ export default function Login() {
     },
     onSubmit: async ({ value }) => {
       try {
-        await signIn(value.account, value.password);
-        // toast.success(`welcome back: ${userCredential.user.displayName}`); // will update this
-        toast.success(t("toast.welcome"));
+        const userDisplayName = await signIn(value.account, value.password);
+        toast.success(`${t("toast.welcome")}: ${userDisplayName}`); // will update this
         navigate("/");
       } catch (err) {
         let errorMessage = t("errors.default");
@@ -100,7 +102,7 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center gap-3">
       <Card className="w-md">
         <CardHeader>
           <CardTitle>{t("title")}</CardTitle>
@@ -121,7 +123,7 @@ export default function Login() {
               children={([isSubmitting]) => (
                 <Button
                   type="submit"
-                  className="w-full flex gap-4 mt-12"
+                  className="w-full flex gap-4 mt-8"
                   disabled={isSubmitting}
                 >
                   {isSubmitting && <Spinner />}
@@ -132,6 +134,19 @@ export default function Login() {
           </form>
         </CardContent>
       </Card>
+      <div className="flex gap-2 justify-center items-center text-sm text-primary/50">
+        <label htmlFor="login-language-selector">{`${t("footer.language")}:`}</label>
+        <select
+          id="login-language-selector"
+          className="focus-visible:outline-0 appearance-none underline hover:cursor-pointer"
+          defaultValue={currLanguage}
+          onChange={(e) => updateLanguage(e.target.value as Language)}
+        >
+          {SUPPORTED_LANGUAGES.map((language) => {
+            return <option key={`login-language-${language}`}>{language}</option>;
+          })}
+        </select>
+      </div>
     </div>
   );
 }

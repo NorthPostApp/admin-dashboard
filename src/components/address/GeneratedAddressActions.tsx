@@ -1,10 +1,7 @@
 import { EllipsisVertical } from "lucide-react";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
-import type {
-  GeneratedAddressSchema,
-  NewAddressRequestSchema,
-} from "@/schemas/address-schema";
+import type { GeneratedAddressSchema, NewAddressRequestSchema } from "@/schemas/address";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { PopoverMenu, type PopoverOption } from "@/components/address/PopoverMenu";

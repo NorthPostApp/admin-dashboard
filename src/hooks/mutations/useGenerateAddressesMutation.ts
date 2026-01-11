@@ -4,7 +4,7 @@ import { generateAddresses } from "@/api/address";
 import type {
   GenerateAddressesRequestSchema,
   GenerateAddressesResponseSchema,
-} from "@/schemas/address-schema";
+} from "@/schemas/address";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../useAuthContext";
 
