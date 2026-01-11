@@ -2,7 +2,7 @@ import { describe, vi, it, expect, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
 import AppContextProvider from "./AppContextProvider";
 import { useAppContext } from "@/hooks/useAppContext";
-import { LOCALSTORAGE_KEY } from "@/consts/app-config";
+import { getLocalAppConfig, updateLocalAppConfig } from "@/consts/app-config";
 
 // Test component that uses the context
 function TestComponent() {
@@ -92,22 +92,19 @@ describe("AppContextProvider", () => {
     );
     const changeENButton = screen.getByTestId("en-button");
     fireEvent.click(changeENButton);
-    let storedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}");
+    let storedData = getLocalAppConfig();
     expect(storedData.language).toEqual("EN");
     expect(screen.getByText("EN")).toBeTruthy();
     const changeZHButton = screen.getByTestId("zh-button");
     fireEvent.click(changeZHButton);
-    storedData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}");
+    storedData = getLocalAppConfig();
     expect(storedData.language).toEqual("ZH");
     expect(screen.getByText("ZH")).toBeTruthy();
   });
 
   it("loads config from localStorage on mount", async () => {
     vi.resetModules(); // clear modules to allow modules been loaded after local storage setup
-    localStorage.setItem(
-      LOCALSTORAGE_KEY,
-      JSON.stringify({ language: "EN", theme: "dark" })
-    );
+    updateLocalAppConfig({ language: "EN", theme: "dark" });
     // Dynamically import the module AFTER setting localStorage
     const { default: AppContextProvider } = await import("./AppContextProvider");
     const { useAppContext } = await import("../hooks/useAppContext");

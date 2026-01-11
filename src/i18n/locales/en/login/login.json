@@ -24,5 +24,8 @@
     "user-not-found": "No account found with this email",
     "invalid-credential": "Invalid log in credential",
     "too-many-requests": "Too many failed attempts. Please try again later"
+  },
+  "footer": {
+    "language": "Language"
   }
 }

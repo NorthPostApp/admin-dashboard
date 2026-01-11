@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import AddressCard from "./AddressCard";
-import type { GeneratedAddressSchema } from "@/schemas/address-schema";
+import type { GeneratedAddressSchema } from "@/schemas/address";
 
 const mockAddressItem: GeneratedAddressSchema = {
   id: "addr-123",

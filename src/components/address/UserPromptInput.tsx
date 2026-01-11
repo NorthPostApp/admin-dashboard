@@ -17,7 +17,7 @@ import {
   type GPTModel,
   type ReasonEffort,
 } from "@/consts/app-config";
-import type { GenerateAddressesRequestSchema } from "@/schemas/address-schema";
+import type { GenerateAddressesRequestSchema } from "@/schemas/address";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { useGenerateAddressesMutation } from "@/hooks/mutations/useGenerateAddressesMutation";
 import { PopoverSelector } from "@/components/address/PopoverSelector";

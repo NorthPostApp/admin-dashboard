@@ -1,6 +1,6 @@
 import { useState, createContext, useCallback, useMemo } from "react";
 import { type Language } from "@/consts/app-config";
-import type { GenerateAddressesResponseSchema } from "@/schemas/address-schema";
+import type { GenerateAddressesResponseSchema } from "@/schemas/address";
 
 type SystemPrompt = {
   language: Language; // use to compare app language and prompt language

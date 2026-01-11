@@ -24,5 +24,8 @@
     "user-not-found": "未找到与此邮箱关联的账号",
     "invalid-credential": "登录凭证无效",
     "too-many-requests": "尝试次数过多，请稍后再试"
+  },
+  "footer": {
+    "language": "语言"
   }
 }
