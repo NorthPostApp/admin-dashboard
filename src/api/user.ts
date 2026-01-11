@@ -19,7 +19,7 @@ async function signInAdminUser(idToken: string, uid: string) {
   });
   if (!response.ok) {
     const errorData = (await response.json()) as ServiceError;
-    const errorMessage = errorData.error || `Error sign in user: ${response.status}`;
+    const errorMessage = errorData.error || `Error signing in user: ${response.status}`;
     throw new Error(errorMessage);
   }
   return (await response.json()) as SignInAdminUserResponse;

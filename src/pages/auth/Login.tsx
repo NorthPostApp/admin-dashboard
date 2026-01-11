@@ -143,7 +143,11 @@ export default function Login() {
           onChange={(e) => updateLanguage(e.target.value as Language)}
         >
           {SUPPORTED_LANGUAGES.map((language) => {
-            return <option key={`login-language-${language}`}>{language}</option>;
+            return (
+              <option key={`login-language-${language}`} value={language}>
+                {language}
+              </option>
+            );
           })}
         </select>
       </div>

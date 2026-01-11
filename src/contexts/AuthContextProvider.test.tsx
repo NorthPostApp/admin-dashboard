@@ -140,7 +140,6 @@ describe("AuthContextProvider", () => {
     });
 
     // Mock signInWithEmailAndPassword to return a proper UserCredential
-    // const mockGetIdToken = vi.fn<[], Promise<string>>().mockResolvedValue("mock-id-token");
     const mockUserCredential: UserCredential = {
       user: {
         uid: "123",
