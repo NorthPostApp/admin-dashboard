@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import CopyButton from "@/components/ui/copy-button";
 
 type AddressCardProps = {
   addressItem: GeneratedAddressSchema;
@@ -36,7 +37,10 @@ export default function AddressCard({ addressItem, actions }: AddressCardProps) 
       <CardHeader className="address-component__card__header">
         <CardTitle className="address-component__card__title">
           <p>{addressItem.name}</p>
-          {actions}
+          <div>
+            <CopyButton content={JSON.stringify(addressItem, null, 2)} />
+            {actions}
+          </div>
         </CardTitle>
         <CardDescription className="address-component__card__description">
           {addressItem.briefIntro}

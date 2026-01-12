@@ -4,13 +4,13 @@ import { useForm, revalidateLogic } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
 import {
   Address,
-  createNewAddressRequestSchema,
+  createAddressItemSchema,
   getDefaultForm,
-  type NewAddressRequestSchema,
+  type AddressItemSchema,
 } from "@/schemas/address";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
-import CreateFromJsonDialog from "@/pages/addresses/CreateFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
 import InputAndButton from "@/components/address/InputAndButton";
 import TagBadge from "@/components/address/TagBadge";
 import { Input } from "@/components/ui/input";
@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/field";
 
 type FormFields =
-  | Exclude<keyof NewAddressRequestSchema, "address">
+  | Exclude<keyof AddressItemSchema, "address">
   | `address.${keyof z.infer<typeof Address>}`;
 
 export default function CreateAddressesManual() {
@@ -38,11 +38,11 @@ export default function CreateAddressesManual() {
 
   const form = useForm({
     defaultValues: {
-      ...getDefaultForm(language),
-    } satisfies NewAddressRequestSchema,
+      ...getDefaultForm(),
+    } satisfies AddressItemSchema,
     validationLogic: revalidateLogic({ mode: "blur" }), // validate when focus out the field
     validators: {
-      onDynamic: createNewAddressRequestSchema(t),
+      onDynamic: createAddressItemSchema(t),
     },
     onSubmit: ({ value }) => {
       mutation.mutate(value);
@@ -74,8 +74,7 @@ export default function CreateAddressesManual() {
     form.setFieldValue("tags", newTags);
   };
 
-  const handleJsonImport = (formData: NewAddressRequestSchema) => {
-    form.setFieldValue("language", formData.language);
+  const handleJsonSave = (formData: AddressItemSchema) => {
     form.setFieldValue("name", formData.name);
     form.setFieldValue("tags", formData.tags);
     form.setFieldValue("briefIntro", formData.briefIntro);
@@ -179,7 +178,6 @@ export default function CreateAddressesManual() {
 
   // update form language when language updated
   useEffect(() => {
-    form.setFieldValue("language", language);
     cleanupFn();
   }, [language, form, cleanupFn]);
 
@@ -195,7 +193,19 @@ export default function CreateAddressesManual() {
         <FieldSet>
           <FieldLegend>
             <span>{t("form.basicInfo.legend")}</span>
-            <CreateFromJsonDialog handleJsonImport={handleJsonImport} />
+            <AddressFromJsonDialog
+              handleJsonSave={handleJsonSave}
+              title={t("json.title")}
+              description={t("json.description")}
+            >
+              <Button
+                variant="link"
+                size="sm"
+                className="address-content__dialog__trigger"
+              >
+                {t("json.trigger")}
+              </Button>
+            </AddressFromJsonDialog>
           </FieldLegend>
           <FieldDescription>{t("form.basicInfo.description")}</FieldDescription>
           <FieldGroup className="address-content__form__group">

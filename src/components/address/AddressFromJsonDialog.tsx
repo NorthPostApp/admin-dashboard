@@ -1,6 +1,5 @@
-import { useRef, useState } from "react";
-import { useAppContext } from "@/hooks/useAppContext";
-import { NewAddressRequest, type NewAddressRequestSchema } from "@/schemas/address";
+import { useRef, useState, type PropsWithChildren } from "react";
+import { AddressItem, type AddressItemSchema } from "@/schemas/address";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,14 +14,18 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslation } from "react-i18next";
 
-type CreateFromJsonDialogProps = {
-  handleJsonImport: (formData: NewAddressRequestSchema) => void;
-};
+type AddressFromJsonDialogProps = {
+  handleJsonSave: (formData: AddressItemSchema) => void;
+  title: string;
+  description: string;
+} & PropsWithChildren;
 
-export default function CreateFromJsonDialog({
-  handleJsonImport,
-}: CreateFromJsonDialogProps) {
-  const { language } = useAppContext();
+export default function AddressFromJsonDialog({
+  handleJsonSave,
+  title,
+  description,
+  children,
+}: AddressFromJsonDialogProps) {
   const { t } = useTranslation("address:newAddress");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -35,10 +38,9 @@ export default function CreateFromJsonDialog({
       const jsonContent = textAreaRef.current?.value;
       if (jsonContent) {
         const output = JSON.parse(jsonContent);
-        output["language"] = language;
-        const result = NewAddressRequest.safeParse(output);
+        const result = AddressItem.safeParse(output);
         if (result.success) {
-          handleJsonImport(result.data);
+          handleJsonSave(result.data);
           setDialogOpen(false);
         } else {
           throw result.error;
@@ -55,18 +57,14 @@ export default function CreateFromJsonDialog({
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="link" size="sm" className="address-content__dialog__trigger">
-          {t("json.trigger")}
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         className="address-content__dialog__content"
         container={document.querySelector("main") ?? undefined}
       >
         <DialogHeader>
-          <DialogTitle>{t("json.title")}</DialogTitle>
-          <DialogDescription>{t("json.description")}</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         <Textarea
           ref={textAreaRef}

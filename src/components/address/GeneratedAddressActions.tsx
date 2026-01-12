@@ -4,7 +4,7 @@ import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddre
 import type { GeneratedAddressSchema, NewAddressRequestSchema } from "@/schemas/address";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { PopoverMenu, type PopoverOption } from "@/components/address/PopoverMenu";
+import { PopoverMenu, type PopoverControls } from "@/components/address/PopoverMenu";
 import { useTranslation } from "react-i18next";
 
 type GeneratedAddressActionsProps = {
@@ -17,19 +17,27 @@ export default function GeneratedAddressActions({
   const { language } = useAppContext();
   const { t } = useTranslation("address:newAddress");
   const { mutate, isPending } = useCreateNewAddressMutation();
-  const options: PopoverOption[] = [
+  const controls: PopoverControls[] = [
     {
-      label: `${t("prompt.controls.save")}`,
-      fn: () => {
-        const addressBody = { language, ...addressItem } as NewAddressRequestSchema;
-        mutate(addressBody);
-      },
+      name: "save",
+      actionComponent: (
+        <Button
+          variant="ghost"
+          size={"sm"}
+          onClick={() => {
+            const addressBody = { language, ...addressItem } as NewAddressRequestSchema;
+            mutate(addressBody);
+          }}
+          className="address-component__popover__body__button text-xs"
+        >
+          {t("prompt.controls.save")}
+        </Button>
+      ),
     },
-    // { label: "Edit", fn: () => {} },
   ];
 
   return (
-    <PopoverMenu id={addressItem.id} options={options}>
+    <PopoverMenu id={addressItem.id} controls={controls}>
       <Button
         size="icon-sm"
         variant="ghost"

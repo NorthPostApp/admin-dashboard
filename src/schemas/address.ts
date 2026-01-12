@@ -1,9 +1,4 @@
-import {
-  GPT_MODELS,
-  REASONING_EFFORTS,
-  SUPPORTED_LANGUAGES,
-  type Language,
-} from "@/consts/app-config";
+import { GPT_MODELS, REASONING_EFFORTS, SUPPORTED_LANGUAGES } from "@/consts/app-config";
 import type { TFunction } from "i18next";
 import * as z from "zod";
 
@@ -58,8 +53,8 @@ const extendAddressSchema = (t: TFunction) =>
     region: z.string().min(1, { error: t("errors.regionField") }),
   });
 
-const createNewAddressRequestSchema = (t: TFunction) =>
-  NewAddressRequest.safeExtend({
+const createAddressItemSchema = (t: TFunction) =>
+  AddressItem.safeExtend({
     name: z.string().min(1, { error: t("errors.nameField") }),
     tags: z.array(z.string()).min(1, { error: t("errors.tagsField") }),
     briefIntro: z.string().refine((value) => value.trim().length > 5, {
@@ -69,9 +64,8 @@ const createNewAddressRequestSchema = (t: TFunction) =>
   });
 
 // Create an empty form with the current language setting
-const getDefaultForm = (language: Language) => {
+const getDefaultForm = () => {
   return {
-    language: language,
     name: "",
     tags: [] as string[],
     briefIntro: "",
@@ -84,7 +78,7 @@ const getDefaultForm = (language: Language) => {
       postalCode: "",
       country: "",
     },
-  };
+  } as AddressItemSchema;
 };
 
 export {
@@ -92,7 +86,8 @@ export {
   GenerateAddressesRequest,
   GenerateAddressesResponse,
   Address,
-  createNewAddressRequestSchema,
+  AddressItem,
+  createAddressItemSchema,
   getDefaultForm,
   type AddressItemSchema,
   type NewAddressRequestSchema,
