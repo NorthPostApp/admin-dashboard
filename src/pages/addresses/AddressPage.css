@@ -1,11 +1,7 @@
 @import "../../index.css";
 
-.address-tab {
-  @apply flex-1 max-h-full overflow-y-auto;
-}
-
-.address-tab__list {
-  @apply mx-auto w-64 my-2;
+.address-header {
+  @apply flex-1 max-h-full overflow-y-auto flex flex-col gap-6;
 }
 
 .address-create {

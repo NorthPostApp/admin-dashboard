@@ -9,5 +9,5 @@
 }
 
 .applayout-body__inner {
-  @apply w-full flex-1 overflow-y-auto bg-background rounded-2xl;
+  @apply w-full flex-1 overflow-y-auto bg-background rounded-2xl shadow-md;
 }
