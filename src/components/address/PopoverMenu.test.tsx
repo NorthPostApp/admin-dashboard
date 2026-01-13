@@ -1,12 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { screen, fireEvent, waitFor } from "@/lib/test-utils";
 import { render } from "@testing-library/react";
-import { PopoverMenu, type PopoverOption } from "./PopoverMenu";
+import { PopoverMenu, type PopoverControls } from "./PopoverMenu";
 
-const mockOptions: PopoverOption[] = [
-  { label: "Option 1", fn: vi.fn() },
-  { label: "Option 2", fn: vi.fn() },
-  { label: "Option 3", fn: vi.fn() },
+const mockFn1 = vi.fn();
+const mockFn2 = vi.fn();
+const mockFn3 = vi.fn();
+
+const mockControls: PopoverControls[] = [
+  {
+    name: "control-1",
+    actionComponent: <button onClick={mockFn1}>Option 1</button>,
+  },
+  {
+    name: "control-2",
+    actionComponent: <button onClick={mockFn2}>Option 2</button>,
+  },
+  {
+    name: "control-3",
+    actionComponent: <button onClick={mockFn3}>Option 3</button>,
+  },
 ];
 
 describe("PopoverMenu", () => {
@@ -16,16 +29,16 @@ describe("PopoverMenu", () => {
 
   it("renders the trigger element", () => {
     render(
-      <PopoverMenu id="test-menu" options={mockOptions}>
+      <PopoverMenu id="test-menu" controls={mockControls}>
         <button>Open Menu</button>
       </PopoverMenu>
     );
     expect(screen.getByText("Open Menu")).toBeTruthy();
   });
 
-  it("does not show options initially", () => {
+  it("does not show controls initially", () => {
     render(
-      <PopoverMenu id="test-menu" options={mockOptions}>
+      <PopoverMenu id="test-menu" controls={mockControls}>
         <button>Open Menu</button>
       </PopoverMenu>
     );
@@ -34,9 +47,9 @@ describe("PopoverMenu", () => {
     expect(screen.queryByText("Option 3")).toBeNull();
   });
 
-  it("shows all options when trigger is clicked", async () => {
+  it("shows all controls when trigger is clicked", async () => {
     render(
-      <PopoverMenu id="test-menu" options={mockOptions}>
+      <PopoverMenu id="test-menu" controls={mockControls}>
         <button>Open Menu</button>
       </PopoverMenu>
     );
@@ -49,9 +62,9 @@ describe("PopoverMenu", () => {
     });
   });
 
-  it("calls the correct function when an option is clicked", async () => {
+  it("calls the correct function when a control is clicked", async () => {
     render(
-      <PopoverMenu id="test-menu" options={mockOptions}>
+      <PopoverMenu id="test-menu" controls={mockControls}>
         <button>Open Menu</button>
       </PopoverMenu>
     );
@@ -61,14 +74,14 @@ describe("PopoverMenu", () => {
       const option1 = screen.getByText("Option 1");
       fireEvent.click(option1);
     });
-    expect(mockOptions[0].fn).toHaveBeenCalledTimes(1);
-    expect(mockOptions[1].fn).not.toHaveBeenCalled();
-    expect(mockOptions[2].fn).not.toHaveBeenCalled();
+    expect(mockFn1).toHaveBeenCalledTimes(1);
+    expect(mockFn2).not.toHaveBeenCalled();
+    expect(mockFn3).not.toHaveBeenCalled();
   });
 
-  it("closes popover after clicking an option", async () => {
+  it("closes popover after clicking a control", async () => {
     render(
-      <PopoverMenu id="test-menu" options={mockOptions}>
+      <PopoverMenu id="test-menu" controls={mockControls}>
         <button>Open Menu</button>
       </PopoverMenu>
     );

@@ -1,41 +1,31 @@
-import type { PropsWithChildren } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverClose,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 
-export type PopoverOption = {
-  label: string;
-  fn: () => void;
+export type PopoverControls = {
+  name: string;
+  actionComponent: ReactNode;
 };
 
 type PopoverMenuProps = {
   id: string;
-  options: PopoverOption[];
+  controls: PopoverControls[];
 } & PropsWithChildren;
 
-export function PopoverMenu({ id, options, ...props }: PopoverMenuProps) {
+export function PopoverMenu({ id, controls, ...props }: PopoverMenuProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
       <PopoverContent className="address-component__popover__body w-22">
-        {options.map((item) => {
-          return (
-            <PopoverClose key={id + item.label} asChild>
-              <Button
-                variant="ghost"
-                size={"sm"}
-                onClick={() => item.fn()}
-                className="address-component__popover__body__button text-xs"
-              >
-                {item.label}
-              </Button>
-            </PopoverClose>
-          );
-        })}
+        {controls.map((controlItem) => (
+          <PopoverClose key={id + controlItem.name} asChild>
+            {controlItem.actionComponent}
+          </PopoverClose>
+        ))}
       </PopoverContent>
     </Popover>
   );

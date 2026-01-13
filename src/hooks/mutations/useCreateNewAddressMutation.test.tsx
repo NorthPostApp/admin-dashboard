@@ -6,7 +6,7 @@ import { useCreateNewAddressMutation } from "./useCreateNewAddressMutation";
 import { createNewAddress } from "@/api/address";
 import { getDefaultForm, type NewAddressRequestSchema } from "@/schemas/address";
 import type { CreateNewAddressResponse } from "@/api/address";
-import AuthContextProvider from "@/contexts/AuthContextProvider";
+import AppContextProvider from "@/contexts/AppContextProvider";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";
 
 vi.mock("sonner");
@@ -21,7 +21,7 @@ const createWrapper = () => {
   });
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>{children}</AuthContextProvider>
+      <AppContextProvider>{children}</AppContextProvider>
     </QueryClientProvider>
   );
 };
@@ -39,7 +39,7 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(), {
       wrapper: createWrapper(),
     });
-    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultRequest();
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(createNewAddress).toHaveBeenCalledWith(requestData, MOCK_ID_TOKEN);
@@ -55,7 +55,7 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(cleanupFn), {
       wrapper: createWrapper(),
     });
-    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultRequest();
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(cleanupFn).toHaveBeenCalled();
@@ -67,9 +67,14 @@ describe("useCreateNewAddressMutation", () => {
     const { result } = renderHook(() => useCreateNewAddressMutation(), {
       wrapper: createWrapper(),
     });
-    const requestData: NewAddressRequestSchema = getDefaultForm("ZH");
+    const requestData: NewAddressRequestSchema = getDefaultRequest();
     result.current.mutate(requestData);
     await waitFor(() => expect(result.current.isError).toBe(true));
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
   });
 });
+
+function getDefaultRequest() {
+  const data = getDefaultForm();
+  return { ...data, language: "EN" } as NewAddressRequestSchema;
+}

@@ -28,6 +28,7 @@ export default function GeneratedAddresses() {
       <Carousel
         opts={{
           align: "start",
+          watchDrag: !isMobile,
         }}
         orientation={isMobile ? "vertical" : "horizontal"}
         className={cn("address-component__carousel", !isMobile && "max-w-[88%]")}
