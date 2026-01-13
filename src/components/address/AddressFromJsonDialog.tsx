@@ -1,4 +1,5 @@
 import { useRef, useState, type PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 import { AddressItem, type AddressItemSchema } from "@/schemas/address";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,23 +13,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { useTranslation } from "react-i18next";
 
 type AddressFromJsonDialogProps = {
   handleJsonSave: (formData: AddressItemSchema) => void;
   title: string;
   description: string;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
+  initialData?: string;
 } & PropsWithChildren;
 
 export default function AddressFromJsonDialog({
   handleJsonSave,
   title,
   description,
+  open,
+  initialData,
+  setOpen,
   children,
 }: AddressFromJsonDialogProps) {
   const { t } = useTranslation("address:newAddress");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const dialogOpenState = open !== undefined ? open : dialogOpen;
+  const setDialogOpenState = setOpen !== undefined ? setOpen : setDialogOpen;
 
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   // parse JSON content, throws error when parsing / model inference failed
@@ -41,7 +50,7 @@ export default function AddressFromJsonDialog({
         const result = AddressItem.safeParse(output);
         if (result.success) {
           handleJsonSave(result.data);
-          setDialogOpen(false);
+          setDialogOpenState(false);
         } else {
           throw result.error;
         }
@@ -56,8 +65,8 @@ export default function AddressFromJsonDialog({
   };
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog open={dialogOpenState} onOpenChange={setDialogOpenState}>
+      {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
         className="address-content__dialog__content"
         container={document.querySelector("main") ?? undefined}
@@ -68,6 +77,7 @@ export default function AddressFromJsonDialog({
         </DialogHeader>
         <Textarea
           ref={textAreaRef}
+          defaultValue={initialData}
           className="address-content__dialog__textarea"
           id="json-content"
         />

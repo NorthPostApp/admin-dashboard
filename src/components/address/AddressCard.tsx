@@ -1,5 +1,10 @@
+import * as React from "react";
 import type { ReactNode } from "react";
-import { type GeneratedAddressSchema, type AddressItemSchema } from "@/schemas/address";
+import {
+  type GeneratedAddressSchema,
+  type AddressItemSchema,
+  addressItemsEqual,
+} from "@/schemas/address";
 import TagBadge from "@/components/address/TagBadge";
 import {
   Card,
@@ -29,7 +34,7 @@ const formatAddressLines = (addressItem: AddressItemSchema) => {
   return lines;
 };
 
-export default function AddressCard({ addressItem, actions }: AddressCardProps) {
+function AddressCard({ addressItem, actions }: AddressCardProps) {
   const addressLines = formatAddressLines(addressItem as AddressItemSchema);
 
   return (
@@ -37,9 +42,9 @@ export default function AddressCard({ addressItem, actions }: AddressCardProps) 
       <CardHeader className="address-component__card__header">
         <CardTitle className="address-component__card__title">
           <p>{addressItem.name}</p>
-          <div>
-            <CopyButton content={JSON.stringify(addressItem, null, 2)} />
-            {actions}
+          <div className="flex-1 flex items-center justify-end">
+            <CopyButton copyAction={() => JSON.stringify(addressItem, null, 2)} />
+            {actions !== null && actions !== undefined && actions}
           </div>
         </CardTitle>
         <CardDescription className="address-component__card__description">
@@ -61,3 +66,7 @@ export default function AddressCard({ addressItem, actions }: AddressCardProps) 
     </Card>
   );
 }
+
+export default React.memo(AddressCard, (prevProps, nextProps) => {
+  return addressItemsEqual(prevProps.addressItem, nextProps.addressItem);
+});

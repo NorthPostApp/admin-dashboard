@@ -30,4 +30,17 @@ describe("InputAndButton", () => {
     fireEvent.click(button);
     expect(mockOnButtonClick).toHaveBeenCalled();
   });
+
+  it("renders with explicit buttonSize prop", () => {
+    render(
+      <InputAndButton
+        onButtonClick={mockOnButtonClick}
+        buttonSize="sm"
+        placeholder="placeholder"
+      />
+    );
+    expect(screen.getByRole("textbox")).toBeTruthy();
+    expect(screen.getByRole("button")).toBeTruthy();
+    expect(screen.getByPlaceholderText("placeholder")).toBeTruthy();
+  });
 });

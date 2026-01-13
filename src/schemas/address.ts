@@ -81,6 +81,39 @@ const getDefaultForm = () => {
   } as AddressItemSchema;
 };
 
+const addressItemsEqual = (
+  addressA: AddressItemSchema,
+  addressB: AddressItemSchema
+): boolean => {
+  // Compare primitive fields
+  if (addressA.name !== addressB.name || addressA.briefIntro !== addressB.briefIntro) {
+    return false;
+  }
+  // Compare tags array (order-insensitive, but multiplicity-sensitive)
+  if (addressA.tags.length !== addressB.tags.length) {
+    return false;
+  }
+  const sortedTagsA = [...addressA.tags].sort();
+  const sortedTagsB = [...addressB.tags].sort();
+  for (let i = 0; i < sortedTagsA.length; i++) {
+    if (sortedTagsA[i] !== sortedTagsB[i]) {
+      return false;
+    }
+  }
+  // Compare address object
+  const addrA = addressA.address;
+  const addrB = addressB.address;
+  return (
+    addrA.city === addrB.city &&
+    addrA.country === addrB.country &&
+    addrA.line1 === addrB.line1 &&
+    addrA.line2 === addrB.line2 &&
+    addrA.buildingName === addrB.buildingName &&
+    addrA.postalCode === addrB.postalCode &&
+    addrA.region === addrB.region
+  );
+};
+
 export {
   NewAddressRequest,
   GenerateAddressesRequest,
@@ -89,6 +122,7 @@ export {
   AddressItem,
   createAddressItemSchema,
   getDefaultForm,
+  addressItemsEqual,
   type AddressItemSchema,
   type NewAddressRequestSchema,
   type GenerateAddressesRequestSchema,
