@@ -12,6 +12,7 @@ function TestComponent() {
     updateSystemPrompt,
     updateUserPrompt,
     saveGeneratedAddresses,
+    updateGeneratedAddress,
   } = useAddressContext();
 
   return (
@@ -20,7 +21,10 @@ function TestComponent() {
       <div data-testid="system-prompt-text">{systemPrompt?.prompt || "empty"}</div>
       <div data-testid="user-prompt">{userPrompt || "empty"}</div>
       <div data-testid="generated-count">{generatedAddresses.length}</div>
-
+      <div data-testid="first-address-name">{generatedAddresses[0]?.name || "none"}</div>
+      <div data-testid="first-address-city">
+        {generatedAddresses[0]?.address.city || "none"}
+      </div>
       <button
         data-testid="update-system-prompt-en"
         onClick={() => updateSystemPrompt("EN", "System prompt in English")}
@@ -68,10 +72,47 @@ function TestComponent() {
                 region: "Test Region",
               },
             },
+            {
+              id: "2",
+              name: "Test Location 2",
+              tags: ["restaurant"],
+              briefIntro: "A test restaurant 2",
+              address: {
+                city: "Test City",
+                country: "Test Country",
+                line1: "123 Test St",
+                line2: "",
+                buildingName: "",
+                postalCode: "12345",
+                region: "Test Region",
+              },
+            },
           ])
         }
       >
         Save Addresses
+      </button>
+
+      <button
+        data-testid="update-address"
+        onClick={() =>
+          updateGeneratedAddress("1", {
+            name: "Updated Location",
+            tags: ["cafe"],
+            briefIntro: "An updated cafe",
+            address: {
+              city: "New City",
+              country: "New Country",
+              line1: "456 New St",
+              line2: "",
+              buildingName: "",
+              postalCode: "67890",
+              region: "New Region",
+            },
+          })
+        }
+      >
+        Update Address
       </button>
     </div>
   );
@@ -137,6 +178,24 @@ describe("AddressContextProvider", () => {
     expect(screen.getByTestId("generated-count").textContent).toBe("0");
     const saveButton = screen.getByTestId("save-addresses");
     fireEvent.click(saveButton);
-    expect(screen.getByTestId("generated-count").textContent).toBe("1");
+    expect(screen.getByTestId("generated-count").textContent).toBe("2");
+  });
+
+  it("updates a specific generated address by id", () => {
+    render(
+      <AddressContextProvider>
+        <TestComponent />
+      </AddressContextProvider>
+    );
+    // First save an address
+    const saveButton = screen.getByTestId("save-addresses");
+    fireEvent.click(saveButton);
+    expect(screen.getByTestId("first-address-name").textContent).toBe("Test Location");
+    expect(screen.getByTestId("first-address-city").textContent).toBe("Test City");
+    // Update the address
+    const updateButton = screen.getByTestId("update-address");
+    fireEvent.click(updateButton);
+    expect(screen.getByTestId("first-address-name").textContent).toBe("Updated Location");
+    expect(screen.getByTestId("first-address-city").textContent).toBe("New City");
   });
 });

@@ -1,6 +1,9 @@
 import { useState, createContext, useCallback, useMemo } from "react";
 import { type Language } from "@/consts/app-config";
-import type { GenerateAddressesResponseSchema } from "@/schemas/address";
+import type {
+  AddressItemSchema,
+  GenerateAddressesResponseSchema,
+} from "@/schemas/address";
 
 type SystemPrompt = {
   language: Language; // use to compare app language and prompt language
@@ -18,6 +21,7 @@ interface AddressContextType {
   updateUserPrompt: (prompt: UserPrompt) => void;
   setGeneratingState: (newGeneratingState: boolean) => void;
   saveGeneratedAddresses: (addresses: GenerateAddressesResponseSchema) => void;
+  updateGeneratedAddress: (id: string, newAddress: AddressItemSchema) => void;
 }
 
 const AddressContext = createContext<AddressContextType | undefined>(undefined);
@@ -51,6 +55,19 @@ export default function AddressContextProvider({
     },
     []
   );
+
+  const updateGeneratedAddress = useCallback(
+    (id: string, newAddress: AddressItemSchema) => {
+      setGeneratedAddresses((prev) =>
+        prev.map((address) => {
+          if (address.id !== id) return address;
+          return { id, ...newAddress };
+        })
+      );
+    },
+    []
+  );
+
   const setGeneratingState = useCallback((generatingState: boolean) => {
     setGenerating(generatingState);
   }, []);
@@ -65,6 +82,7 @@ export default function AddressContextProvider({
       updateUserPrompt,
       setGeneratingState,
       saveGeneratedAddresses,
+      updateGeneratedAddress,
     }),
     [
       userPrompt,
@@ -75,6 +93,7 @@ export default function AddressContextProvider({
       updateUserPrompt,
       setGeneratingState,
       saveGeneratedAddresses,
+      updateGeneratedAddress,
     ]
   );
 

@@ -3,10 +3,10 @@ import { Button } from "./button";
 import { Copy, Check } from "lucide-react";
 
 type CopyButtonProps = {
-  content: string;
+  copyAction: () => string;
 };
 
-export default function CopyButton({ content }: CopyButtonProps) {
+export default function CopyButton({ copyAction }: CopyButtonProps) {
   const [copied, setCopied] = useState<boolean>(false);
 
   useEffect(() => {
@@ -18,13 +18,14 @@ export default function CopyButton({ content }: CopyButtonProps) {
 
   return (
     <Button
+      data-testid="address-card-copy-button"
       size={"icon-sm"}
       type="button"
       variant="ghost"
       disabled={copied}
       onClick={() => {
         setCopied(true);
-        navigator.clipboard.writeText(content);
+        navigator.clipboard.writeText(copyAction());
       }}
     >
       {copied ? <Check /> : <Copy />}

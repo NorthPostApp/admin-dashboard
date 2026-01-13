@@ -6,7 +6,14 @@ import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react({
+      babel: {
+        plugins: process.env.VITEST ? [] : ["babel-plugin-react-compiler"],
+      },
+    }),
+    tailwindcss(),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -32,7 +39,6 @@ export default defineConfig({
           "vendor-form": ["@tanstack/react-form", "@tanstack/react-query"],
           "vendor-i18n": ["i18next", "react-i18next", "i18next-resources-to-backend"],
           "vendor-firebase": ["firebase/auth", "firebase/app"],
-          lucide: ["lucide-react"],
           zod: ["zod"],
         },
       },

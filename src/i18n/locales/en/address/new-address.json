@@ -99,6 +99,8 @@
     "title": "Parse address from JSON",
     "description": "Paste a JSON object containing address data. The form fields will be automatically populated with the parsed values.",
     "cancel": "Cancel",
-    "save": "Save changes"
+    "save": "Save changes",
+    "title-edit": "Edit address",
+    "description-edit": "Edit the generated address. The address won't be uploaded to the database until you click the save option on the card again."
   }
 }
