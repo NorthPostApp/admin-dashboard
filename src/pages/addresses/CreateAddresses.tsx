@@ -1,9 +1,13 @@
+import { Activity } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useLocation } from "react-router";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import CreateAddressesManual from "@/pages/addresses/CreateAddressManual";
 import CreateAddressPrompt from "@/pages/addresses/CreateAddressPrompt";
+import Subheader from "@/pages/Subheader";
+import TabsTrigger, { type TabOption } from "@/components/ui/tabs-trigger";
 import "./AddressPage.css";
+
+type AddressCreationTab = "prompt" | "manual";
 
 export default function CreateAddresses() {
   const { t } = useTranslation("address:newAddress");
@@ -12,27 +16,36 @@ export default function CreateAddresses() {
   const location = useLocation();
   const navigate = useNavigate();
   const hash = location.hash.replace("#", "");
-  const activeTab = hash === "manual" ? "manual" : "prompt";
-  const handleHashChange = (value: string) => {
+  const activeTab: AddressCreationTab = hash === "manual" ? "manual" : "prompt";
+
+  const handleHashChange = (value: AddressCreationTab) => {
     navigate({ hash: value });
   };
 
+  const tabs: TabOption[] = [
+    {
+      id: "prompt",
+      title: t("tabs.prompt"),
+      action: () => handleHashChange("prompt"),
+    },
+    {
+      id: "manual",
+      title: t("tabs.manual"),
+      action: () => handleHashChange("manual"),
+    },
+  ];
+
   return (
-    <Tabs
-      defaultValue={activeTab}
-      className="address-tab"
-      onValueChange={handleHashChange}
-    >
-      <TabsList className="address-tab__list">
-        <TabsTrigger value="prompt">{t("tabs.prompt")}</TabsTrigger>
-        <TabsTrigger value="manual">{t("tabs.manual")}</TabsTrigger>
-      </TabsList>
-      <TabsContent value="prompt" className="address-create">
+    <div className="address-header">
+      <Subheader title={t("title")}>
+        <TabsTrigger tabOptions={tabs} activeTab={activeTab} />
+      </Subheader>
+      <Activity mode={activeTab === "prompt" ? "visible" : "hidden"}>
         <CreateAddressPrompt />
-      </TabsContent>
-      <TabsContent value="manual" className="address-create">
+      </Activity>
+      <Activity mode={activeTab === "manual" ? "visible" : "hidden"}>
         <CreateAddressesManual />
-      </TabsContent>
-    </Tabs>
+      </Activity>
+    </div>
   );
 }

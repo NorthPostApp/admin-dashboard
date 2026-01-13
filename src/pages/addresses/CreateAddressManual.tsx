@@ -182,101 +182,103 @@ export default function CreateAddressesManual() {
   }, [language, form, cleanupFn]);
 
   return (
-    <form
-      className="address-content__body"
-      onSubmit={(e) => {
-        e.preventDefault();
-        form.handleSubmit();
-      }}
-    >
-      <FieldGroup className="address-content__form__group">
-        <FieldSet>
-          <FieldLegend>
-            <span>{t("form.basicInfo.legend")}</span>
-            <AddressFromJsonDialog
-              handleJsonSave={handleJsonSave}
-              title={t("json.title")}
-              description={t("json.description")}
-            >
-              <Button
-                variant="link"
-                size="sm"
-                className="address-content__dialog__trigger"
+    <div className="address-create">
+      <form
+        className="address-content__body"
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+      >
+        <FieldGroup className="address-content__form__group">
+          <FieldSet>
+            <FieldLegend>
+              <span>{t("form.basicInfo.legend")}</span>
+              <AddressFromJsonDialog
+                handleJsonSave={handleJsonSave}
+                title={t("json.title")}
+                description={t("json.description")}
               >
-                {t("json.trigger")}
-              </Button>
-            </AddressFromJsonDialog>
-          </FieldLegend>
-          <FieldDescription>{t("form.basicInfo.description")}</FieldDescription>
-          <FieldGroup className="address-content__form__group">
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="address-content__dialog__trigger"
+                >
+                  {t("json.trigger")}
+                </Button>
+              </AddressFromJsonDialog>
+            </FieldLegend>
+            <FieldDescription>{t("form.basicInfo.description")}</FieldDescription>
+            <FieldGroup className="address-content__form__group">
+              {getFormTextField({
+                fieldName: "name",
+                label: t("form.basicInfo.name.label"),
+                placeholder: t("form.basicInfo.name.placeholder"),
+              })}
+              {getTagField()}
+              {getFormTextField({
+                fieldName: "briefIntro",
+                label: t("form.basicInfo.briefIntro.label"),
+                placeholder: t("form.basicInfo.briefIntro.placeholder"),
+                type: "textarea",
+              })}
+            </FieldGroup>
+          </FieldSet>
+          <FieldSeparator className="address-content__form__separator" />
+          <FieldSet>
+            <FieldLegend>{t("form.address.legend")}</FieldLegend>
+            <FieldDescription>{t("form.address.description")}</FieldDescription>
             {getFormTextField({
-              fieldName: "name",
-              label: t("form.basicInfo.name.label"),
-              placeholder: t("form.basicInfo.name.placeholder"),
-            })}
-            {getTagField()}
-            {getFormTextField({
-              fieldName: "briefIntro",
-              label: t("form.basicInfo.briefIntro.label"),
-              placeholder: t("form.basicInfo.briefIntro.placeholder"),
-              type: "textarea",
-            })}
-          </FieldGroup>
-        </FieldSet>
-        <FieldSeparator className="address-content__form__separator" />
-        <FieldSet>
-          <FieldLegend>{t("form.address.legend")}</FieldLegend>
-          <FieldDescription>{t("form.address.description")}</FieldDescription>
-          {getFormTextField({
-            fieldName: "address.buildingName",
-            label: t("form.address.buildingName.label"),
-            placeholder: t("form.address.buildingName.placeholder"),
-          })}
-          {getFormTextField({
-            fieldName: "address.line1",
-            label: t("form.address.line1.label"),
-            placeholder: t("form.address.line1.placeholder"),
-          })}
-          {getFormTextField({
-            fieldName: "address.line2",
-            label: t("form.address.line2.label"),
-            placeholder: t("form.address.line2.placeholder"),
-          })}
-          <div className="grid grid-cols-2 gap-4">
-            {getFormTextField({
-              fieldName: "address.city",
-              label: t("form.address.city.label"),
-              placeholder: t("form.address.city.placeholder"),
+              fieldName: "address.buildingName",
+              label: t("form.address.buildingName.label"),
+              placeholder: t("form.address.buildingName.placeholder"),
             })}
             {getFormTextField({
-              fieldName: "address.region",
-              label: t("form.address.region.label"),
-              placeholder: t("form.address.region.placeholder"),
+              fieldName: "address.line1",
+              label: t("form.address.line1.label"),
+              placeholder: t("form.address.line1.placeholder"),
             })}
             {getFormTextField({
-              fieldName: "address.postalCode",
-              label: t("form.address.postalCode.label"),
-              placeholder: t("form.address.postalCode.placeholder"),
+              fieldName: "address.line2",
+              label: t("form.address.line2.label"),
+              placeholder: t("form.address.line2.placeholder"),
             })}
-            {getFormTextField({
-              fieldName: "address.country",
-              label: t("form.address.country.label"),
-              placeholder: t("form.address.country.placeholder"),
-            })}
-          </div>
-        </FieldSet>
-        <FieldSeparator className="address-content__form__separator" />
-        <Field orientation="horizontal">
-          <Button
-            type="submit"
-            className="address-content__form__submit"
-            disabled={submitPending}
-          >
-            {submitPending && <Spinner />}
-            {submitPending ? t("form.loading") : t("form.submit")}
-          </Button>
-        </Field>
-      </FieldGroup>
-    </form>
+            <div className="grid grid-cols-2 gap-4">
+              {getFormTextField({
+                fieldName: "address.city",
+                label: t("form.address.city.label"),
+                placeholder: t("form.address.city.placeholder"),
+              })}
+              {getFormTextField({
+                fieldName: "address.region",
+                label: t("form.address.region.label"),
+                placeholder: t("form.address.region.placeholder"),
+              })}
+              {getFormTextField({
+                fieldName: "address.postalCode",
+                label: t("form.address.postalCode.label"),
+                placeholder: t("form.address.postalCode.placeholder"),
+              })}
+              {getFormTextField({
+                fieldName: "address.country",
+                label: t("form.address.country.label"),
+                placeholder: t("form.address.country.placeholder"),
+              })}
+            </div>
+          </FieldSet>
+          <FieldSeparator className="address-content__form__separator" />
+          <Field orientation="horizontal">
+            <Button
+              type="submit"
+              className="address-content__form__submit"
+              disabled={submitPending}
+            >
+              {submitPending && <Spinner />}
+              {submitPending ? t("form.loading") : t("form.submit")}
+            </Button>
+          </Field>
+        </FieldGroup>
+      </form>
+    </div>
   );
 }
