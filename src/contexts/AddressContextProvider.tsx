@@ -47,13 +47,14 @@ export default function AddressContextProvider({
       if (prompt === userPrompt) return;
       setUserPrompt(prompt);
     },
-    [userPrompt]
+    [userPrompt],
   );
   const saveGeneratedAddresses = useCallback(
     (addresses: GenerateAddressesResponseSchema) => {
+      setGenerating(false);
       setGeneratedAddresses(addresses);
     },
-    []
+    [],
   );
 
   const updateGeneratedAddress = useCallback(
@@ -62,10 +63,10 @@ export default function AddressContextProvider({
         prev.map((address) => {
           if (address.id !== id) return address;
           return { id, ...newAddress };
-        })
+        }),
       );
     },
-    []
+    [],
   );
 
   const setGeneratingState = useCallback((generatingState: boolean) => {
@@ -94,7 +95,7 @@ export default function AddressContextProvider({
       setGeneratingState,
       saveGeneratedAddresses,
       updateGeneratedAddress,
-    ]
+    ],
   );
 
   return (
