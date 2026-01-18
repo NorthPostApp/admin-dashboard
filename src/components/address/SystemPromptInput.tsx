@@ -97,7 +97,7 @@ export default function SystemPromptInput() {
         disabled={!editing}
         className={cn(
           "resize-none transition-all duration-150",
-          isFetching || !isSuccess ? "h-4" : "h-80"
+          isFetching || !isSuccess ? "h-4" : "h-80",
         )}
       />
     </>

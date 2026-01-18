@@ -20,6 +20,15 @@ const AddressItem = z.object({
   address: Address,
 });
 
+const GeneratedAddress = AddressItem.extend({
+  id: z.string().min(3),
+});
+
+const AddressItemWithTime = AddressItem.extend({
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+
 const NewAddressRequest = AddressItem.extend({
   language: z.enum(SUPPORTED_LANGUAGES),
 });
@@ -32,8 +41,11 @@ const GenerateAddressesRequest = z.object({
   reasoningEffort: z.enum(REASONING_EFFORTS),
 });
 
-const GeneratedAddress = AddressItem.extend({
-  id: z.string().min(3),
+const GetAllAddressesResponse = z.object({
+  addresses: z.array(AddressItemWithTime),
+  totalCount: z.number(),
+  hasMore: z.boolean(),
+  lastDocId: z.string(),
 });
 
 const GenerateAddressesResponse = z.array(GeneratedAddress);
@@ -43,6 +55,7 @@ type NewAddressRequestSchema = z.infer<typeof NewAddressRequest>;
 type GenerateAddressesRequestSchema = z.infer<typeof GenerateAddressesRequest>;
 type GenerateAddressesResponseSchema = z.infer<typeof GenerateAddressesResponse>;
 type GeneratedAddressSchema = z.infer<typeof GeneratedAddress>;
+type GetAllAddressesResponseSchema = z.infer<typeof GetAllAddressesResponse>;
 
 // Extend error messages based on the i18n language
 const extendAddressSchema = (t: TFunction) =>
@@ -83,7 +96,7 @@ const getDefaultForm = () => {
 
 const addressItemsEqual = (
   addressA: AddressItemSchema,
-  addressB: AddressItemSchema
+  addressB: AddressItemSchema,
 ): boolean => {
   // Compare primitive fields
   if (addressA.name !== addressB.name || addressA.briefIntro !== addressB.briefIntro) {
@@ -118,6 +131,7 @@ export {
   NewAddressRequest,
   GenerateAddressesRequest,
   GenerateAddressesResponse,
+  GetAllAddressesResponse,
   Address,
   AddressItem,
   createAddressItemSchema,
@@ -128,4 +142,5 @@ export {
   type GenerateAddressesRequestSchema,
   type GenerateAddressesResponseSchema,
   type GeneratedAddressSchema,
+  type GetAllAddressesResponseSchema,
 };

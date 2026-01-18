@@ -11,6 +11,8 @@ function TestComponent() {
     generatedAddresses,
     updateSystemPrompt,
     updateUserPrompt,
+    generating,
+    setGeneratingState,
     saveGeneratedAddresses,
     updateGeneratedAddress,
   } = useAddressContext();
@@ -20,6 +22,7 @@ function TestComponent() {
       <div data-testid="system-prompt-language">{systemPrompt?.language || "none"}</div>
       <div data-testid="system-prompt-text">{systemPrompt?.prompt || "empty"}</div>
       <div data-testid="user-prompt">{userPrompt || "empty"}</div>
+      <div data-testid="generating-state">{generating ? "generating" : "pending"}</div>
       <div data-testid="generated-count">{generatedAddresses.length}</div>
       <div data-testid="first-address-name">{generatedAddresses[0]?.name || "none"}</div>
       <div data-testid="first-address-city">
@@ -52,7 +55,14 @@ function TestComponent() {
       >
         Update User Prompt Same
       </button>
-
+      <button
+        data-testid="set-generating"
+        onClick={() => {
+          setGeneratingState(true);
+        }}
+      >
+        Set Generating
+      </button>
       <button
         data-testid="save-addresses"
         onClick={() =>
@@ -123,7 +133,7 @@ describe("AddressContextProvider", () => {
     render(
       <AddressContextProvider>
         <TestComponent />
-      </AddressContextProvider>
+      </AddressContextProvider>,
     );
     expect(screen.getByTestId("system-prompt-language").textContent).toBe("none");
     expect(screen.getByTestId("system-prompt-text").textContent).toBe("empty");
@@ -135,13 +145,13 @@ describe("AddressContextProvider", () => {
     render(
       <AddressContextProvider>
         <TestComponent />
-      </AddressContextProvider>
+      </AddressContextProvider>,
     );
     const updateButton = screen.getByTestId("update-system-prompt-en");
     fireEvent.click(updateButton);
     expect(screen.getByTestId("system-prompt-language").textContent).toBe("EN");
     expect(screen.getByTestId("system-prompt-text").textContent).toBe(
-      "System prompt in English"
+      "System prompt in English",
     );
   });
 
@@ -149,7 +159,7 @@ describe("AddressContextProvider", () => {
     render(
       <AddressContextProvider>
         <TestComponent />
-      </AddressContextProvider>
+      </AddressContextProvider>,
     );
 
     // First update
@@ -169,15 +179,19 @@ describe("AddressContextProvider", () => {
     }).toThrow("useAddressContext hook must be used within AddressContextProvider");
   });
 
-  it("saves generated addresses", () => {
+  it("saves generated addresses", async () => {
     render(
       <AddressContextProvider>
         <TestComponent />
-      </AddressContextProvider>
+      </AddressContextProvider>,
     );
+    const generatingButton = screen.getByTestId("set-generating");
+    fireEvent.click(generatingButton);
+    expect(screen.getByText(/generating/)).toBeTruthy();
     expect(screen.getByTestId("generated-count").textContent).toBe("0");
     const saveButton = screen.getByTestId("save-addresses");
     fireEvent.click(saveButton);
+    expect(screen.getByText(/pending/)).toBeTruthy(); // generating state turned off
     expect(screen.getByTestId("generated-count").textContent).toBe("2");
   });
 
@@ -185,7 +199,7 @@ describe("AddressContextProvider", () => {
     render(
       <AddressContextProvider>
         <TestComponent />
-      </AddressContextProvider>
+      </AddressContextProvider>,
     );
     // First save an address
     const saveButton = screen.getByTestId("save-addresses");

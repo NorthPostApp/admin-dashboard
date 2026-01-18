@@ -43,13 +43,8 @@ const getEffortIcon = (effort: ReasonEffort | "none") => {
 };
 
 export default function UserPromptInput() {
-  const {
-    systemPrompt,
-    userPrompt,
-    updateUserPrompt,
-    saveGeneratedAddresses,
-    setGeneratingState,
-  } = useAddressContext();
+  const { systemPrompt, userPrompt, updateUserPrompt, saveGeneratedAddresses } =
+    useAddressContext();
   const { mutate, isPending, cancelRequest } =
     useGenerateAddressesMutation(saveGeneratedAddresses);
   const { t } = useTranslation("address:newAddress");
@@ -96,11 +91,6 @@ export default function UserPromptInput() {
       textareaRef.current.value = userPrompt;
     }
   }, [userPrompt]);
-
-  // change generating state when running queries
-  useEffect(() => {
-    setGeneratingState(isPending);
-  }, [isPending, setGeneratingState]);
 
   const keyboardControl = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Escape") {
