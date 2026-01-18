@@ -93,7 +93,8 @@
   },
   "failed": {
     "generated": "Failed to recognize the user prompt, got 0 results",
-    "fetch": "Failed to fetch system prompt, please check the login or server status"
+    "fetch": "Failed to fetch system prompt, please check the login or server status",
+    "canceled": "The request was canceled manually"
   },
   "json": {
     "trigger": "Import from JSON",

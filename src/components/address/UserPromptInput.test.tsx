@@ -6,9 +6,11 @@ import { renderWithProviders } from "@/lib/test-wrappers";
 import { useAddressContext } from "@/hooks/useAddressContext";
 import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
 import UserPromptInput from "./UserPromptInput";
+import { toast } from "sonner";
 
 // Mock the address API
 vi.mock("@/api/address");
+vi.mock("sonner");
 
 describe("UserPromptInput", () => {
   beforeEach(() => {
@@ -116,7 +118,8 @@ describe("UserPromptInput", () => {
           model: "gpt-5-mini",
           reasoningEffort: "high",
         },
-        MOCK_ID_TOKEN
+        MOCK_ID_TOKEN,
+        expect.any(AbortSignal),
       );
     });
   });
@@ -180,7 +183,8 @@ describe("UserPromptInput", () => {
           model: DEFAULT_MODEL,
           reasoningEffort: DEFAULT_EFFORT,
         },
-        MOCK_ID_TOKEN
+        MOCK_ID_TOKEN,
+        expect.any(AbortSignal),
       );
     });
   });
@@ -204,7 +208,7 @@ describe("UserPromptInput", () => {
     });
   });
 
-  it("displays spinner when submission is pending", async () => {
+  it("displays stop when submission is pending", async () => {
     const UserInputWithSystemPrompt = () => {
       const { updateSystemPrompt } = useAddressContext();
       useEffect(() => {
@@ -214,7 +218,7 @@ describe("UserPromptInput", () => {
     };
     // Mock the API to delay response so we can check pending state
     vi.mocked(addressApi.generateAddresses).mockImplementation(
-      () => new Promise((resolve) => setTimeout(() => resolve([]), 100))
+      () => new Promise((resolve) => setTimeout(() => resolve([]), 100)),
     );
     renderWithProviders(<UserInputWithSystemPrompt />);
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
@@ -224,7 +228,39 @@ describe("UserPromptInput", () => {
     fireEvent.click(submitButton);
     // Check that Spinner is displayed while pending
     await waitFor(() => {
-      expect(screen.getByTestId("address-userprompt-spinner")).toBeTruthy();
+      expect(screen.getByTestId("address-userprompt-stop")).toBeTruthy();
     });
+  });
+
+  it("cancel request when submission is pending", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    let rejectFn: (reason: Error) => void;
+    // Mock the API to delay response so we can check pending state
+    vi.mocked(addressApi.generateAddresses).mockImplementation(
+      () => new Promise((_, reject) => (rejectFn = reject)),
+    );
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    const submitButton = screen.getByTestId("address-userprompt-submit");
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    fireEvent.blur(textarea);
+    fireEvent.click(submitButton);
+    // Check that Spinner is displayed while pending
+    await waitFor(() => {
+      expect(screen.getByTestId("address-userprompt-stop")).toBeTruthy();
+    });
+    const cancelButton = screen.getByTestId("address-userprompt-stop");
+    fireEvent.click(cancelButton);
+    const abortError = new Error("operation canceled");
+    abortError.name = "AbortError";
+    rejectFn!(abortError);
+    await waitFor(() => expect(toast.info).toHaveBeenCalled());
+    expect(screen.getByTestId("address-userprompt-submit"));
   });
 });

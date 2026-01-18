@@ -8,6 +8,7 @@ import {
   HeartPlus,
   HeartPulse,
   BrushCleaning,
+  CircleStop,
 } from "lucide-react";
 import {
   GPT_MODELS,
@@ -24,7 +25,6 @@ import { PopoverSelector } from "@/components/address/PopoverSelector";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldLabel } from "@/components/ui/field";
-import { Spinner } from "@/components/ui/spinner";
 import "./Address.css";
 
 const getEffortIcon = (effort: ReasonEffort | "none") => {
@@ -50,7 +50,8 @@ export default function UserPromptInput() {
     saveGeneratedAddresses,
     setGeneratingState,
   } = useAddressContext();
-  const { mutate, isPending } = useGenerateAddressesMutation(saveGeneratedAddresses);
+  const { mutate, isPending, cancelRequest } =
+    useGenerateAddressesMutation(saveGeneratedAddresses);
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering
 
@@ -190,14 +191,17 @@ export default function UserPromptInput() {
               <BrushCleaning />
             </Button>
             <Button
-              size="sm"
+              size="icon-sm"
               data-testid="address-userprompt-submit"
               type="button" // we don't use submit which will cause the form submission event
-              onClick={() => submitRequest()}
-              disabled={isPending}
+              variant={isPending ? "outline" : "default"}
+              onClick={() => {
+                if (!isPending) submitRequest();
+                else cancelRequest();
+              }}
             >
               {isPending ? (
-                <Spinner data-testid="address-userprompt-spinner" />
+                <CircleStop data-testid="address-userprompt-stop" />
               ) : (
                 <Sparkles />
               )}

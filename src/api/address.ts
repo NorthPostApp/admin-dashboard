@@ -32,7 +32,8 @@ async function createNewAddress(data: NewAddressRequestSchema, idToken: string) 
 
 async function generateAddresses(
   requestBody: GenerateAddressesRequestSchema,
-  idToken: string
+  idToken: string,
+  signal?: AbortSignal,
 ) {
   const response = await fetch(`${BASE_URL}/address/generate`, {
     method: "POST",
@@ -41,6 +42,7 @@ async function generateAddresses(
       Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify(requestBody),
+    signal,
   });
   if (!response.ok) {
     const errorData = (await response.json()) as ServiceError;
@@ -54,7 +56,7 @@ async function generateAddresses(
 async function getSystemPrompt(
   language: Language,
   idToken: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ) {
   const response = await fetch(`${BASE_URL}/prompt/system/address?language=${language}`, {
     method: "GET",
