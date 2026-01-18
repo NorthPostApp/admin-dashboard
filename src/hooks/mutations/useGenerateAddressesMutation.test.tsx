@@ -81,7 +81,11 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
+    expect(generateAddresses).toHaveBeenCalledWith(
+      MOCK_REQUEST_BODY,
+      MOCK_ID_TOKEN,
+      expect.any(AbortSignal),
+    );
     expect(saveResultFn).toHaveBeenCalledWith(mockResponse);
     expect(toast.success).toHaveBeenCalled();
   });
@@ -95,10 +99,36 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
+    expect(generateAddresses).toHaveBeenCalledWith(
+      MOCK_REQUEST_BODY,
+      MOCK_ID_TOKEN,
+      expect.any(AbortSignal),
+    );
     expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
+  });
+
+  it("should handle request cancellation", async () => {
+    let rejectFn: (reason: Error) => void;
+    const pendingPromise = new Promise<GenerateAddressesResponseSchema>((_, reject) => {
+      rejectFn = reject;
+    });
+    vi.mocked(generateAddresses).mockReturnValue(pendingPromise);
+    const saveResultFn = vi.fn();
+    const { result } = renderHook(() => useGenerateAddressesMutation(saveResultFn), {
+      wrapper: createWrapper(),
+    });
+    result.current.mutate(MOCK_REQUEST_BODY);
+    await waitFor(() => expect(result.current.isPending).toBeTruthy());
+    result.current.cancelRequest();
+    const abortError = new Error("The operation was aborted");
+    abortError.name = "AbortError";
+    rejectFn!(abortError);
+    await waitFor(() => expect(result.current.isError).toBeTruthy());
+    expect(toast.info).toHaveBeenCalled(); // Should show cancellation toast
+    expect(toast.error).not.toHaveBeenCalledWith(abortError.message);
+    expect(saveResultFn).not.toHaveBeenCalled();
   });
 
   it("should handle API errors and show error toast", async () => {
@@ -110,7 +140,11 @@ describe("useGenerateAddressesMutation", () => {
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(generateAddresses).toHaveBeenCalledWith(MOCK_REQUEST_BODY, MOCK_ID_TOKEN);
+    expect(generateAddresses).toHaveBeenCalledWith(
+      MOCK_REQUEST_BODY,
+      MOCK_ID_TOKEN,
+      expect.any(AbortSignal),
+    );
     expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
     expect(toast.success).not.toHaveBeenCalled();
