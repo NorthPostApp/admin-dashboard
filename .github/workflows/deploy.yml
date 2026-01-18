@@ -1,22 +1,16 @@
 name: Deploy
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types:
-      - completed
-    branches: [main, dev]
+  repository_dispatch:
+    types: [deploy-trigger]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     # Only run if CI succeeded AND it was triggered by a push (not a PR)
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' }}
     environment: cloudflare
     steps:
       - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
@@ -39,7 +33,7 @@ jobs:
         run: npm run build
 
       - name: Deploy to Cloudflare Pages (Production)
-        if: github.event.workflow_run.head_branch == 'main'
+        if: github.event.client_payload.branch == 'main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -47,7 +41,7 @@ jobs:
           command: pages deploy dist --project-name=north-post-admin --branch=main
 
       - name: Deploy to Cloudflare Pages (Preview)
-        if: github.event.workflow_run.head_branch == 'dev'
+        if: github.event.client_payload.branch == 'dev'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
