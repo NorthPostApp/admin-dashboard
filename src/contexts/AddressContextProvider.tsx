@@ -51,7 +51,6 @@ export default function AddressContextProvider({
   );
   const saveGeneratedAddresses = useCallback(
     (addresses: GenerateAddressesResponseSchema) => {
-      setGenerating(false);
       setGeneratedAddresses(addresses);
     },
     [],

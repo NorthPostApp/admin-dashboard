@@ -43,10 +43,8 @@ const getEffortIcon = (effort: ReasonEffort | "none") => {
 };
 
 export default function UserPromptInput() {
-  const { systemPrompt, userPrompt, updateUserPrompt, saveGeneratedAddresses } =
-    useAddressContext();
-  const { mutate, isPending, cancelRequest } =
-    useGenerateAddressesMutation(saveGeneratedAddresses);
+  const { generating, systemPrompt, userPrompt, updateUserPrompt } = useAddressContext();
+  const { mutate, cancelRequest } = useGenerateAddressesMutation();
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering
 
@@ -126,7 +124,7 @@ export default function UserPromptInput() {
           id="prompt"
           onBlur={onBlur}
           ref={textareaRef}
-          disabled={isPending}
+          disabled={generating}
           className="address-component__prompt__textarea"
           onKeyDown={keyboardControl}
         />
@@ -144,7 +142,7 @@ export default function UserPromptInput() {
                 size="sm"
                 variant="ghost"
                 className="address-component__prompt__trigger w-24 font-normal"
-                disabled={isPending}
+                disabled={generating}
               >
                 {gptModel}
               </Button>
@@ -162,7 +160,7 @@ export default function UserPromptInput() {
                 variant="ghost"
                 data-testid="address-userprompt-effort"
                 className="address-component__prompt__trigger"
-                disabled={!effortEnabled() || isPending}
+                disabled={!effortEnabled() || generating}
               >
                 {effortEnabled() ? getEffortIcon(reasonEffort) : getEffortIcon("none")}
               </Button>
@@ -176,7 +174,7 @@ export default function UserPromptInput() {
               data-testid="address-userprompt-clear"
               type="button"
               onClick={clearInput}
-              disabled={isPending}
+              disabled={generating}
             >
               <BrushCleaning />
             </Button>
@@ -184,13 +182,13 @@ export default function UserPromptInput() {
               size="icon-sm"
               data-testid="address-userprompt-submit"
               type="button" // we don't use submit which will cause the form submission event
-              variant={isPending ? "outline" : "default"}
+              variant={generating ? "outline" : "default"}
               onClick={() => {
-                if (!isPending) submitRequest();
+                if (!generating) submitRequest();
                 else cancelRequest();
               }}
             >
-              {isPending ? (
+              {generating ? (
                 <CircleStop data-testid="address-userprompt-stop" />
               ) : (
                 <Sparkles />

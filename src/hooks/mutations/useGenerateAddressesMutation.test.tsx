@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook, waitFor, act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -10,6 +10,7 @@ import type {
 } from "@/schemas/address";
 import AuthContextProvider from "@/contexts/AuthContextProvider";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";
+import AddressContextProvider from "@/contexts/AddressContextProvider";
 
 vi.mock("sonner");
 vi.mock("@/api/address");
@@ -31,7 +32,9 @@ const createWrapper = () => {
   });
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <AuthContextProvider>{children}</AuthContextProvider>
+      <AuthContextProvider>
+        <AddressContextProvider>{children}</AddressContextProvider>
+      </AuthContextProvider>
     </QueryClientProvider>
   );
 };
@@ -41,7 +44,7 @@ describe("useGenerateAddressesMutation", () => {
     vi.clearAllMocks();
   });
 
-  it("should successfully generate addresses and call saveResultFn", async () => {
+  it("should successfully generate addresses", async () => {
     const mockResponse: GenerateAddressesResponseSchema = [
       {
         id: "addr-1",
@@ -75,8 +78,7 @@ describe("useGenerateAddressesMutation", () => {
       },
     ];
     vi.mocked(generateAddresses).mockResolvedValue(mockResponse);
-    const saveResultFn = vi.fn();
-    const { result } = renderHook(() => useGenerateAddressesMutation(saveResultFn), {
+    const { result } = renderHook(() => useGenerateAddressesMutation(), {
       wrapper: createWrapper(),
     });
     result.current.mutate(MOCK_REQUEST_BODY);
@@ -86,15 +88,13 @@ describe("useGenerateAddressesMutation", () => {
       MOCK_ID_TOKEN,
       expect.any(AbortSignal),
     );
-    expect(saveResultFn).toHaveBeenCalledWith(mockResponse);
     expect(toast.success).toHaveBeenCalled();
   });
 
   it("should show error toast when generation returns empty results", async () => {
     const mockResponse: GenerateAddressesResponseSchema = [];
     vi.mocked(generateAddresses).mockResolvedValue(mockResponse);
-    const saveResultFn = vi.fn();
-    const { result } = renderHook(() => useGenerateAddressesMutation(saveResultFn), {
+    const { result } = renderHook(() => useGenerateAddressesMutation(), {
       wrapper: createWrapper(),
     });
     result.current.mutate(MOCK_REQUEST_BODY);
@@ -104,7 +104,6 @@ describe("useGenerateAddressesMutation", () => {
       MOCK_ID_TOKEN,
       expect.any(AbortSignal),
     );
-    expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalled();
     expect(toast.success).not.toHaveBeenCalled();
   });
@@ -115,27 +114,24 @@ describe("useGenerateAddressesMutation", () => {
       rejectFn = reject;
     });
     vi.mocked(generateAddresses).mockReturnValue(pendingPromise);
-    const saveResultFn = vi.fn();
-    const { result } = renderHook(() => useGenerateAddressesMutation(saveResultFn), {
+    const { result } = renderHook(() => useGenerateAddressesMutation(), {
       wrapper: createWrapper(),
     });
     result.current.mutate(MOCK_REQUEST_BODY);
     await waitFor(() => expect(result.current.isPending).toBeTruthy());
-    result.current.cancelRequest();
+    act(() => result.current.cancelRequest());
     const abortError = new Error("The operation was aborted");
     abortError.name = "AbortError";
-    rejectFn!(abortError);
+    act(() => rejectFn!(abortError));
     await waitFor(() => expect(result.current.isError).toBeTruthy());
     expect(toast.info).toHaveBeenCalled(); // Should show cancellation toast
     expect(toast.error).not.toHaveBeenCalledWith(abortError.message);
-    expect(saveResultFn).not.toHaveBeenCalled();
   });
 
   it("should handle API errors and show error toast", async () => {
     const errorMessage = "Failed to generate addresses: API error";
     vi.mocked(generateAddresses).mockRejectedValue(new Error(errorMessage));
-    const saveResultFn = vi.fn();
-    const { result } = renderHook(() => useGenerateAddressesMutation(saveResultFn), {
+    const { result } = renderHook(() => useGenerateAddressesMutation(), {
       wrapper: createWrapper(),
     });
     result.current.mutate(MOCK_REQUEST_BODY);
@@ -145,7 +141,6 @@ describe("useGenerateAddressesMutation", () => {
       MOCK_ID_TOKEN,
       expect.any(AbortSignal),
     );
-    expect(saveResultFn).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith(errorMessage);
     expect(toast.success).not.toHaveBeenCalled();
   });

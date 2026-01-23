@@ -191,7 +191,6 @@ describe("AddressContextProvider", () => {
     expect(screen.getByTestId("generated-count").textContent).toBe("0");
     const saveButton = screen.getByTestId("save-addresses");
     fireEvent.click(saveButton);
-    expect(screen.getByText(/pending/)).toBeTruthy(); // generating state turned off
     expect(screen.getByTestId("generated-count").textContent).toBe("2");
   });
 
