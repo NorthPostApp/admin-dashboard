@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import * as addressApi from "@/api/address";
 import { screen, fireEvent, waitFor, MOCK_ID_TOKEN } from "@/lib/test-utils";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
 import UserPromptInput from "./UserPromptInput";
 import { toast } from "sonner";
@@ -85,7 +85,7 @@ describe("UserPromptInput", () => {
 
   it("submits with custom model and effort", async () => {
     const UserInputWithSystemPrompt = () => {
-      const { updateSystemPrompt } = useAddressContext();
+      const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
         updateSystemPrompt("EN", "some prompt");
       }, [updateSystemPrompt]);
@@ -161,7 +161,7 @@ describe("UserPromptInput", () => {
 
   it("submits form when Enter key is pressed without shift", async () => {
     const UserInputWithSystemPrompt = () => {
-      const { updateSystemPrompt } = useAddressContext();
+      const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
         updateSystemPrompt("EN", "system prompt");
       }, [updateSystemPrompt]);
@@ -191,7 +191,7 @@ describe("UserPromptInput", () => {
 
   it("does not submit when Enter is pressed with empty prompt", async () => {
     const UserInputWithSystemPrompt = () => {
-      const { updateSystemPrompt } = useAddressContext();
+      const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
         updateSystemPrompt("EN", "system prompt");
       }, [updateSystemPrompt]);
@@ -210,7 +210,7 @@ describe("UserPromptInput", () => {
 
   it("displays stop when submission is pending", async () => {
     const UserInputWithSystemPrompt = () => {
-      const { updateSystemPrompt } = useAddressContext();
+      const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
         updateSystemPrompt("EN", "system prompt");
       }, [updateSystemPrompt]);
@@ -234,7 +234,7 @@ describe("UserPromptInput", () => {
 
   it("cancel request when submission is pending", async () => {
     const UserInputWithSystemPrompt = () => {
-      const { updateSystemPrompt } = useAddressContext();
+      const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
         updateSystemPrompt("EN", "system prompt");
       }, [updateSystemPrompt]);

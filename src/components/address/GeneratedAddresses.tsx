@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import Timer from "@/components/address/Timer";
@@ -16,7 +16,7 @@ import "./Address.css";
 
 export default function GeneratedAddresses() {
   const isMobile = useIsMobile();
-  const { generating, generatedAddresses } = useAddressContext();
+  const { generating, generatedAddresses } = useNewAddressContext();
   const { t } = useTranslation("address:newAddress");
 
   if (generating) {

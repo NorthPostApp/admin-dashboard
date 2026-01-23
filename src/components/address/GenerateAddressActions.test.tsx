@@ -3,7 +3,7 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from "@/lib/test-wrappers";
 import GeneratedAddressActions from "./GeneratedAddressActions";
 import type { GeneratedAddressSchema, AddressItemSchema } from "@/schemas/address";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import * as useCreateNewAddressMutation from "@/hooks/mutations/useCreateNewAddressMutation";
 
 // Mock the mutation hook
@@ -11,8 +11,8 @@ vi.mock("@/hooks/mutations/useCreateNewAddressMutation", () => ({
   useCreateNewAddressMutation: vi.fn(),
 }));
 
-vi.mock("@/hooks/useAddressContext", () => ({
-  useAddressContext: vi.fn(),
+vi.mock("@/hooks/useNewAddressContext", () => ({
+  useNewAddressContext: vi.fn(),
 }));
 
 const mockAddressItem: GeneratedAddressSchema = {
@@ -34,9 +34,9 @@ const mockAddressItem: GeneratedAddressSchema = {
 const mockMutate = vi.fn();
 const mockUpdateGeneratedAddress = vi.fn();
 const mockUseCreateNewAddressMutation = vi.mocked(
-  useCreateNewAddressMutation.useCreateNewAddressMutation
+  useCreateNewAddressMutation.useCreateNewAddressMutation,
 );
-const mockUseAddressContext = vi.mocked(useAddressContext);
+const mockuseNewAddressContext = vi.mocked(useNewAddressContext);
 
 describe("GeneratedAddressActions", () => {
   beforeEach(() => {
@@ -60,7 +60,7 @@ describe("GeneratedAddressActions", () => {
       submittedAt: 0,
     });
 
-    mockUseAddressContext.mockReturnValue({
+    mockuseNewAddressContext.mockReturnValue({
       updateGeneratedAddress: mockUpdateGeneratedAddress,
       systemPrompt: undefined,
       userPrompt: "",
@@ -107,7 +107,7 @@ describe("GeneratedAddressActions", () => {
           tags: ["historical", "royal", "18th-century"],
           address: mockAddressItem.address,
           language: expect.any(String),
-        })
+        }),
       );
     });
   });
@@ -194,7 +194,7 @@ describe("GeneratedAddressActions", () => {
       expect(mockMutate).toHaveBeenCalledWith(
         expect.objectContaining({
           language: expect.any(String),
-        })
+        }),
       );
     });
   });

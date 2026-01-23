@@ -8,12 +8,12 @@ import type {
 } from "@/schemas/address";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../useAuthContext";
-import { useAddressContext } from "../useAddressContext";
+import { useNewAddressContext } from "../useNewAddressContext";
 
 export function useGenerateAddressesMutation() {
   const { t } = useTranslation("address:newAddress");
   const { user } = useAuthContext();
-  const { setGeneratingState, saveGeneratedAddresses } = useAddressContext();
+  const { setGeneratingState, saveGeneratedAddresses } = useNewAddressContext();
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const mutation = useMutation({

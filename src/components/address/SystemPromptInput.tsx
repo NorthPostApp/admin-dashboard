@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import { useAppContext } from "@/hooks/useAppContext";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useSystemPromptQuery } from "@/hooks/queries/useSystemPromptQuery";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
 
 export default function SystemPromptInput() {
   const { language } = useAppContext();
-  const { systemPrompt, updateSystemPrompt } = useAddressContext();
+  const { systemPrompt, updateSystemPrompt } = useNewAddressContext();
   const { isFetching, isSuccess, refetch } = useSystemPromptQuery(language);
   const { t } = useTranslation("address:newAddress");
 

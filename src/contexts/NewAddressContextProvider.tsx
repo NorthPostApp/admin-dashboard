@@ -12,7 +12,7 @@ type SystemPrompt = {
 
 type UserPrompt = string;
 
-interface AddressContextType {
+interface NewAddressContextType {
   systemPrompt: SystemPrompt | undefined;
   userPrompt: UserPrompt;
   generating: boolean;
@@ -24,9 +24,9 @@ interface AddressContextType {
   updateGeneratedAddress: (id: string, newAddress: AddressItemSchema) => void;
 }
 
-const AddressContext = createContext<AddressContextType | undefined>(undefined);
+const NewAddressContext = createContext<NewAddressContextType | undefined>(undefined);
 
-export default function AddressContextProvider({
+export default function NewAddressContextProvider({
   children,
 }: {
   children: React.ReactNode;
@@ -98,7 +98,9 @@ export default function AddressContextProvider({
   );
 
   return (
-    <AddressContext.Provider value={contextValue}>{children}</AddressContext.Provider>
+    <NewAddressContext.Provider value={contextValue}>
+      {children}
+    </NewAddressContext.Provider>
   );
 }
-export { AddressContext };
+export { NewAddressContext };

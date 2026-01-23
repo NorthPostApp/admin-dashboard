@@ -19,7 +19,7 @@ import {
   type ReasonEffort,
 } from "@/consts/app-config";
 import type { GenerateAddressesRequestSchema } from "@/schemas/address";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useGenerateAddressesMutation } from "@/hooks/mutations/useGenerateAddressesMutation";
 import { PopoverSelector } from "@/components/address/PopoverSelector";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,8 @@ const getEffortIcon = (effort: ReasonEffort | "none") => {
 };
 
 export default function UserPromptInput() {
-  const { generating, systemPrompt, userPrompt, updateUserPrompt } = useAddressContext();
+  const { generating, systemPrompt, userPrompt, updateUserPrompt } =
+    useNewAddressContext();
   const { mutate, cancelRequest } = useGenerateAddressesMutation();
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering

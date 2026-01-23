@@ -10,7 +10,7 @@ import type {
 } from "@/schemas/address";
 import AuthContextProvider from "@/contexts/AuthContextProvider";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";
-import AddressContextProvider from "@/contexts/AddressContextProvider";
+import AddressContextProvider from "@/contexts/NewAddressContextProvider";
 
 vi.mock("sonner");
 vi.mock("@/api/address");

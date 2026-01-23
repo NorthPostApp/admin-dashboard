@@ -1,0 +1,5 @@
+@import "../index.css";
+
+.subheader {
+  @apply flex flex-col w-full border-b justify-center min-h-13 h-13;
+}
