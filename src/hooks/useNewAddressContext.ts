@@ -5,7 +5,7 @@ export function useNewAddressContext() {
   const context = useContext(NewAddressContext);
   if (context === undefined) {
     throw new Error(
-      "useNewAddressContext hook must be used within AddressContextProvider",
+      "useNewAddressContext hook must be used within NewAddressContextProvider",
     );
   }
   return context;
