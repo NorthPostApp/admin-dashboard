@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import AddressContextProvider from "./AddressContextProvider";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import AddressContextProvider from "./NewAddressContextProvider";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 
 // Test component that uses the context
 function TestComponent() {
@@ -15,7 +15,7 @@ function TestComponent() {
     setGeneratingState,
     saveGeneratedAddresses,
     updateGeneratedAddress,
-  } = useAddressContext();
+  } = useNewAddressContext();
 
   return (
     <div>
@@ -172,11 +172,11 @@ describe("AddressContextProvider", () => {
     expect(screen.getByTestId("user-prompt").textContent).toBe("Generate 5 addresses");
   });
 
-  it("throws error when useAddressContext is used outside provider", () => {
+  it("throws error when useNewAddressContext is used outside provider", () => {
     // Suppress console.error for this test
     expect(() => {
       render(<TestComponent />);
-    }).toThrow("useAddressContext hook must be used within AddressContextProvider");
+    }).toThrow("useNewAddressContext hook must be used within AddressContextProvider");
   });
 
   it("saves generated addresses", async () => {

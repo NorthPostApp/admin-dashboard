@@ -25,6 +25,7 @@ const GeneratedAddress = AddressItem.extend({
 });
 
 const AddressItemWithTime = AddressItem.extend({
+  id: z.string().min(3),
   createdAt: z.number(),
   updatedAt: z.number(),
 });

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EllipsisVertical } from "lucide-react";
 import { useAppContext } from "@/hooks/useAppContext";
-import { useAddressContext } from "@/hooks/useAddressContext";
+import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 import {
   addressItemsEqual,
@@ -23,7 +23,7 @@ export default function GeneratedAddressActions({
   addressItem,
 }: GeneratedAddressActionsProps) {
   const { language } = useAppContext();
-  const { updateGeneratedAddress } = useAddressContext();
+  const { updateGeneratedAddress } = useNewAddressContext();
   const { t } = useTranslation("address:newAddress");
   const { mutate, isPending } = useCreateNewAddressMutation();
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);

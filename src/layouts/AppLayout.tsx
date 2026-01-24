@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import AddressContextProvider from "@/contexts/AddressContextProvider";
+import AddressContextProvider from "@/contexts/NewAddressContextProvider";
 import AppSidebar, { SidebarProvider } from "@/components/sidebar/AppSidebar";
 import AppHeader from "@/components/header/AppHeader";
 import "./AppLayout.css";

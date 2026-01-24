@@ -36,7 +36,7 @@ export default function CreateAddresses() {
   ];
 
   return (
-    <div className="address-header">
+    <div className="address-body">
       <Subheader title={t("title")}>
         <TabsTrigger tabOptions={tabs} activeTab={activeTab} />
       </Subheader>

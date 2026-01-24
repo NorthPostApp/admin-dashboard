@@ -1,10 +1,14 @@
 @import "../../index.css";
 
-.address-header {
+.address-body {
   @apply flex-1 max-h-full overflow-y-auto flex flex-col gap-6;
 }
 
 .address-create {
+  @apply flex-1 flex justify-center overflow-y-auto px-5;
+}
+
+.address-view {
   @apply flex-1 flex justify-center overflow-y-auto px-5;
 }
 
