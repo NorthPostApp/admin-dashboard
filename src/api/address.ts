@@ -11,7 +11,8 @@ type ServiceError = { error: string };
 type GetAllAddressesRequest = {
   language: Language;
   tags?: string[];
-  limit?: number;
+  pageSize?: number;
+  lastDocId?: string;
 };
 
 type GetSystemPromptResponse = { data: string };

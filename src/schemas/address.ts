@@ -47,6 +47,7 @@ const GetAllAddressesResponse = z.object({
   totalCount: z.number(),
   hasMore: z.boolean(),
   lastDocId: z.string(),
+  language: z.enum(SUPPORTED_LANGUAGES),
 });
 
 const GenerateAddressesResponse = z.array(GeneratedAddress);

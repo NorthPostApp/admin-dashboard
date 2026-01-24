@@ -176,7 +176,7 @@ describe("AddressContextProvider", () => {
     // Suppress console.error for this test
     expect(() => {
       render(<TestComponent />);
-    }).toThrow("useNewAddressContext hook must be used within AddressContextProvider");
+    }).toThrow("useNewAddressContext hook must be used within NewAddressContextProvider");
   });
 
   it("saves generated addresses", async () => {

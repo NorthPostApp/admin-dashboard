@@ -32,6 +32,10 @@
   @apply flex flex-col justify-between w-full max-w-240 text-left;
 }
 
+.address-content__body__unbound {
+  @apply flex flex-col justify-between w-full text-left px-4 sm:px-12;
+}
+
 .address-content__form__group {
   @apply gap-4;
 }
