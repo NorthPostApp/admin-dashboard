@@ -1,18 +1,20 @@
+import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
-import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
-import Subheader from "../Subheader";
-import AddressCard from "@/components/address/AddressCard";
-import "./AddressPage.css";
-import { toast } from "sonner";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
+import Subheader from "@/pages/Subheader";
+import "./AddressPage.css";
+import PaginatedAddresses from "@/components/address/PaginatedAddresses";
+import PaginationBar from "@/components/address/PaginationBar";
 
 export default function ViewAddresses() {
   const { t } = useTranslation("address:viewAddress");
   const { language } = useAppContext();
   const { isFetching, refetch } = useGetAllAddressesQuery(language);
-  const { addressData, refreshAddressData } = useAddressDataContext();
+  const { totalPages, currentPage, addressData, refreshAddressData, selectPage } =
+    useAddressDataContext();
 
   // initial loading
   useEffect(() => {
@@ -36,13 +38,18 @@ export default function ViewAddresses() {
         <div className="address-content__body__unbound">
           {isFetching && <div>Loading</div>}
           {!isFetching && (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-              {addressData?.addresses.map((address) => (
-                <div key={address.id}>
-                  <AddressCard addressItem={address} actions={[]} />
-                </div>
-              ))}
-            </div>
+            <PaginatedAddresses
+              currentPage={currentPage}
+              addresses={addressData?.addresses || []}
+            />
+          )}
+          {addressData && (
+            <PaginationBar
+              totalPages={totalPages}
+              currPage={currentPage}
+              hasMore={addressData?.hasMore}
+              selectPageAction={selectPage}
+            />
           )}
         </div>
       </div>

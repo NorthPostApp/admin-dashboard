@@ -36,6 +36,10 @@ export const DEFAULT_LANGUAGE: Language = "EN";
 export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
 
+// For all addresses pagination, fetch 3 pages in advance
+export const DEFAULT_PAGE_DISPLAY_SIZE = 12;
+export const DEFAULT_PAGE_FETCH_SIZE = DEFAULT_PAGE_DISPLAY_SIZE * 3;
+
 export function getLocalAppConfig(): AppConfigLocalstorageType {
   const localData = getLocalData();
   return localData["config"] || {};
@@ -45,7 +49,7 @@ export function updateLocalAppConfig(newAppConfig: AppConfigLocalstorageType) {
   const localData = getLocalData();
   localStorage.setItem(
     LOCALSTORAGE_KEY,
-    JSON.stringify({ ...localData, config: newAppConfig } as LocalStorageType)
+    JSON.stringify({ ...localData, config: newAppConfig } as LocalStorageType),
   );
 }
 
@@ -58,7 +62,7 @@ export function updateLocalUserData(userData: AdminUserData) {
   const localData = getLocalData();
   localStorage.setItem(
     LOCALSTORAGE_KEY,
-    JSON.stringify({ ...localData, user: userData } as LocalStorageType)
+    JSON.stringify({ ...localData, user: userData } as LocalStorageType),
   );
 }
 
