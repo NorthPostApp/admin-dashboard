@@ -53,6 +53,7 @@ const GetAllAddressesResponse = z.object({
 const GenerateAddressesResponse = z.array(GeneratedAddress);
 
 type AddressItemSchema = z.infer<typeof AddressItem>;
+type AddressItemWithTimeSchema = z.infer<typeof AddressItemWithTime>;
 type NewAddressRequestSchema = z.infer<typeof NewAddressRequest>;
 type GenerateAddressesRequestSchema = z.infer<typeof GenerateAddressesRequest>;
 type GenerateAddressesResponseSchema = z.infer<typeof GenerateAddressesResponse>;
@@ -136,10 +137,12 @@ export {
   GetAllAddressesResponse,
   Address,
   AddressItem,
+  AddressItemWithTime,
   createAddressItemSchema,
   getDefaultForm,
   addressItemsEqual,
   type AddressItemSchema,
+  type AddressItemWithTimeSchema,
   type NewAddressRequestSchema,
   type GenerateAddressesRequestSchema,
   type GenerateAddressesResponseSchema,

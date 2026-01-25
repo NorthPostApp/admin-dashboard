@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../useAuthContext";
-import { type Language } from "@/consts/app-config";
+import { DEFAULT_PAGE_FETCH_SIZE, type Language } from "@/consts/app-config";
 import { getAllAddresses, type GetAllAddressesRequest } from "@/api/address";
-
-const defaultPageSize = 10;
 
 export function useGetAllAddressesQuery(
   language: Language,
@@ -18,7 +16,7 @@ export function useGetAllAddressesQuery(
       const requestBody: GetAllAddressesRequest = {
         language,
         tags: tags || [],
-        pageSize: defaultPageSize,
+        pageSize: DEFAULT_PAGE_FETCH_SIZE,
         lastDocId: lastDocId || "",
       };
       return getAllAddresses(requestBody, idToken, signal);
