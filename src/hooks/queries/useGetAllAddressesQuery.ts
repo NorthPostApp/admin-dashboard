@@ -7,17 +7,18 @@ export function useGetAllAddressesQuery(
   language: Language,
   tags?: string[],
   lastDocId?: string,
+  refresh?: boolean,
 ) {
   const { user } = useAuthContext();
   const query = useQuery({
-    queryKey: ["allAddresses", "language", ...(tags || []), lastDocId || ""],
+    queryKey: [language, ...(tags || []), lastDocId || "", refresh],
     queryFn: async ({ signal }) => {
       const idToken = (await user?.getIdToken()) || "";
       const requestBody: GetAllAddressesRequest = {
         language,
         tags: tags || [],
         pageSize: DEFAULT_PAGE_FETCH_SIZE,
-        lastDocId: lastDocId || "",
+        lastDocId: refresh ? "" : lastDocId || "",
       };
       return getAllAddresses(requestBody, idToken, signal);
     },
