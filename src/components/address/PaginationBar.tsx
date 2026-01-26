@@ -12,6 +12,7 @@ type PaginationBarProps = {
   totalPages: number;
   currPage: number;
   hasMore: boolean;
+  loading: boolean;
   selectPageAction: (page: number) => void;
 };
 
@@ -19,13 +20,19 @@ export default function PaginationBar({
   totalPages,
   currPage,
   hasMore,
+  loading,
   selectPageAction,
 }: PaginationBarProps) {
+  const prevDisabled = currPage <= 1;
+  const nextDisabled = currPage >= totalPages ? !hasMore : false;
   return (
     <Pagination className="py-3">
       <PaginationContent>
-        <PaginationItem onClick={() => selectPageAction(currPage - 1)} className="">
-          <PaginationPrevious disabled={currPage === 1} />
+        <PaginationItem>
+          <PaginationPrevious
+            disabled={prevDisabled || loading}
+            onClick={() => !prevDisabled && selectPageAction(currPage - 1)}
+          />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
           <PaginationItem
@@ -40,8 +47,11 @@ export default function PaginationBar({
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        <PaginationItem onClick={() => selectPageAction(currPage + 1)}>
-          <PaginationNext disabled={currPage === totalPages} />
+        <PaginationItem>
+          <PaginationNext
+            disabled={nextDisabled || loading}
+            onClick={() => !nextDisabled && selectPageAction(currPage + 1)}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
