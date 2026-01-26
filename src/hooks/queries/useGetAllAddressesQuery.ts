@@ -11,7 +11,7 @@ export function useGetAllAddressesQuery(
 ) {
   const { user } = useAuthContext();
   const query = useQuery({
-    queryKey: [language, ...(tags || []), lastDocId || "", refresh],
+    queryKey: ["allAddresses", language, ...(tags || []), lastDocId || "", refresh],
     queryFn: async ({ signal }) => {
       const idToken = (await user?.getIdToken()) || "";
       const requestBody: GetAllAddressesRequest = {
