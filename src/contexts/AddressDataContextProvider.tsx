@@ -32,9 +32,12 @@ export default function AddressDataContextProvider({
   };
 
   const selectPage = (page: number) => {
-    const selectedPage = Math.max(Math.min(page, totalPages), 1);
-    if (selectedPage === currentPage) return;
-    setCurrentPage(selectedPage);
+    const maxPossiblePage = Math.ceil(
+      (addressData?.totalCount || 1) / DEFAULT_PAGE_DISPLAY_SIZE,
+    );
+    const nextPage = Math.max(Math.min(page, maxPossiblePage), 1);
+    if (nextPage === currentPage) return;
+    setCurrentPage(nextPage);
   };
 
   const updateNextPageData = (nextPageData: GetAllAddressesResponseSchema) => {
