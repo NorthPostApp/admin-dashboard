@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
 import { fireEvent, render, screen } from "@/lib/test-utils";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
-import type { GetAllAddressesResponseSchema } from "@/schemas/address";
+import type {
+  AddressItemWithTimeSchema,
+  GetAllAddressesResponseSchema,
+} from "@/schemas/address";
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import AddressDataContextProvider from "./AddressDataContextProvider";
 
@@ -315,6 +318,68 @@ describe("AddressDataContextProvider", () => {
     expect(screen.getByTestId("address-count").textContent).toBe("1");
     expect(screen.getByTestId("language").textContent).toBe("ZH");
     expect(screen.getByTestId("last-doc-id").textContent).toBe("refresh-last-doc");
+  });
+
+  it("updated single data", () => {
+    function TestComponentWithCustomData() {
+      const { addressData, refreshAddressData, updateSingleAddressData, totalPages } =
+        useAddressDataContext();
+      return (
+        <div>
+          <div data-testid="total-pages">{totalPages}</div>
+          <button
+            data-testid="load-data"
+            onClick={() => {
+              // Create data with exactly 2 pages worth of addresses
+              const data = createMockAddressData(2);
+              refreshAddressData(data);
+            }}
+          >
+            Load Data
+          </button>
+          <button
+            data-testid="update-data"
+            onClick={() => {
+              const newData: AddressItemWithTimeSchema = {
+                id: "address-0",
+                name: "updated name",
+                tags: ["tag1", "tag2"],
+                briefIntro: "This is a brief introduction",
+                address: {
+                  city: "Test City",
+                  country: "Test Country",
+                  line1: "123 Test St",
+                  line2: "Apt 4",
+                  buildingName: "Test Building",
+                  postalCode: "12345",
+                  region: "Test Region",
+                },
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+              };
+              updateSingleAddressData(newData);
+            }}
+          >
+            Update data
+          </button>
+          <div>
+            {addressData?.addresses.map((data) => {
+              return <p key={data.id}>{data.name}</p>;
+            })}
+          </div>
+        </div>
+      );
+    }
+    render(
+      <AddressDataContextProvider>
+        <TestComponentWithCustomData />
+      </AddressDataContextProvider>,
+    );
+    const loadButton = screen.getByTestId("load-data");
+    const updateButton = screen.getByTestId("update-data");
+    fireEvent.click(loadButton);
+    fireEvent.click(updateButton);
+    expect(screen.getByText(/updated name/)).toBeTruthy();
   });
 
   it("updates total pages after refresh", () => {

@@ -1,3 +1,10 @@
 {
-  "title": "查看地址"
+  "title": "查看地址",
+  "controls": {
+      "edit": "编辑"
+  },
+  "editDialog": {
+    "title": "编辑地址",
+    "description": "以JSON格式修改地址"
+  }
 }

@@ -1,5 +1,8 @@
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
-import type { GetAllAddressesResponseSchema } from "@/schemas/address";
+import {
+  type AddressItemWithTimeSchema,
+  type GetAllAddressesResponseSchema,
+} from "@/schemas/address";
 import { createContext, useState } from "react";
 
 interface AddressDataContextProviderType {
@@ -9,6 +12,7 @@ interface AddressDataContextProviderType {
   selectPage: (page: number) => void;
   updateNextPageData: (nextPageData: GetAllAddressesResponseSchema) => void;
   refreshAddressData: (getAllAddressesResponse: GetAllAddressesResponseSchema) => void;
+  updateSingleAddressData: (newAddressItem: AddressItemWithTimeSchema) => void;
 }
 
 const AddressDataContext = createContext<AddressDataContextProviderType | undefined>(
@@ -59,6 +63,16 @@ export default function AddressDataContextProvider({
     handleUpdateTotalPages(getAllAddressesResponse.addresses.length);
   };
 
+  const updateSingleAddressData = (updatedAddressItem: AddressItemWithTimeSchema) => {
+    setAddressData((prev) => {
+      const newAddresses = prev?.addresses.map((address) => {
+        if (address.id !== updatedAddressItem.id) return address;
+        return updatedAddressItem;
+      });
+      return { ...prev, addresses: newAddresses } as GetAllAddressesResponseSchema;
+    });
+  };
+
   const contextValue = {
     addressData,
     currentPage,
@@ -66,6 +80,7 @@ export default function AddressDataContextProvider({
     selectPage,
     updateNextPageData,
     refreshAddressData,
+    updateSingleAddressData,
   };
 
   return (

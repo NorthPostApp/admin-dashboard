@@ -36,7 +36,6 @@ const formatAddressLines = (addressItem: AddressItemSchema) => {
 
 function AddressCard({ addressItem, actions }: AddressCardProps) {
   const addressLines = formatAddressLines(addressItem as AddressItemSchema);
-
   return (
     <Card className="address-component__card">
       <CardHeader className="address-component__card__header">
