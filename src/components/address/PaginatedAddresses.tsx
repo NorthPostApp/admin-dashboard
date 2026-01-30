@@ -1,6 +1,8 @@
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import type { AddressItemWithTimeSchema } from "@/schemas/address";
 import AddressCard from "@/components/address/AddressCard";
+import ViewAddressActions from "@/components/address/ViewAddressActions";
+import "./Address.css";
 
 type PaginatedAddressesProps = {
   currentPage: number;
@@ -19,10 +21,13 @@ export default function PaginatedAddresses({
   const currPageData = addresses.slice(...currDataRange);
 
   return (
-    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8">
+    <div className="address-layout__grid">
       {currPageData.map((address) => (
         <div key={address.id}>
-          <AddressCard addressItem={address} actions={[]} />
+          <AddressCard
+            addressItem={address}
+            actions={<ViewAddressActions addressItem={address} />}
+          />
         </div>
       ))}
     </div>

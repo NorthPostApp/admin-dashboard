@@ -34,6 +34,16 @@ const NewAddressRequest = AddressItem.extend({
   language: z.enum(SUPPORTED_LANGUAGES),
 });
 
+const UpdateAddressRequest = z.object({
+  language: z.enum(SUPPORTED_LANGUAGES),
+  id: z.string().min(1),
+  address: AddressItemWithTime,
+});
+
+const UpdateAddressResponse = z.object({
+  data: AddressItemWithTime,
+});
+
 const GenerateAddressesRequest = z.object({
   language: z.enum(SUPPORTED_LANGUAGES),
   systemPrompt: z.string().min(10),
@@ -59,6 +69,8 @@ type GenerateAddressesRequestSchema = z.infer<typeof GenerateAddressesRequest>;
 type GenerateAddressesResponseSchema = z.infer<typeof GenerateAddressesResponse>;
 type GeneratedAddressSchema = z.infer<typeof GeneratedAddress>;
 type GetAllAddressesResponseSchema = z.infer<typeof GetAllAddressesResponse>;
+type UpdateAddressRequestSchema = z.infer<typeof UpdateAddressRequest>;
+type UpdateAddressResponseSchema = z.infer<typeof UpdateAddressResponse>;
 
 // Extend error messages based on the i18n language
 const extendAddressSchema = (t: TFunction) =>
@@ -123,10 +135,10 @@ const addressItemsEqual = (
     addrA.city === addrB.city &&
     addrA.country === addrB.country &&
     addrA.line1 === addrB.line1 &&
-    addrA.line2 === addrB.line2 &&
-    addrA.buildingName === addrB.buildingName &&
-    addrA.postalCode === addrB.postalCode &&
-    addrA.region === addrB.region
+    addrA.region === addrB.region &&
+    (addrA.line2 || "") === (addrB.line2 || "") &&
+    (addrA.buildingName || "") === (addrB.buildingName || "") &&
+    (addrA.postalCode || "") === (addrB.postalCode || "")
   );
 };
 
@@ -135,6 +147,8 @@ export {
   GenerateAddressesRequest,
   GenerateAddressesResponse,
   GetAllAddressesResponse,
+  UpdateAddressRequest,
+  UpdateAddressResponse,
   Address,
   AddressItem,
   AddressItemWithTime,
@@ -147,5 +161,7 @@ export {
   type GenerateAddressesRequestSchema,
   type GenerateAddressesResponseSchema,
   type GeneratedAddressSchema,
+  type UpdateAddressRequestSchema,
+  type UpdateAddressResponseSchema,
   type GetAllAddressesResponseSchema,
 };

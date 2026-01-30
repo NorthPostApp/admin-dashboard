@@ -1,3 +1,10 @@
 {
-  "title": "View Addresses"
+  "title": "View Addresses",
+  "controls": {
+      "edit": "Edit"
+  },
+  "editDialog": {
+    "title": "Edit Address",
+    "description": "Modify the address details in JSON format"
+  }
 }

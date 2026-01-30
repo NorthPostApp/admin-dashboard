@@ -3,6 +3,8 @@ import type {
   GenerateAddressesResponseSchema,
   GetAllAddressesResponseSchema,
   NewAddressRequestSchema,
+  UpdateAddressRequestSchema,
+  UpdateAddressResponseSchema,
 } from "@/schemas/address";
 import type { Language } from "@/consts/app-config";
 
@@ -37,6 +39,24 @@ async function createNewAddress(data: NewAddressRequestSchema, idToken: string) 
     throw new Error(errorMessage);
   }
   return (await response.json()) as CreateNewAddressResponse;
+}
+
+async function updateAddress(requestBody: UpdateAddressRequestSchema, idToken: string) {
+  const response = await fetch(BASE_URL + "/address/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    const errorData = (await response.json()) as ServiceError;
+    const errorMessage = errorData.error || `Error updating address: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+  return (await response.json()) as UpdateAddressResponseSchema;
 }
 
 async function getAllAddresses(
@@ -111,6 +131,7 @@ export {
   getSystemPrompt,
   generateAddresses,
   getAllAddresses,
+  updateAddress,
   type CreateNewAddressResponse,
   type GetSystemPromptResponse,
   type GetAllAddressesRequest,

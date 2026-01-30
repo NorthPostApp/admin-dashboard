@@ -32,6 +32,10 @@
   @apply w-full flex justify-between gap-4;
 }
 
+.address-component__popover__body__button_sm {
+  @apply w-full flex justify-between gap-4 text-xs;
+}
+
 .address-component__popover__header {
   @apply px-2 border-b w-full pb-2;
 }
@@ -78,4 +82,8 @@
 
 .address-component__tag {
   @apply flex gap-2 items-center h-5 bg-primary/80;
+}
+
+.address-layout__grid {
+  @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8;
 }
