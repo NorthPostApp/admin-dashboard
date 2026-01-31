@@ -20,6 +20,7 @@
     "controls": {
       "edit": "编辑",
       "save": "保存",
+      "search": "搜索",
       "cancel": "取消"
     },
     "state": {

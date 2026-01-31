@@ -1,7 +1,8 @@
 {
   "title": "View Addresses",
   "controls": {
-      "edit": "Edit"
+      "edit": "Edit",
+      "search": "Search"
   },
   "editDialog": {
     "title": "Edit Address",

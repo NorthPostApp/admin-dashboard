@@ -33,12 +33,12 @@ export default function GeneratedAddressActions({
       actionComponent: (
         <Button
           variant="ghost"
-          size={"sm"}
+          size="sm"
           onClick={() => {
             const addressBody = { language, ...addressItem } as NewAddressRequestSchema;
             mutate(addressBody);
           }}
-          className="address-component__popover__body__button text-xs"
+          className="address-component__popover__body__button__sm"
         >
           {t("prompt.controls.save")}
         </Button>
@@ -49,13 +49,30 @@ export default function GeneratedAddressActions({
       actionComponent: (
         <Button
           variant="ghost"
-          size={"sm"}
-          className="address-component__popover__body__button text-xs"
+          size="sm"
+          className="address-component__popover__body__button__sm"
           onClick={() => {
             setEditDialogOpen(true);
           }}
         >
           {t("prompt.controls.edit")}
+        </Button>
+      ),
+    },
+    {
+      name: "search",
+      actionComponent: (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="address-component__popover__body__button__sm"
+          onClick={() => {
+            const searchQuery = `${addressItem.name} ${addressItem.address.country}`;
+            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+            window.open(googleSearchUrl, "_blank");
+          }}
+        >
+          {t("prompt.controls.search")}
         </Button>
       ),
     },

@@ -34,9 +34,26 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           onClick={() => {
             setEditDialogOpen(true);
           }}
-          className="address-component__popover__body__button_sm"
+          className="address-component__popover__body__button__sm"
         >
           {t("controls.edit")}
+        </Button>
+      ),
+    },
+    {
+      name: "search",
+      actionComponent: (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            const searchQuery = `${addressItem.name} ${addressItem.address.country}`;
+            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
+            window.open(googleSearchUrl, "_blank");
+          }}
+          className="address-component__popover__body__button__sm"
+        >
+          {t("controls.search")}
         </Button>
       ),
     },

@@ -37,6 +37,8 @@ const mockAddressItem: AddressItemWithTimeSchema = {
   updatedAt: new Date().getTime(),
 };
 
+const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent("John Doe United Kingdom")}`;
+
 const getMockMutationValue = (isPending: boolean) => {
   return {
     mutate: mockMutate,
@@ -66,6 +68,7 @@ describe("ViewAddressActions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
   it("disables the button and shows spinner when pending", async () => {
     vi.mocked(useUpdateAddressMutation).mockReturnValue(getMockMutationValue(true));
     renderWithProviders(<ViewAddressActions addressItem={mockAddressItem} />);
@@ -80,6 +83,7 @@ describe("ViewAddressActions", () => {
     fireEvent.click(triggerButton);
     await waitFor(() => {
       expect(screen.getByText("Edit")).toBeTruthy();
+      expect(screen.getByText("Search")).toBeTruthy();
     });
   });
 
@@ -124,6 +128,7 @@ describe("ViewAddressActions", () => {
       });
     });
   });
+
   it("does not call mutate when address data is unchanged", async () => {
     renderWithProviders(<ViewAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
@@ -141,5 +146,17 @@ describe("ViewAddressActions", () => {
     await waitFor(() => {
       expect(mockMutate).not.toHaveBeenCalled();
     });
+  });
+
+  it("calls window.open api and open google search with URI query", async () => {
+    vi.mocked(useUpdateAddressMutation).mockReturnValue(getMockMutationValue(false));
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    renderWithProviders(<ViewAddressActions addressItem={mockAddressItem} />);
+    const triggerButton = screen.getByRole("button");
+    fireEvent.click(triggerButton);
+    const searchButton = screen.getByText("Search");
+    fireEvent.click(searchButton);
+    expect(openSpy).toHaveBeenCalled();
+    expect(openSpy).toHaveBeenCalledWith(googleSearchUrl, "_blank");
   });
 });
