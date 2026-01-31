@@ -4,7 +4,7 @@ import { renderWithProviders } from "@/lib/test-wrappers";
 import GeneratedAddressActions from "./GeneratedAddressActions";
 import type { GeneratedAddressSchema, AddressItemSchema } from "@/schemas/address";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
-import * as useCreateNewAddressMutation from "@/hooks/mutations/useCreateNewAddressMutation";
+import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 
 // Mock the mutation hook
 vi.mock("@/hooks/mutations/useCreateNewAddressMutation", () => ({
@@ -31,35 +31,36 @@ const mockAddressItem: GeneratedAddressSchema = {
   },
 };
 
+const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent("John Doe United Kingdom")}`;
+
 const mockMutate = vi.fn();
 const mockUpdateGeneratedAddress = vi.fn();
-const mockUseCreateNewAddressMutation = vi.mocked(
-  useCreateNewAddressMutation.useCreateNewAddressMutation,
-);
+const mockUseCreateNewAddressMutation = vi.mocked(useCreateNewAddressMutation);
 const mockuseNewAddressContext = vi.mocked(useNewAddressContext);
+const getMockMutationValue = (isPending: boolean) => {
+  return {
+    mutate: mockMutate,
+    isPending,
+    mutateAsync: vi.fn(),
+    data: undefined,
+    error: null,
+    isError: false,
+    isIdle: true,
+    isSuccess: false,
+    failureCount: 0,
+    failureReason: null,
+    isPaused: false,
+    variables: undefined,
+    status: "idle",
+    reset: vi.fn(),
+    context: undefined,
+    submittedAt: 0,
+  } as ReturnType<typeof useCreateNewAddressMutation>;
+};
 
 describe("GeneratedAddressActions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseCreateNewAddressMutation.mockReturnValue({
-      mutate: mockMutate,
-      isPending: false,
-      mutateAsync: vi.fn(),
-      data: undefined,
-      error: null,
-      isError: false,
-      isIdle: true,
-      isSuccess: false,
-      failureCount: 0,
-      failureReason: null,
-      isPaused: false,
-      variables: undefined,
-      status: "idle",
-      reset: vi.fn(),
-      context: undefined,
-      submittedAt: 0,
-    });
-
     mockuseNewAddressContext.mockReturnValue({
       updateGeneratedAddress: mockUpdateGeneratedAddress,
       systemPrompt: undefined,
@@ -74,12 +75,22 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("renders the popover trigger button", () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     expect(triggerButton).toBeTruthy();
   });
 
+  it("disables the popover trigger button", () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(true));
+    renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
+    const triggerButton = screen.getByRole("button");
+    expect(triggerButton).toBeTruthy();
+    expect(triggerButton).toHaveProperty("disabled", true);
+  });
+
   it("opens popover menu when trigger button is clicked", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -90,6 +101,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("calls mutate with correct data when save button is clicked", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -113,6 +125,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("opens edit dialog when edit button is clicked", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -127,6 +140,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("stringifies address data without id for edit dialog", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -149,6 +163,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("does not update when edit dialog saves with unchanged data", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -163,6 +178,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("closes edit dialog when setOpen is called", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -182,6 +198,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("includes language from AppContext when calling mutate", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -200,6 +217,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("renders two control buttons in popover menu", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -210,6 +228,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("calls updateGeneratedAddress when address data is modified", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -243,6 +262,7 @@ describe("GeneratedAddressActions", () => {
   });
 
   it("does NOT call updateGeneratedAddress when address data is unchanged", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
     renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
     const triggerButton = screen.getByRole("button");
     fireEvent.click(triggerButton);
@@ -267,5 +287,17 @@ describe("GeneratedAddressActions", () => {
     await waitFor(() => {
       expect(mockUpdateGeneratedAddress).not.toHaveBeenCalled();
     });
+  });
+
+  it("calls window.open api and open google search with URI query", async () => {
+    mockUseCreateNewAddressMutation.mockReturnValue(getMockMutationValue(false));
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
+    renderWithProviders(<GeneratedAddressActions addressItem={mockAddressItem} />);
+    const triggerButton = screen.getByRole("button");
+    fireEvent.click(triggerButton);
+    const searchButton = screen.getByText("Search");
+    fireEvent.click(searchButton);
+    expect(openSpy).toHaveBeenCalled();
+    expect(openSpy).toHaveBeenCalledWith(googleSearchUrl, "_blank");
   });
 });

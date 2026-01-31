@@ -20,6 +20,7 @@
     "controls": {
       "edit": "Edit",
       "save": "Save",
+      "search": "Search",
       "cancel": "Cancel"
     },
     "state": {
