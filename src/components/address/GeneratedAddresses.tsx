@@ -32,6 +32,9 @@ export default function GeneratedAddresses() {
         }}
         orientation={isMobile ? "vertical" : "horizontal"}
         className={cn("address-component__carousel", !isMobile && "max-w-[88%]")}
+        onKeyDownCapture={(e) => {
+          e.stopPropagation(); // avoid carousel left/right key control blocks cursor navigation in the modal textarea component
+        }}
       >
         <CarouselContent className="mb-2">
           {generatedAddresses.map((addressItem) => {
