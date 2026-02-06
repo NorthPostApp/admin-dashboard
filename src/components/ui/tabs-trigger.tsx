@@ -26,7 +26,7 @@ export default function TabsTrigger({ tabOptions, activeTab }: TabsButtonProps) 
     }
   }, [activeIndex]);
   return (
-    <div className="relative flex bg-accent w-fit px-2 rounded-full py-0.5 shadow-sm">
+    <div className="relative flex bg-accent w-fit px-2 rounded-full py-0.5 shadow-sm mx-auto">
       <div
         className={
           "absolute bg-primary w-22 top-1 h-[calc(100%-0.5rem)] rounded-full transition-normal duration-150 ease-in-out"
@@ -42,7 +42,7 @@ export default function TabsTrigger({ tabOptions, activeTab }: TabsButtonProps) 
             }}
             className={cn(
               "w-22 z-10 text-sm py-1 transition-none",
-              activeIndex === index ? "text-background" : "text-muted-foreground"
+              activeIndex === index ? "text-background" : "text-muted-foreground",
             )}
             onClick={action}
           >

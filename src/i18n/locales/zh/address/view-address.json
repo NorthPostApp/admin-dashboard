@@ -7,5 +7,8 @@
   "editDialog": {
     "title": "编辑地址",
     "description": "以JSON格式修改地址"
+  },
+  "filters": {
+    "searchPlaceholder": "按名称或简介搜索"
   }
 }

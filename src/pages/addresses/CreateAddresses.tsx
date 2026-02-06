@@ -37,9 +37,10 @@ export default function CreateAddresses() {
 
   return (
     <div className="address-body">
-      <Subheader title={t("title")}>
-        <TabsTrigger tabOptions={tabs} activeTab={activeTab} />
-      </Subheader>
+      <Subheader
+        title={t("title")}
+        centralComponent={<TabsTrigger tabOptions={tabs} activeTab={activeTab} />}
+      ></Subheader>
       <Activity mode={activeTab === "prompt" ? "visible" : "hidden"}>
         <CreateAddressPrompt />
       </Activity>
