@@ -1,12 +1,14 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import Subheader from "@/pages/Subheader";
 import PaginatedAddresses from "@/components/address/PaginatedAddresses";
 import PaginationBar from "@/components/address/PaginationBar";
+import SearchInput from "@/components/address/SearchInput";
 import "./AddressPage.css";
 
 export default function ViewAddresses() {
@@ -20,6 +22,11 @@ export default function ViewAddresses() {
     updateNextPageData,
     selectPage,
   } = useAddressDataContext();
+  const [searchText, setSearchText] = useState<string>("");
+  const onChangeSearchText = (text: string) => {
+    if (currentPage !== 1) selectPage(1);
+    setSearchText(text);
+  };
 
   const shouldRefreshData = language !== addressData?.language;
 
@@ -30,6 +37,12 @@ export default function ViewAddresses() {
     addressData?.lastDocId,
     shouldRefreshData,
   );
+  const filteredAddresses = useMemo(() => {
+    if (searchText.length === 0) return addressData?.addresses;
+    return addressData?.addresses.filter((address) => {
+      return address.name.includes(searchText) || address.briefIntro.includes(searchText);
+    });
+  }, [searchText, addressData]);
 
   // get first page data when first loading the page or refetching data
   const loadInitialAddressData = useCallback(() => {
@@ -63,23 +76,35 @@ export default function ViewAddresses() {
     if (currentPage > totalPages && !isFetching) loadNextPageData();
   }, [loadNextPageData, currentPage, totalPages, isFetching]);
 
+  const filteredPages =
+    searchText.length === 0
+      ? totalPages
+      : Math.ceil((filteredAddresses?.length || 1) / DEFAULT_PAGE_DISPLAY_SIZE);
+
   return (
     <div className="address-body">
-      <Subheader title={t("title")}>
-        <div>filters</div>
-      </Subheader>
+      <Subheader
+        title={t("title")}
+        centralComponent={
+          <SearchInput
+            onChange={onChangeSearchText}
+            placeholder={t("filters.searchPlaceholder")}
+          />
+        }
+        sideComponent={<div>Filters</div>}
+      ></Subheader>
       <div className="address-view">
         <div className="address-content__body__unbound">
           {isFetching && <div>Loading</div>}
           {!isFetching && (
             <PaginatedAddresses
               currentPage={currentPage}
-              addresses={addressData?.addresses || []}
+              addresses={filteredAddresses || []}
             />
           )}
           {addressData && (
             <PaginationBar
-              totalPages={totalPages}
+              totalPages={searchText.length === 0 ? totalPages : filteredPages}
               currPage={currentPage}
               hasMore={addressData?.hasMore}
               loading={isFetching}

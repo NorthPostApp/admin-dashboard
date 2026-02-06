@@ -87,3 +87,7 @@
 .address-layout__grid {
   @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8;
 }
+
+.address-component__search {
+  @apply rounded-full h-8 w-full;
+}
