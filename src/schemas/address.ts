@@ -60,6 +60,11 @@ const GetAllAddressesResponse = z.object({
   language: z.enum(SUPPORTED_LANGUAGES),
 });
 
+const GetAllTagsResponse = z.object({
+  tags: z.record(z.string(), z.array(z.string())),
+  refreshedAt: z.number(),
+});
+
 const GenerateAddressesResponse = z.array(GeneratedAddress);
 
 type AddressItemSchema = z.infer<typeof AddressItem>;
@@ -71,6 +76,7 @@ type GeneratedAddressSchema = z.infer<typeof GeneratedAddress>;
 type GetAllAddressesResponseSchema = z.infer<typeof GetAllAddressesResponse>;
 type UpdateAddressRequestSchema = z.infer<typeof UpdateAddressRequest>;
 type UpdateAddressResponseSchema = z.infer<typeof UpdateAddressResponse>;
+type GetAllTagsResponseSchema = z.infer<typeof GetAllTagsResponse>;
 
 // Extend error messages based on the i18n language
 const extendAddressSchema = (t: TFunction) =>
@@ -152,6 +158,7 @@ export {
   Address,
   AddressItem,
   AddressItemWithTime,
+  GetAllTagsResponse,
   createAddressItemSchema,
   getDefaultForm,
   addressItemsEqual,
@@ -164,4 +171,5 @@ export {
   type UpdateAddressRequestSchema,
   type UpdateAddressResponseSchema,
   type GetAllAddressesResponseSchema,
+  type GetAllTagsResponseSchema,
 };
