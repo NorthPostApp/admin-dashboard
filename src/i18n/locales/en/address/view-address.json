@@ -9,6 +9,6 @@
     "description": "Modify the address details in JSON format"
   },
   "filters": {
-    "searchPlaceholder": "Search by name or brief intro"
+    "searchPlaceholder": "Search by ID, name or brief intro"
   }
 }

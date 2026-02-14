@@ -22,7 +22,9 @@ export default function Subheader({
         <div className="col-span-1 content-center text-center w-full">
           {centralComponent}
         </div>
-        <div className="col-span-1 content-center text-end">{sideComponent}</div>
+        <div className="col-span-1 content-center text-end justify-self-end">
+          {sideComponent}
+        </div>
       </div>
     </div>
   );

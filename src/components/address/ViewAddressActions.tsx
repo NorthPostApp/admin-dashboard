@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useAppContext } from "@/hooks/useAppContext";
 import {
   addressItemsEqual,
@@ -59,10 +59,10 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
     },
   ];
 
-  const stringifyData = () => {
+  const stringData = useMemo(() => {
     const data = JSON.stringify(prevAddress, null, 2);
     return data;
-  };
+  }, [prevAddress]);
 
   const handleSaveNewAddress = (newAddress: AddressItemSchema) => {
     if (!addressItemsEqual(prevAddress, newAddress)) {
@@ -95,7 +95,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           title={t("editDialog.title")}
           description={t("editDialog.description")}
           handleJsonSave={handleSaveNewAddress}
-          initialData={stringifyData()}
+          initialData={stringData}
           open={editDialogOpen}
           setOpen={setEditDialogOpen}
         />

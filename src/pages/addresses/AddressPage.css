@@ -1,7 +1,7 @@
 @import "../../index.css";
 
 .address-body {
-  @apply flex-1 max-h-full overflow-y-auto flex flex-col gap-6 h-full;
+  @apply flex-1 max-h-full overflow-y-auto flex flex-col h-full;
 }
 
 .address-create {
@@ -9,7 +9,11 @@
 }
 
 .address-view {
-  @apply flex-1 flex justify-center overflow-y-auto px-2;
+  @apply flex-1 flex justify-center overflow-y-auto;
+}
+
+.address-view__flex__row {
+  @apply flex w-full;
 }
 
 .address-content__dialog__trigger {
@@ -29,11 +33,11 @@
 }
 
 .address-content__body {
-  @apply flex flex-col justify-between w-full max-w-240 text-left;
+  @apply flex flex-col justify-between w-full max-w-240 text-left pt-6;
 }
 
 .address-content__body__unbound {
-  @apply flex flex-col justify-between w-full max-h-full text-left;
+  @apply flex flex-col justify-between w-full max-h-full text-left pt-6;
 }
 
 .address-content__form__group {

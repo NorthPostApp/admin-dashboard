@@ -1,4 +1,4 @@
-@import url("https://cdn.jsdelivr.net/npm/cn-fontsource-lxgw-wen-kai-gb-screen/font.css");
+@import url("https://chinese-fonts-cdn.deno.dev/packages/lywkpmydb/dist/LXGWWenKaiMonoScreen/result.css");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -127,11 +127,11 @@
   body {
     @apply bg-primary-foreground text-foreground flex m-0 h-dvh w-dvw;
   }
-  html:lang(en) {
-    font-family: Roboto, "LXGW WenKai GB Screen", system-ui, sans-serif;
-  }
   html:lang(zh) {
-    font-family: Roboto, "LXGW WenKai GB Screen", system-ui, sans-serif;
+    font-family: "LXGW WenKai Mono Screen", system-ui, sans-serif;
+  }
+  html:lang(en) {
+    font-family: Roboto, system-ui, sans-serif;
   }
   #root {
     @apply w-full;
