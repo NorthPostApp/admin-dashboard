@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { RefreshCcw } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+import type { Language } from "@/consts/app-config";
 import { useGetAllTagsQuery } from "@/hooks/queries/useGetAllTagsQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import { Button } from "@/components/ui/button";
-import CheckboxSection from "./CheckboxSection";
-import type { Language } from "@/consts/app-config";
+import CheckboxSection from "@/components/address/CheckboxSection";
 
 export default function ViewAddressesFilters() {
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const { t } = useTranslation("address:viewAddress");
   const { language } = useAppContext();
-  const [currLanguage, setCurrLanguage] = useState<Language>(language);
-  const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefresh);
   const { tagsData, updateTagsData } = useAddressDataContext();
+
+  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [currLanguage, setCurrLanguage] = useState<Language>(language);
+
+  const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefresh);
+
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => {
@@ -21,7 +27,7 @@ export default function ViewAddressesFilters() {
     });
   };
 
-  // be sure to review this implementation
+  // the tags will be updated when 1. initial loading; 2. shouldRefresh; 3. Switch language
   useEffect(() => {
     if (!tagsData || shouldRefresh || currLanguage !== language) {
       refetch()
@@ -45,30 +51,32 @@ export default function ViewAddressesFilters() {
   };
 
   return (
-    <div className="py-6 h-full flex flex-col justify-between max-h-full px-4">
-      <h1>Filter By Tags</h1>
-      <div className="max-h-full overflow-y-auto flex-1">
+    <div className="address-component__filter">
+      <h1 className="address-component__filter__header">{t("filters.filterByTags")}</h1>
+      <div className="address-component__filter__section">
         {tagsData?.tags &&
           Object.entries(tagsData.tags).map(([sectionName, tags]) => (
             <CheckboxSection
               key={sectionName}
-              title={sectionName}
+              title={t(`filters.categories.${sectionName}`)}
               options={tags}
               selectedOptions={selectedTags}
               toggleOption={toggleTag}
             />
           ))}
       </div>
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <h2>Last updated: {getLastUpdated(tagsData?.refreshedAt)}</h2>
+      <div>
+        <div className="address-component__filter__footer__info">
+          <h2>
+            {t("filters.tagsUpdatedAt")}: {getLastUpdated(tagsData?.refreshedAt)}
+          </h2>
           <Button
             variant="ghost"
             size="icon-sm"
             onClick={() => setShouldRefresh(true)}
             disabled={isFetching}
           >
-            <RefreshCcw />
+            <RefreshCcw className={cn(isFetching ? "animate-spin" : "")} />
           </Button>
         </div>
         <Button variant="outline" className="w-full">
