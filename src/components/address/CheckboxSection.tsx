@@ -49,10 +49,9 @@ type MemoCheckboxProps = {
 };
 
 const MemoCheckbox = memo(
-  ({ title, tag, checked, toggleTag }: MemoCheckboxProps) => {
+  ({ tag, checked, toggleTag }: MemoCheckboxProps) => {
     return (
       <div
-        key={`${title}-${tag}`}
         className="group w-fit flex items-center gap-1.5 text-sm px-2 py-1 rounded-md border hover:cursor-pointer"
         onClick={(e) => {
           e.stopPropagation();

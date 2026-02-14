@@ -16,7 +16,7 @@ export default function ViewAddressesFilters() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) => {
-      if (prev.includes(tag)) return prev.filter((prevTag) => prevTag != tag);
+      if (prev.includes(tag)) return prev.filter((prevTag) => prevTag !== tag);
       else return [...prev, tag];
     });
   };
@@ -39,7 +39,7 @@ export default function ViewAddressesFilters() {
 
   const getLastUpdated = (time: number | undefined) => {
     if (!time) return "";
-    const dateTime = new Date(time * 1000); // add comments here
+    const dateTime = new Date(time * 1000); //  `time` is a Unix timestamp in seconds; convert to milliseconds for the JavaScript Date constructor
     const dateString = dateTime.toLocaleDateString();
     return dateString;
   };
