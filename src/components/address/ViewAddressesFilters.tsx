@@ -32,6 +32,7 @@ export default function ViewAddressesFilters() {
     if (!tagsData || shouldRefresh || currLanguage !== language) {
       refetch()
         .then((response) => {
+          // TODO: add no table error handling here
           if (response.data !== undefined) {
             updateTagsData(response.data);
           }
@@ -75,6 +76,7 @@ export default function ViewAddressesFilters() {
             size="icon-sm"
             onClick={() => setShouldRefresh(true)}
             disabled={isFetching}
+            data-testid="viewaddressfilters-refresh"
           >
             <RefreshCcw className={cn(isFetching ? "animate-spin" : "")} />
           </Button>
