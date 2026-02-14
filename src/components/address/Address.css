@@ -1,5 +1,13 @@
 @import "../../index.css";
 
+.address-layout__grid {
+  @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8;
+}
+
+.address-layout__sidebar {
+  @apply basis-1/3 border-l;
+}
+
 .address-component__prompt {
   @apply border rounded-lg p-2 focus-within:shadow-md transition-shadow duration-200;
 }
@@ -84,6 +92,34 @@
   @apply flex gap-2 items-center h-5 bg-primary/80;
 }
 
-.address-layout__grid {
-  @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8;
+.address-component__search {
+  @apply rounded-full h-8 w-full;
+}
+
+.address-component__filter {
+  @apply py-6 h-full flex flex-col justify-between max-h-full px-4 text-left;
+}
+
+.address-component__filter__header {
+  @apply border-b pb-3 px-3;
+}
+
+.address-component__filter__section {
+  @apply max-h-full overflow-y-auto flex-1;
+}
+
+.address-component__filter__footer__info {
+  @apply flex justify-between items-center pb-2 opacity-55;
+}
+
+.address-component__collapsible__trigger {
+  @apply w-full flex justify-between text-base mb-2;
+}
+
+.address-component__collapsible__content {
+  @apply flex flex-wrap gap-x-3 gap-y-2 px-2.5;
+}
+
+.address-component__checkbox {
+  @apply w-fit flex items-center gap-1.5 text-sm px-2 py-1 rounded-md border hover:cursor-pointer;
 }

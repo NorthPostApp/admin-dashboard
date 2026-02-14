@@ -27,6 +27,7 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/lib/test-utils.ts",
     coverage: {
+      // include: ["src/**/*.{ts,tsx}"], for the next step
       exclude: ["**/components/ui/**", "*.css", "**/i18n/", "src/api/", "src/lib/"],
     },
   },
@@ -36,7 +37,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom", "react-router"],
-          "vendor-form": ["@tanstack/react-form", "@tanstack/react-query"],
+          "vendor-tanstack": ["@tanstack/react-form", "@tanstack/react-query"],
           "vendor-i18n": ["i18next", "react-i18next", "i18next-resources-to-backend"],
           "vendor-firebase": ["firebase/auth", "firebase/app"],
           zod: ["zod"],

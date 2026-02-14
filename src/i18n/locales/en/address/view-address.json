@@ -7,5 +7,15 @@
   "editDialog": {
     "title": "Edit Address",
     "description": "Modify the address details in JSON format"
+  },
+  "filters": {
+    "searchPlaceholder": "Search by ID, name or brief intro",
+    "filterByTags": "Filter by tags",
+    "tagsUpdatedAt": "Tags updated at",
+    "categories": {
+      "country": "Country",
+      "figure": "Figure",
+      "role": "Role"
+    }
   }
 }

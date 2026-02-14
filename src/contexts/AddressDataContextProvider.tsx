@@ -1,7 +1,8 @@
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
-import {
-  type AddressItemWithTimeSchema,
-  type GetAllAddressesResponseSchema,
+import type {
+  GetAllTagsResponseSchema,
+  AddressItemWithTimeSchema,
+  GetAllAddressesResponseSchema,
 } from "@/schemas/address";
 import { createContext, useState } from "react";
 
@@ -9,8 +10,10 @@ interface AddressDataContextProviderType {
   addressData: GetAllAddressesResponseSchema | undefined;
   totalPages: number;
   currentPage: number;
+  tagsData: GetAllTagsResponseSchema | undefined;
   selectPage: (page: number) => void;
   updateNextPageData: (nextPageData: GetAllAddressesResponseSchema) => void;
+  updateTagsData: (tagsData: GetAllTagsResponseSchema | undefined) => void;
   refreshAddressData: (getAllAddressesResponse: GetAllAddressesResponseSchema) => void;
   updateSingleAddressData: (newAddressItem: AddressItemWithTimeSchema) => void;
 }
@@ -29,6 +32,9 @@ export default function AddressDataContextProvider({
   >(undefined);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [tagsData, setTagsData] = useState<GetAllTagsResponseSchema | undefined>(
+    undefined,
+  );
 
   const handleUpdateTotalPages = (numAddresses: number) => {
     const numPages = Math.ceil(numAddresses / DEFAULT_PAGE_DISPLAY_SIZE);
@@ -58,6 +64,10 @@ export default function AddressDataContextProvider({
     });
   };
 
+  const updateTagsData = (tagsData: GetAllTagsResponseSchema | undefined) => {
+    setTagsData(tagsData);
+  };
+
   const refreshAddressData = (getAllAddressesResponse: GetAllAddressesResponseSchema) => {
     setAddressData(getAllAddressesResponse);
     handleUpdateTotalPages(getAllAddressesResponse.addresses.length);
@@ -77,8 +87,10 @@ export default function AddressDataContextProvider({
     addressData,
     currentPage,
     totalPages,
+    tagsData,
     selectPage,
     updateNextPageData,
+    updateTagsData,
     refreshAddressData,
     updateSingleAddressData,
   };
