@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
@@ -128,11 +129,11 @@ export default function ViewAddresses() {
               />
             )}
           </div>
-          {showFilters && (
-            <div className="basis-1/3 border-l">
-              <ViewAddressesFilters />
-            </div>
-          )}
+          <div
+            className={cn("address-layout__sidebar", showFilters ? "visible" : "hidden")}
+          >
+            <ViewAddressesFilters />
+          </div>
         </div>
       </div>
     </div>
