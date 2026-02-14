@@ -6,7 +6,7 @@ import { getAllTags } from "@/api/address";
 export function useGetAllTagsQuery(language: Language, refresh: boolean = false) {
   const { user } = useAuthContext();
   const query = useQuery({
-    queryKey: ["tags", language, refresh],
+    queryKey: ["tags", language],
     queryFn: async ({ signal }) => {
       const idToken = (await user?.getIdToken()) || "";
       return getAllTags(language, idToken, refresh, signal);

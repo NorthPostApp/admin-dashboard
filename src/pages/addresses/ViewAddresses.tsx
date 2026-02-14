@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { ListFilter } from "lucide-react";
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import Subheader from "@/pages/Subheader";
+import { Button } from "@/components/ui/button";
 import PaginatedAddresses from "@/components/address/PaginatedAddresses";
 import PaginationBar from "@/components/address/PaginationBar";
 import SearchInput from "@/components/address/SearchInput";
+import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import "./AddressPage.css";
 
 export default function ViewAddresses() {
@@ -22,10 +25,14 @@ export default function ViewAddresses() {
     updateNextPageData,
     selectPage,
   } = useAddressDataContext();
+  const [showFilters, setShowFilters] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const onChangeSearchText = (text: string) => {
     if (currentPage !== 1) selectPage(1);
     setSearchText(text);
+  };
+  const onToggleFilters = () => {
+    setShowFilters((prev) => !prev);
   };
 
   const shouldRefreshData = language !== addressData?.language;
@@ -40,7 +47,11 @@ export default function ViewAddresses() {
   const filteredAddresses = useMemo(() => {
     if (searchText.length === 0) return addressData?.addresses;
     return addressData?.addresses.filter((address) => {
-      return address.name.includes(searchText) || address.briefIntro.includes(searchText);
+      return (
+        address.id === searchText ||
+        address.name.includes(searchText) ||
+        address.briefIntro.includes(searchText)
+      );
     });
   }, [searchText, addressData]);
 
@@ -91,25 +102,36 @@ export default function ViewAddresses() {
             placeholder={t("filters.searchPlaceholder")}
           />
         }
-        sideComponent={<div>Filters</div>}
+        sideComponent={
+          <Button onClick={onToggleFilters} variant="ghost" size="icon-sm">
+            <ListFilter width={20} />
+          </Button>
+        }
       ></Subheader>
       <div className="address-view">
-        <div className="address-content__body__unbound">
-          {isFetching && <div>Loading</div>}
-          {!isFetching && (
-            <PaginatedAddresses
-              currentPage={currentPage}
-              addresses={filteredAddresses || []}
-            />
-          )}
-          {addressData && (
-            <PaginationBar
-              totalPages={searchText.length === 0 ? totalPages : filteredPages}
-              currPage={currentPage}
-              hasMore={addressData?.hasMore}
-              loading={isFetching}
-              selectPageAction={selectPage}
-            />
+        <div className="address-view__flex__row">
+          <div className="address-content__body__unbound">
+            {isFetching && <div>Loading</div>}
+            {!isFetching && (
+              <PaginatedAddresses
+                currentPage={currentPage}
+                addresses={filteredAddresses || []}
+              />
+            )}
+            {addressData && (
+              <PaginationBar
+                totalPages={searchText.length === 0 ? totalPages : filteredPages}
+                currPage={currentPage}
+                hasMore={addressData?.hasMore}
+                loading={isFetching}
+                selectPageAction={selectPage}
+              />
+            )}
+          </div>
+          {showFilters && (
+            <div className="basis-1/3 border-l">
+              <ViewAddressesFilters />
+            </div>
           )}
         </div>
       </div>
