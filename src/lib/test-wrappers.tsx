@@ -2,9 +2,18 @@ import { render } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppContextProvider from "@/contexts/AppContextProvider";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import AddressContextProvider from "@/contexts/NewAddressContextProvider";
+import NewAddressContextProvider from "@/contexts/NewAddressContextProvider";
+import AddressDataContextProvider from "@/contexts/AddressDataContextProvider";
 
 export function renderWithProviders(children: React.ReactNode) {
+  const AddressProviders = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <NewAddressContextProvider>
+        <AddressDataContextProvider>{children}</AddressDataContextProvider>
+      </NewAddressContextProvider>
+    );
+  };
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -19,9 +28,9 @@ export function renderWithProviders(children: React.ReactNode) {
   return render(
     <QueryClientProvider client={queryClient}>
       <AppContextProvider>
-        <AddressContextProvider>
+        <AddressProviders>
           <SidebarProvider>{children}</SidebarProvider>
-        </AddressContextProvider>
+        </AddressProviders>
       </AppContextProvider>
     </QueryClientProvider>,
   );
