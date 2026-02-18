@@ -30,8 +30,9 @@ export default function PaginationBar({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
+            data-testid="pagination-previous"
             disabled={prevDisabled || loading}
-            onClick={() => !prevDisabled && selectPageAction(currPage - 1)}
+            onClick={() => !prevDisabled && !loading && selectPageAction(currPage - 1)}
           />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -44,13 +45,14 @@ export default function PaginationBar({
         ))}
         {hasMore && (
           <PaginationItem>
-            <PaginationEllipsis />
+            <PaginationEllipsis data-testid="pagination-ellipsis" />
           </PaginationItem>
         )}
         <PaginationItem>
           <PaginationNext
+            data-testid="pagination-next"
             disabled={nextDisabled || loading}
-            onClick={() => !nextDisabled && selectPageAction(currPage + 1)}
+            onClick={() => !nextDisabled && !loading && selectPageAction(currPage + 1)}
           />
         </PaginationItem>
       </PaginationContent>

@@ -63,6 +63,7 @@ const GetAllAddressesResponse = z.object({
 const GetAllTagsResponse = z.object({
   tags: z.record(z.string(), z.array(z.string())),
   refreshedAt: z.number(),
+  language: z.enum(SUPPORTED_LANGUAGES),
 });
 
 const GenerateAddressesResponse = z.array(GeneratedAddress);

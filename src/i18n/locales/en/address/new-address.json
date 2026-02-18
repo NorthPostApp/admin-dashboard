@@ -24,7 +24,8 @@
       "cancel": "Cancel"
     },
     "state": {
-      "generating": "Generating addresses"
+      "generating": "Generating addresses",
+      "loadingSystemPrompt": "Loading system prompt..."
     }
   },
   "form": {

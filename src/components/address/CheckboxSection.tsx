@@ -23,7 +23,7 @@ export default function CheckboxSection({
   toggleOption,
 }: CheckboxSectionProps) {
   return (
-    <Collapsible className="my-4">
+    <Collapsible className="my-4" defaultOpen={true}>
       <CollapsibleTrigger asChild>
         <Button variant="ghost" className="address-component__collapsible__trigger group">
           {title}

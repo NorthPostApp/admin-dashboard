@@ -101,7 +101,7 @@
 }
 
 .address-component__filter__header {
-  @apply border-b pb-3 px-3;
+  @apply flex justify-between items-center border-b pb-3 px-3;
 }
 
 .address-component__filter__section {
@@ -113,7 +113,7 @@
 }
 
 .address-component__collapsible__trigger {
-  @apply w-full flex justify-between text-base mb-2;
+  @apply w-full flex justify-between text-sm mb-2;
 }
 
 .address-component__collapsible__content {

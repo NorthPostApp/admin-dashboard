@@ -14,6 +14,7 @@ import PaginationBar from "@/components/address/PaginationBar";
 import SearchInput from "@/components/address/SearchInput";
 import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import "./AddressPage.css";
+import type { GetAllAddressesResponseSchema } from "@/schemas/address";
 
 export default function ViewAddresses() {
   const { t } = useTranslation("address:viewAddress");
@@ -25,6 +26,7 @@ export default function ViewAddresses() {
     refreshAddressData,
     updateNextPageData,
     selectPage,
+    selectedTags,
   } = useAddressDataContext();
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
@@ -38,13 +40,13 @@ export default function ViewAddresses() {
 
   const shouldRefreshData = language !== addressData?.language;
 
-  // this refresh could be a state, in case we need to refresh with new tags or keywords
   const { isFetching, refetch } = useGetAllAddressesQuery(
     language,
-    [],
+    shouldRefreshData ? [] : selectedTags,
     addressData?.lastDocId,
     shouldRefreshData,
   );
+
   const filteredAddresses = useMemo(() => {
     if (searchText.length === 0) return addressData?.addresses;
     return addressData?.addresses.filter((address) => {
@@ -57,32 +59,34 @@ export default function ViewAddresses() {
   }, [searchText, addressData]);
 
   // get first page data when first loading the page or refetching data
-  const loadInitialAddressData = useCallback(() => {
-    if (!addressData || language != addressData.language) {
+  const refetchData = useCallback(
+    (callbackFn: (data: GetAllAddressesResponseSchema) => void) => {
+      if (isFetching) return; // see if this can avoid multiple refetching happen
       refetch().then((result) => {
         if (result.data) {
-          refreshAddressData(result.data);
+          callbackFn(result.data);
         } else if (result.error) {
           toast.error("failed to fetch data, please check your internet connection");
         }
       });
+    },
+    [refetch, isFetching],
+  );
+
+  const loadInitialAddressData = useCallback(() => {
+    if (!addressData || shouldRefreshData) {
+      refetchData(refreshAddressData);
     }
-  }, [addressData, language, refetch, refreshAddressData]);
+  }, [addressData, shouldRefreshData, refreshAddressData, refetchData]);
 
   const loadNextPageData = useCallback(() => {
-    refetch().then((result) => {
-      if (result.data) {
-        updateNextPageData(result.data);
-      } else if (result.error) {
-        toast.error("failed to fetch data, please check your internet connection");
-      }
-    });
-  }, [refetch, updateNextPageData]);
+    refetchData(updateNextPageData);
+  }, [updateNextPageData, refetchData]);
 
   // initial loading
   useEffect(() => {
-    loadInitialAddressData();
-  }, [loadInitialAddressData]);
+    if (!isFetching) loadInitialAddressData();
+  }, [loadInitialAddressData, isFetching]);
 
   useEffect(() => {
     if (currentPage > totalPages && !isFetching) loadNextPageData();
