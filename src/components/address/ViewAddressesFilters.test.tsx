@@ -79,8 +79,6 @@ describe("ViewAddressesFilters", () => {
       expect(screen.getByText(/country/i)).toBeTruthy();
       expect(screen.getByText(/roles/i)).toBeTruthy();
     });
-    const countrySection = screen.getByText(/country/i);
-    fireEvent.click(countrySection);
     const tagButton = screen.getByText(/china/);
     fireEvent.click(tagButton);
     const parentElement = tagButton.parentElement;
@@ -88,5 +86,16 @@ describe("ViewAddressesFilters", () => {
     expect(checkbox!.getAttribute("data-state")).toBe("checked");
     fireEvent.click(tagButton);
     expect(checkbox!.getAttribute("data-state")).toBe("unchecked");
+  });
+
+  it("show spinner when fetching is pending", async () => {
+    mockUseGetAllTagsQuery.mockReturnValue({
+      refetch: mockRefetch,
+      isFetching: true,
+    });
+    renderWithProviders(<ViewAddressesFilters />);
+    await waitFor(() =>
+      expect(screen.getByTestId("view-addresses-filters-spinner")).toBeTruthy(),
+    );
   });
 });

@@ -24,7 +24,8 @@
       "cancel": "取消"
     },
     "state": {
-      "generating": "生成地址中"
+      "generating": "生成地址中",
+      "loadingSystemPrompt": "加载系统提示词中..."
     }
   },
   "form": {

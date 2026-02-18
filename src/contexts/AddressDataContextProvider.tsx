@@ -10,10 +10,13 @@ interface AddressDataContextProviderType {
   addressData: GetAllAddressesResponseSchema | undefined;
   totalPages: number;
   currentPage: number;
+  selectedTags: string[];
   tagsData: GetAllTagsResponseSchema | undefined;
   selectPage: (page: number) => void;
   updateNextPageData: (nextPageData: GetAllAddressesResponseSchema) => void;
   updateTagsData: (tagsData: GetAllTagsResponseSchema | undefined) => void;
+  updateSelectedTags: (tag: string) => void;
+  clearTagSelections: () => void;
   refreshAddressData: (getAllAddressesResponse: GetAllAddressesResponseSchema) => void;
   updateSingleAddressData: (newAddressItem: AddressItemWithTimeSchema) => void;
 }
@@ -35,10 +38,22 @@ export default function AddressDataContextProvider({
   const [tagsData, setTagsData] = useState<GetAllTagsResponseSchema | undefined>(
     undefined,
   );
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const handleUpdateTotalPages = (numAddresses: number) => {
     const numPages = Math.ceil(numAddresses / DEFAULT_PAGE_DISPLAY_SIZE);
     setTotalPages(Math.max(numPages, 1));
+  };
+
+  const updateSelectedTags = (tag: string) => {
+    setSelectedTags((prev) => {
+      if (prev.includes(tag)) return prev.filter((prevTag) => prevTag !== tag);
+      return [...prev, tag];
+    });
+  };
+
+  const clearTagSelections = () => {
+    setSelectedTags([]);
   };
 
   const selectPage = (page: number) => {
@@ -89,8 +104,11 @@ export default function AddressDataContextProvider({
     totalPages,
     tagsData,
     selectPage,
+    selectedTags,
     updateNextPageData,
     updateTagsData,
+    updateSelectedTags,
+    clearTagSelections,
     refreshAddressData,
     updateSingleAddressData,
   };

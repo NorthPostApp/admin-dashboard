@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { RefreshCcw } from "lucide-react";
+import { RefreshCcw, Eraser } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import type { Language } from "@/consts/app-config";
@@ -8,28 +8,27 @@ import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import { Button } from "@/components/ui/button";
 import CheckboxSection from "@/components/address/CheckboxSection";
+import { Spinner } from "../ui/spinner";
 
 export default function ViewAddressesFilters() {
   const { t } = useTranslation("address:viewAddress");
   const { language } = useAppContext();
-  const { tagsData, updateTagsData } = useAddressDataContext();
+  const {
+    tagsData,
+    updateTagsData,
+    selectedTags,
+    updateSelectedTags,
+    clearTagSelections,
+  } = useAddressDataContext();
 
-  const [shouldRefresh, setShouldRefresh] = useState<boolean>(false);
+  const [shouldRefreshTags, setShouldRefreshTags] = useState<boolean>(false);
   const [currLanguage, setCurrLanguage] = useState<Language>(language);
 
-  const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefresh);
-
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const toggleTag = (tag: string) => {
-    setSelectedTags((prev) => {
-      if (prev.includes(tag)) return prev.filter((prevTag) => prevTag !== tag);
-      else return [...prev, tag];
-    });
-  };
+  const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefreshTags);
 
   // the tags will be updated when 1. initial loading; 2. shouldRefresh; 3. Switch language
   useEffect(() => {
-    if (!tagsData || shouldRefresh || currLanguage !== language) {
+    if (!tagsData || shouldRefreshTags || currLanguage !== language) {
       refetch()
         .then((response) => {
           // TODO: add no table error handling here
@@ -38,11 +37,20 @@ export default function ViewAddressesFilters() {
           }
         })
         .finally(() => {
-          if (shouldRefresh) setShouldRefresh(false);
+          if (shouldRefreshTags) setShouldRefreshTags(false);
           if (currLanguage !== language) setCurrLanguage(language);
+          clearTagSelections();
         });
     }
-  }, [refetch, updateTagsData, tagsData, shouldRefresh, language, currLanguage]);
+  }, [
+    refetch,
+    updateTagsData,
+    tagsData,
+    shouldRefreshTags,
+    language,
+    currLanguage,
+    clearTagSelections,
+  ]);
 
   const getLastUpdated = (time: number | undefined) => {
     if (!time) return "";
@@ -53,16 +61,28 @@ export default function ViewAddressesFilters() {
 
   return (
     <div className="address-component__filter">
-      <h1 className="address-component__filter__header">{t("filters.filterByTags")}</h1>
+      <div className="address-component__filter__header">
+        <p>{t("filters.filterByTags")}</p>
+        <Button variant={"ghost"} size={"icon-sm"} onClick={clearTagSelections}>
+          <Eraser />
+        </Button>
+      </div>
       <div className="address-component__filter__section">
-        {tagsData?.tags &&
+        {isFetching && (
+          <Spinner
+            className="mx-auto my-6 opacity-55"
+            data-testid="view-addresses-filters-spinner"
+          />
+        )}
+        {!isFetching &&
+          tagsData?.tags &&
           Object.entries(tagsData.tags).map(([sectionName, tags]) => (
             <CheckboxSection
               key={sectionName}
               title={t(`filters.categories.${sectionName}`)}
               options={tags}
               selectedOptions={selectedTags}
-              toggleOption={toggleTag}
+              toggleOption={updateSelectedTags}
             />
           ))}
       </div>
@@ -74,11 +94,13 @@ export default function ViewAddressesFilters() {
           <Button
             variant="ghost"
             size="icon-sm"
-            onClick={() => setShouldRefresh(true)}
+            onClick={() => setShouldRefreshTags(true)}
             disabled={isFetching}
             data-testid="viewaddressfilters-refresh"
           >
-            <RefreshCcw className={cn(isFetching ? "animate-spin" : "")} />
+            <RefreshCcw
+              className={cn(shouldRefreshTags && isFetching ? "animate-spin" : "")}
+            />
           </Button>
         </div>
         <Button variant="outline" className="w-full">
