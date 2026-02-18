@@ -30,17 +30,16 @@ describe("CheckboxSection", () => {
 
   it("renders all checkbox options when expanded", () => {
     renderWithProviders(<CheckboxSectionWrapper />);
-    const trigger = screen.getByText("Test Section");
-    fireEvent.click(trigger);
     expect(screen.getByText("Option 1")).toBeTruthy();
     expect(screen.getByText("Option 2")).toBeTruthy();
     expect(screen.getByText("Option 3")).toBeTruthy();
+    const trigger = screen.getByText("Test Section");
+    fireEvent.click(trigger);
+    expect(screen.queryByText("Option 1")).not.toBeTruthy();
   });
 
   it("calls toggleOption when checkbox is clicked", () => {
     renderWithProviders(<CheckboxSectionWrapper />);
-    const trigger = screen.getByText("Test Section");
-    fireEvent.click(trigger);
     const option = screen.getByText("Option 2");
     fireEvent.click(option);
     const checkboxes = screen.getAllByRole("checkbox");

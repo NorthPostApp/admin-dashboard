@@ -27,7 +27,7 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
 export default function SystemPromptInput() {
   const { language } = useAppContext();
   const { systemPrompt, updateSystemPrompt } = useNewAddressContext();
-  const { isFetching, isSuccess, refetch } = useSystemPromptQuery(language);
+  const { isFetching, refetch } = useSystemPromptQuery(language);
   const { t } = useTranslation("address:newAddress");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -64,6 +64,7 @@ export default function SystemPromptInput() {
   useEffect(() => {
     // only do auto refetch when system language changed
     if (!systemPrompt || systemPrompt.language !== language) {
+      updateSystemPrompt(language, t("prompt.state.loadingSystemPrompt"));
       refetch().then((result) => {
         let fetchedPrompt = "";
         if (result.data?.data) {
@@ -97,7 +98,9 @@ export default function SystemPromptInput() {
         disabled={!editing}
         className={cn(
           "resize-none transition-all duration-150",
-          isFetching || !isSuccess ? "h-4" : "h-80",
+          isFetching || (systemPrompt && systemPrompt.prompt.length === 0)
+            ? "h-4"
+            : "h-90",
         )}
       />
     </>
