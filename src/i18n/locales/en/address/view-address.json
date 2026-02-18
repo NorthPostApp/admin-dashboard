@@ -16,6 +16,9 @@
       "country": "Country",
       "figure": "Figure",
       "role": "Role"
-    }
-  }
+    },
+    "updateData": "Update Addresses",
+    "updatingData": "Updating Addresses"
+  }, 
+  "fetchFailed": "Failed to fetch addresses. Please check your connection and try again"
 }
