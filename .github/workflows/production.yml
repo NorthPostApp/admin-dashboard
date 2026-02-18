@@ -2,12 +2,11 @@ name: Deploy
 
 on:
   repository_dispatch:
-    types: [deploy-trigger]
+    types: [deploy-production]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    # Only run if CI succeeded AND it was triggered by a push (not a PR)
     environment: cloudflare
     steps:
       - uses: actions/checkout@v5
@@ -35,17 +34,8 @@ jobs:
         run: npm run build
 
       - name: Deploy to Cloudflare Pages (Production)
-        if: github.event.client_payload.branch == 'main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=north-post-admin --branch=main
-
-      - name: Deploy to Cloudflare Pages (Preview)
-        if: github.event.client_payload.branch == 'dev'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=north-post-admin --branch=dev
