@@ -60,22 +60,26 @@ export default function ViewAddresses() {
 
   // get first page data when first loading the page or refetching data
   const refetchData = useCallback(
-    (callbackFn: (data: GetAllAddressesResponseSchema) => void) => {
+    (
+      callbackFn: (data: GetAllAddressesResponseSchema) => void,
+      resetPageNumber: boolean = false,
+    ) => {
       if (isFetching) return; // see if this can avoid multiple refetching happen
       refetch().then((result) => {
         if (result.data) {
           callbackFn(result.data);
+          if (resetPageNumber && currentPage !== 1) selectPage(1);
         } else if (result.error) {
           toast.error("failed to fetch data, please check your internet connection");
         }
       });
     },
-    [refetch, isFetching],
+    [refetch, isFetching, currentPage, selectPage],
   );
 
   const loadInitialAddressData = useCallback(() => {
     if (!addressData || shouldRefreshData) {
-      refetchData(refreshAddressData);
+      refetchData(refreshAddressData, true);
     }
   }, [addressData, shouldRefreshData, refreshAddressData, refetchData]);
 

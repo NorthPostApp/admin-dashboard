@@ -16,9 +16,11 @@ export default function ViewAddressesFilters() {
   const { language } = useAppContext();
   const {
     tagsData,
+    currentPage,
+    selectedTags,
     updateTagsData,
     refreshAddressData,
-    selectedTags,
+    selectPage,
     updateSelectedTags,
     clearTagSelections,
   } = useAddressDataContext();
@@ -34,6 +36,7 @@ export default function ViewAddressesFilters() {
     refetchAddressData().then((result) => {
       if (result.data) {
         refreshAddressData(result.data);
+        if (currentPage !== 1) selectPage(1);
       } else if (result.error) {
         toast.error(t("fetchFailed"));
       }

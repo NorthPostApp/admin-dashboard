@@ -28,7 +28,14 @@ export default defineConfig({
     setupFiles: "./src/lib/test-utils.ts",
     coverage: {
       // include: ["src/**/*.{ts,tsx}"], for the next step
-      exclude: ["**/components/ui/**", "*.css", "**/i18n/", "src/api/", "src/lib/"],
+      exclude: [
+        "**/components/ui/**",
+        "*.css",
+        "**/i18n/",
+        "src/api/",
+        "src/lib/",
+        "use-mobile.ts",
+      ],
     },
   },
   build: {
