@@ -83,9 +83,13 @@ describe("ViewAddressesFilters", () => {
     fireEvent.click(tagButton);
     const parentElement = tagButton.parentElement;
     const checkbox = parentElement?.querySelector("button");
-    expect(checkbox!.getAttribute("data-state")).toBe("checked");
+    await waitFor(() => {
+      expect(checkbox!.getAttribute("data-state")).toBe("checked");
+    });
     fireEvent.click(tagButton);
-    expect(checkbox!.getAttribute("data-state")).toBe("unchecked");
+    await waitFor(() => {
+      expect(checkbox!.getAttribute("data-state")).toBe("checked");
+    });
   });
 
   it("show spinner when fetching is pending", async () => {

@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DEFAULT_PAGE_DISPLAY_SIZE, type Language } from "@/consts/app-config";
+import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
@@ -30,7 +30,6 @@ export default function ViewAddresses() {
   } = useAddressDataContext();
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
-  const [prevLanguage, setPrevLanguage] = useState<Language | undefined>(undefined);
   const onChangeSearchText = (text: string) => {
     if (currentPage !== 1) selectPage(1);
     setSearchText(text);
@@ -39,15 +38,15 @@ export default function ViewAddresses() {
     setShowFilters((prev) => !prev);
   };
 
-  const shouldRefreshData = language !== prevLanguage;
+  const shouldRefreshData = language != addressData?.language;
 
-  // this refresh could be a state, in case we need to refresh with new tags or keywords
   const { isFetching, refetch } = useGetAllAddressesQuery(
     language,
     shouldRefreshData ? [] : selectedTags,
     addressData?.lastDocId,
     shouldRefreshData,
   );
+
   const filteredAddresses = useMemo(() => {
     if (searchText.length === 0) return addressData?.addresses;
     return addressData?.addresses.filter((address) => {
@@ -62,17 +61,16 @@ export default function ViewAddresses() {
   // get first page data when first loading the page or refetching data
   const refetchData = useCallback(
     (callbackFn: (data: GetAllAddressesResponseSchema) => void) => {
-      refetch()
-        .then((result) => {
-          if (result.data) {
-            callbackFn(result.data);
-          } else if (result.error) {
-            toast.error("failed to fetch data, please check your internet connection");
-          }
-        })
-        .finally(() => setPrevLanguage(language));
+      if (isFetching) return; // see if this can avoid multiple refetching happen
+      refetch().then((result) => {
+        if (result.data) {
+          callbackFn(result.data);
+        } else if (result.error) {
+          toast.error("failed to fetch data, please check your internet connection");
+        }
+      });
     },
-    [refetch, language],
+    [refetch, isFetching],
   );
 
   const loadInitialAddressData = useCallback(() => {

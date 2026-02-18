@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { RefreshCcw, Eraser } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
-import type { Language } from "@/consts/app-config";
 import { useGetAllTagsQuery } from "@/hooks/queries/useGetAllTagsQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
+import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { Button } from "@/components/ui/button";
 import CheckboxSection from "@/components/address/CheckboxSection";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 export default function ViewAddressesFilters() {
   const { t } = useTranslation("address:viewAddress");
@@ -16,19 +17,32 @@ export default function ViewAddressesFilters() {
   const {
     tagsData,
     updateTagsData,
+    refreshAddressData,
     selectedTags,
     updateSelectedTags,
     clearTagSelections,
   } = useAddressDataContext();
 
   const [shouldRefreshTags, setShouldRefreshTags] = useState<boolean>(false);
-  const [currLanguage, setCurrLanguage] = useState<Language>(language);
-
   const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefreshTags);
+  // the following query is used to refetch the address data with selected tags
+  const { refetch: refetchAddressData, isFetching: isFetchingAddressData } =
+    useGetAllAddressesQuery(language, selectedTags);
+
+  const updateAddressData = () => {
+    if (isFetchingAddressData) return;
+    refetchAddressData().then((result) => {
+      if (result.data) {
+        refreshAddressData(result.data);
+      } else if (result.error) {
+        toast.error(t("fetchFailed"));
+      }
+    });
+  };
 
   // the tags will be updated when 1. initial loading; 2. shouldRefresh; 3. Switch language
   useEffect(() => {
-    if (!tagsData || shouldRefreshTags || currLanguage !== language) {
+    if (!tagsData || shouldRefreshTags || tagsData.language !== language) {
       refetch()
         .then((response) => {
           // TODO: add no table error handling here
@@ -38,7 +52,6 @@ export default function ViewAddressesFilters() {
         })
         .finally(() => {
           if (shouldRefreshTags) setShouldRefreshTags(false);
-          if (currLanguage !== language) setCurrLanguage(language);
           clearTagSelections();
         });
     }
@@ -48,7 +61,6 @@ export default function ViewAddressesFilters() {
     tagsData,
     shouldRefreshTags,
     language,
-    currLanguage,
     clearTagSelections,
   ]);
 
@@ -63,7 +75,12 @@ export default function ViewAddressesFilters() {
     <div className="address-component__filter">
       <div className="address-component__filter__header">
         <p>{t("filters.filterByTags")}</p>
-        <Button variant={"ghost"} size={"icon-sm"} onClick={clearTagSelections}>
+        <Button
+          variant={"ghost"}
+          size={"icon-sm"}
+          disabled={selectedTags.length === 0}
+          onClick={clearTagSelections}
+        >
           <Eraser />
         </Button>
       </div>
@@ -103,8 +120,13 @@ export default function ViewAddressesFilters() {
             />
           </Button>
         </div>
-        <Button variant="outline" className="w-full">
-          Apply
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={updateAddressData}
+          disabled={isFetchingAddressData}
+        >
+          {isFetchingAddressData ? t("filters.updatingData") : t("filters.updateData")}
         </Button>
       </div>
     </div>
