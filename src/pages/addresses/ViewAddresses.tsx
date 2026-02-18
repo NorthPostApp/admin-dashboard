@@ -38,7 +38,7 @@ export default function ViewAddresses() {
     setShowFilters((prev) => !prev);
   };
 
-  const shouldRefreshData = language != addressData?.language;
+  const shouldRefreshData = language !== addressData?.language;
 
   const { isFetching, refetch } = useGetAllAddressesQuery(
     language,
