@@ -13,6 +13,13 @@ vi.mock("./AddressCard", () => ({
   )),
 }));
 
+// Mock ResizeObserver
+globalThis.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 vi.mock("./ViewAddressActions", () => ({
   default: vi.fn(() => <div data-testid="view-actions">Actions</div>),
 }));
@@ -53,4 +60,34 @@ describe("PaginatedAddresses", () => {
       screen.queryByTestId(`address-card-addr-${DEFAULT_PAGE_DISPLAY_SIZE + 1}`),
     ).toBeFalsy();
   });
+});
+
+describe("getColumnNumber via useElementInnerSize mock", () => {
+  beforeEach(() => {
+    vi.mock("@/hooks/useElementInnerSize", () => ({
+      useElementInnerSize: vi.fn(),
+    }));
+  });
+
+  const widthCases: [number, string][] = [
+    [300, "grid-cols-1"],
+    [600, "grid-cols-2"],
+    [900, "grid-cols-3"],
+    [1200, "grid-cols-4"],
+  ];
+
+  it.each(widthCases)(
+    "applies %s => %s based on container width",
+    async (width, expectedClass) => {
+      const { useElementInnerSize } = await import("@/hooks/useElementInnerSize");
+      vi.mocked(useElementInnerSize).mockReturnValue([{ width, height: 500 }]);
+
+      const addresses = [createMockAddress("addr-0", "Person 0")];
+      const { container } = renderWithProviders(
+        <PaginatedAddresses currentPage={1} addresses={addresses} />,
+      );
+      const grid = container.querySelector("div")?.querySelector("div") as HTMLElement;
+      expect(grid.className).toContain(expectedClass);
+    },
+  );
 });

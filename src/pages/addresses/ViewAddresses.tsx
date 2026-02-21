@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Activity, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
@@ -18,6 +19,7 @@ import type { GetAllAddressesResponseSchema } from "@/schemas/address";
 
 export default function ViewAddresses() {
   const { t } = useTranslation("address:viewAddress");
+  const isMobile = useIsMobile();
   const { language } = useAppContext();
   const {
     totalPages,
@@ -119,26 +121,32 @@ export default function ViewAddresses() {
       ></Subheader>
       <div className="address-view">
         <div className="address-view__flex__row">
-          <div className="address-content__body__unbound">
-            {isFetching && <div>Loading</div>}
-            {!isFetching && (
-              <PaginatedAddresses
-                currentPage={currentPage}
-                addresses={filteredAddresses || []}
-              />
-            )}
-            {addressData && (
-              <PaginationBar
-                totalPages={searchText.length === 0 ? totalPages : filteredPages}
-                currPage={currentPage}
-                hasMore={addressData?.hasMore}
-                loading={isFetching}
-                selectPageAction={selectPage}
-              />
-            )}
-          </div>
+          <Activity mode={isMobile && showFilters ? "hidden" : "visible"}>
+            <div className="address-content__body__unbound">
+              {isFetching && <div>Loading</div>}
+              {!isFetching && (
+                <PaginatedAddresses
+                  currentPage={currentPage}
+                  addresses={filteredAddresses || []}
+                />
+              )}
+              {addressData && (
+                <PaginationBar
+                  totalPages={searchText.length === 0 ? totalPages : filteredPages}
+                  currPage={currentPage}
+                  hasMore={addressData?.hasMore}
+                  loading={isFetching}
+                  selectPageAction={selectPage}
+                />
+              )}
+            </div>
+          </Activity>
           <div
-            className={cn("address-layout__sidebar", showFilters ? "visible" : "hidden")}
+            className={cn(
+              "address-layout__sidebar",
+              showFilters ? "visible" : "hidden",
+              isMobile ? "" : "w-[30%] min-w-72",
+            )}
           >
             <ViewAddressesFilters />
           </div>

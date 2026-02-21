@@ -108,7 +108,7 @@ export default function ViewAddressesFilters() {
       </div>
       <div>
         <div className="address-component__filter__footer__info">
-          <h2>
+          <h2 className="text-sm">
             {t("filters.tagsUpdatedAt")}: {getLastUpdated(tagsData?.refreshedAt)}
           </h2>
           <Button
