@@ -11,10 +11,26 @@ vi.mock("@/hooks/useAppContext", () => ({
   })),
 }));
 
+vi.mock("@/components/address/DeleteAddressDialog", () => ({
+  default: vi.fn((params) => (
+    <div>
+      <p>Delete Dialog</p>
+      <button onClick={params.handleDeleteAddress}>delete button</button>
+    </div>
+  )),
+}));
+
 const mockMutate = vi.fn();
 vi.mock("@/hooks/mutations/useUpdateAddressMutation", () => ({
   useUpdateAddressMutation: vi.fn(() => ({
     mutate: mockMutate,
+    isPending: false,
+  })),
+}));
+const mockDeleteMutate = vi.fn();
+vi.mock("@/hooks/mutations/useDeleteAddressMutation", () => ({
+  useDeleteAddressMutation: vi.fn(() => ({
+    mutate: mockDeleteMutate,
     isPending: false,
   })),
 }));
@@ -84,6 +100,7 @@ describe("ViewAddressActions", () => {
     await waitFor(() => {
       expect(screen.getByText("Edit")).toBeTruthy();
       expect(screen.getByText("Search")).toBeTruthy();
+      expect(screen.getByText("Delete")).toBeTruthy();
     });
   });
 
@@ -158,5 +175,19 @@ describe("ViewAddressActions", () => {
     fireEvent.click(searchButton);
     expect(openSpy).toHaveBeenCalled();
     expect(openSpy).toHaveBeenCalledWith(googleSearchUrl, "_blank");
+  });
+
+  it("show delete address dialog", async () => {
+    renderWithProviders(<ViewAddressActions addressItem={mockAddressItem} />);
+    const triggerButton = screen.getByRole("button");
+    fireEvent.click(triggerButton);
+    await waitFor(() => {
+      const editButton = screen.getByRole("button", { name: /delete/i });
+      fireEvent.click(editButton);
+    });
+    expect(screen.getByText(/delete dialog/i));
+    const deleteButton = screen.getByText(/delete button/i);
+    fireEvent.click(deleteButton);
+    expect(mockDeleteMutate).toHaveBeenCalled();
   });
 });

@@ -2,11 +2,17 @@
   "title": "查看地址",
   "controls": {
       "edit": "编辑",
-      "search": "搜索"
+      "search": "搜索",
+      "delete": "删除",
+      "cancel": "取消"
   },
   "editDialog": {
     "title": "编辑地址",
     "description": "以JSON格式修改地址"
+  },
+  "deleteDialog": {
+    "title": "删除地址",
+    "description": "此操作无法撤消"
   },
   "filters": {
     "searchPlaceholder": "按ID，名称或简介搜索",
@@ -19,6 +25,11 @@
     },
     "updateData": "更新地址",
     "updatingData": "正在更新地址"
-    }, 
-    "fetchFailed": "获取地址失败。请检查您的连接并重试"
+  }, 
+  "fetchFailed": "获取地址失败。请检查您的连接并重试",
+  "deleteResult": {
+  "success": "地址删除成功",
+  "canceled": "删除请求已取消",
+  "failed": "删除地址失败"
+  }
 }

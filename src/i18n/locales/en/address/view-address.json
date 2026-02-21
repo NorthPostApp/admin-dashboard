@@ -2,11 +2,17 @@
   "title": "View Addresses",
   "controls": {
       "edit": "Edit",
-      "search": "Search"
+      "search": "Search",
+      "delete": "Delete",
+      "cancel": "Cancel"
   },
   "editDialog": {
     "title": "Edit Address",
     "description": "Modify the address details in JSON format"
+  },
+  "deleteDialog": {
+    "title": "Delete Address",
+    "description": "This action cannot be undone"
   },
   "filters": {
     "searchPlaceholder": "Search by ID, name or brief intro",
@@ -20,5 +26,10 @@
     "updateData": "Update Addresses",
     "updatingData": "Updating Addresses"
   }, 
-  "fetchFailed": "Failed to fetch addresses. Please check your connection and try again"
+  "fetchFailed": "Failed to fetch addresses. Please check your connection and try again",
+  "deleteResult": {
+    "success": "Address deleted successfully",
+    "canceled": "Deletion request canceled",
+    "failed": "Failed to delete the address"
+  }
 }
