@@ -480,4 +480,60 @@ describe("AddressDataContextProvider", () => {
     fireEvent.click(loadButton);
     expect(screen.getByTestId("total-pages").textContent).toBe("1");
   });
+
+  it("delete single data from context", () => {
+    const totalCount = 3;
+    function TestComponentWithDataDeletion() {
+      const { addressData, refreshAddressData, deleteSingleAddressData } =
+        useAddressDataContext();
+      return (
+        <div>
+          <div>
+            {addressData?.addresses.map((data) => (
+              <div key={data.id}>
+                <p>{data.id}</p>
+                <button
+                  data-testid={`delete-${data.id}`}
+                  onClick={() => deleteSingleAddressData(data.id)}
+                >
+                  Delete {data.id}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div data-testid="count">{addressData?.totalCount}</div>
+          <div data-testid="last-id">{addressData?.lastDocId}</div>
+          <button
+            data-testid="setup-multi-page"
+            onClick={() => {
+              const data = createMockAddressData(totalCount);
+              refreshAddressData(data);
+            }}
+          >
+            Setup
+          </button>
+        </div>
+      );
+    }
+    render(
+      <AddressDataContextProvider>
+        <TestComponentWithDataDeletion />
+      </AddressDataContextProvider>,
+    );
+    const setupButton = screen.getByTestId("setup-multi-page");
+    fireEvent.click(setupButton);
+    expect(screen.getByText("address-0")).toBeTruthy();
+    expect(screen.getByTestId("count").innerHTML).toBe(totalCount.toString());
+    const deleteFirstButton = screen.getByTestId("delete-address-0");
+    fireEvent.click(deleteFirstButton);
+    expect(screen.queryByText("address-0")).toBeFalsy();
+    expect(screen.getByTestId("count").innerHTML).toBe((totalCount - 1).toString());
+    const deleteLastButton = screen.getByTestId("delete-address-2");
+    fireEvent.click(deleteLastButton);
+    expect(screen.queryByText("address-2")).toBeFalsy();
+    expect(screen.getByTestId("last-id").innerHTML).toBe("address-1");
+    const deleteFinalButton = screen.getByTestId("delete-address-1");
+    fireEvent.click(deleteFinalButton);
+    expect(screen.getByTestId("last-id").innerHTML).toBe("");
+  });
 });

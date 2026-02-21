@@ -1,18 +1,20 @@
 import { useMemo, useState } from "react";
-import { useAppContext } from "@/hooks/useAppContext";
+import { useTranslation } from "react-i18next";
+import { EllipsisVertical } from "lucide-react";
 import {
   addressItemsEqual,
   type AddressItemSchema,
   type AddressItemWithTimeSchema,
   type UpdateAddressRequestSchema,
 } from "@/schemas/address";
-import { PopoverMenu, type PopoverControls } from "./PopoverMenu";
-import { Button } from "../ui/button";
-import { EllipsisVertical } from "lucide-react";
-import AddressFromJsonDialog from "./AddressFromJsonDialog";
+import { useAppContext } from "@/hooks/useAppContext";
+import { useDeleteAddressMutation } from "@/hooks/mutations/useDeleteAddressMutation";
 import { useUpdateAddressMutation } from "@/hooks/mutations/useUpdateAddressMutation";
-import { Spinner } from "../ui/spinner";
-import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { PopoverMenu, type PopoverControls } from "@/components/address/PopoverMenu";
+import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
+import DeleteAddressDialog from "@/components/address/DeleteAddressDialog";
 
 type ViewAddressActionsProps = {
   addressItem: AddressItemWithTimeSchema;
@@ -21,7 +23,10 @@ type ViewAddressActionsProps = {
 export default function ViewAddressActions({ addressItem }: ViewAddressActionsProps) {
   const { language } = useAppContext();
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
-  const { mutate, isPending } = useUpdateAddressMutation();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const { mutate, isPending: isUpdateAddressPending } = useUpdateAddressMutation();
+  const { mutate: deleteAddressMutate, isPending: isDeleteAddressIsPending } =
+    useDeleteAddressMutation();
   const { t } = useTranslation("address:viewAddress");
   const { id, createdAt, updatedAt, ...prevAddress } = addressItem;
   const controls: PopoverControls[] = [
@@ -57,6 +62,21 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
         </Button>
       ),
     },
+    {
+      name: "delete",
+      actionComponent: (
+        <Button
+          variant="ghost"
+          size="sm"
+          className="address-component__popover__body__button__sm__danger"
+          onClick={() => {
+            setDeleteDialogOpen(true);
+          }}
+        >
+          {t("controls.delete")}
+        </Button>
+      ),
+    },
   ];
 
   const stringData = useMemo(() => {
@@ -77,6 +97,12 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
     }
   };
 
+  const handleDeleteSingleAddress = (addressId: string) => {
+    deleteAddressMutate(addressId);
+  };
+
+  const pending = isDeleteAddressIsPending || isUpdateAddressPending;
+
   return (
     <>
       <PopoverMenu id={addressItem.id} controls={controls}>
@@ -85,9 +111,9 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           variant="ghost"
           className="address-component__prompt__trigger"
           type="button"
-          disabled={isPending}
+          disabled={pending}
         >
-          {isPending ? <Spinner /> : <EllipsisVertical />}
+          {pending ? <Spinner /> : <EllipsisVertical />}
         </Button>
       </PopoverMenu>
       {editDialogOpen && (
@@ -98,6 +124,14 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           initialData={stringData}
           open={editDialogOpen}
           setOpen={setEditDialogOpen}
+        />
+      )}
+      {deleteDialogOpen && (
+        <DeleteAddressDialog
+          addressItem={addressItem}
+          handleDeleteAddress={handleDeleteSingleAddress}
+          open={deleteDialogOpen}
+          setOpen={setDeleteDialogOpen}
         />
       )}
     </>

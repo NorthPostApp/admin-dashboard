@@ -19,6 +19,7 @@ interface AddressDataContextProviderType {
   clearTagSelections: () => void;
   refreshAddressData: (getAllAddressesResponse: GetAllAddressesResponseSchema) => void;
   updateSingleAddressData: (newAddressItem: AddressItemWithTimeSchema) => void;
+  deleteSingleAddressData: (addressId: string) => void;
 }
 
 const AddressDataContext = createContext<AddressDataContextProviderType | undefined>(
@@ -98,6 +99,32 @@ export default function AddressDataContextProvider({
     });
   };
 
+  const deleteSingleAddressData = (addressId: string) => {
+    setAddressData((prev) => {
+      // exclude the deleted address Item
+      const newAddresses = prev?.addresses.filter(
+        (addressData) => addressData.id !== addressId,
+      );
+      // reduce the total count by one
+      let totalCount = prev?.totalCount;
+      if (totalCount && newAddresses?.length !== prev?.addresses.length) {
+        totalCount -= 1;
+      }
+      // update the last doc id if we're deleting the last doc (for a flawless pagination)
+      let lastDocId = prev?.lastDocId;
+      if (lastDocId && lastDocId === addressId) {
+        if (newAddresses && newAddresses.length === 0) lastDocId = undefined;
+        else if (newAddresses) lastDocId = newAddresses[newAddresses.length - 1].id;
+      }
+      return {
+        ...prev,
+        totalCount,
+        lastDocId,
+        addresses: newAddresses,
+      } as GetAllAddressesResponseSchema;
+    });
+  };
+
   const contextValue = {
     addressData,
     currentPage,
@@ -111,6 +138,7 @@ export default function AddressDataContextProvider({
     clearTagSelections,
     refreshAddressData,
     updateSingleAddressData,
+    deleteSingleAddressData,
   };
 
   return (
