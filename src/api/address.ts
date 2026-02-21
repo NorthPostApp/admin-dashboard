@@ -20,6 +20,7 @@ type GetAllAddressesRequest = {
 
 type GetSystemPromptResponse = { data: string };
 type CreateNewAddressResponse = { id: string };
+type DeleteAddressResponse = { id: string };
 
 const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 
@@ -58,6 +59,30 @@ async function updateAddress(requestBody: UpdateAddressRequestSchema, idToken: s
     throw new Error(errorMessage);
   }
   return (await response.json()) as UpdateAddressResponseSchema;
+}
+
+async function deleteAddress(
+  addressId: string,
+  language: Language,
+  idToken: string,
+  signal?: AbortSignal,
+) {
+  const url = new URL(`${BASE_URL}/address/${addressId}`);
+  url.searchParams.set("language", language);
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+    signal,
+  });
+  if (!response.ok) {
+    const errorData = (await response.json()) as ServiceError;
+    const errorMessage =
+      errorData.error || `Error deleting address ${addressId}: ${response.status}`;
+    throw new Error(errorMessage);
+  }
+  return (await response.json()).data as DeleteAddressResponse;
 }
 
 async function getAllAddresses(
@@ -158,12 +183,14 @@ async function getSystemPrompt(
 
 export {
   createNewAddress,
+  deleteAddress,
   getSystemPrompt,
   generateAddresses,
   getAllAddresses,
   updateAddress,
   getAllTags,
   type CreateNewAddressResponse,
+  type DeleteAddressResponse,
   type GetSystemPromptResponse,
   type GetAllAddressesRequest,
 };

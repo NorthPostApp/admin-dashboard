@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, vi, expect, beforeEach } from "vitest";
 import { fireEvent, render, screen } from "@/lib/test-utils";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import type {
@@ -138,6 +138,7 @@ function createMockAddressData(
 }
 
 describe("AddressDataContextProvider", () => {
+  beforeEach(() => vi.clearAllMocks());
   it("provides default values on initialization", () => {
     render(
       <AddressDataContextProvider>
@@ -479,5 +480,129 @@ describe("AddressDataContextProvider", () => {
     const loadButton = screen.getByTestId("load-data");
     fireEvent.click(loadButton);
     expect(screen.getByTestId("total-pages").textContent).toBe("1");
+  });
+
+  it("delete single data from context", () => {
+    const totalCount = 3;
+    function TestComponentWithDataDeletion() {
+      const { addressData, totalPages, refreshAddressData, deleteSingleAddressData } =
+        useAddressDataContext();
+      return (
+        <div>
+          <div>
+            {addressData?.addresses.map((data) => (
+              <div key={data.id}>
+                <p>{data.id}</p>
+                <button
+                  data-testid={`delete-${data.id}`}
+                  onClick={() => deleteSingleAddressData(data.id)}
+                >
+                  Delete {data.id}
+                </button>
+              </div>
+            ))}
+          </div>
+          <div data-testid="count">{addressData?.totalCount}</div>
+          <div data-testid="last-id">{addressData?.lastDocId}</div>
+          <button
+            data-testid="setup-multi-page"
+            onClick={() => {
+              const data = createMockAddressData(totalCount);
+              refreshAddressData(data);
+            }}
+          >
+            Setup
+          </button>
+          <p data-testid="total-pages">{totalPages}</p>
+        </div>
+      );
+    }
+    render(
+      <AddressDataContextProvider>
+        <TestComponentWithDataDeletion />
+      </AddressDataContextProvider>,
+    );
+    const setupButton = screen.getByTestId("setup-multi-page");
+    fireEvent.click(setupButton);
+    expect(screen.getByText("address-0")).toBeTruthy();
+    expect(screen.getByTestId("count").innerHTML).toBe(totalCount.toString());
+    const deleteFirstButton = screen.getByTestId("delete-address-0");
+    fireEvent.click(deleteFirstButton);
+    expect(screen.queryByText("address-0")).toBeFalsy();
+    expect(screen.getByTestId("count").innerHTML).toBe((totalCount - 1).toString());
+    const deleteLastButton = screen.getByTestId("delete-address-2");
+    fireEvent.click(deleteLastButton);
+    expect(screen.queryByText("address-2")).toBeFalsy();
+    expect(screen.getByTestId("last-id").innerHTML).toBe("address-1");
+    const deleteFinalButton = screen.getByTestId("delete-address-1");
+    fireEvent.click(deleteFinalButton);
+    expect(screen.getByTestId("last-id").innerHTML).toBe("");
+  });
+
+  it("update total pages and current page when deletion happens", () => {
+    function TestComponentWithDataDeletion() {
+      const {
+        addressData,
+        currentPage,
+        totalPages,
+        selectPage,
+        refreshAddressData,
+        deleteSingleAddressData,
+      } = useAddressDataContext();
+      return (
+        <div>
+          <div>
+            {addressData?.addresses.map((data) => (
+              <div key={data.id}>
+                <p>{data.id}</p>
+                <button
+                  data-testid={`delete-${data.id}`}
+                  onClick={() => deleteSingleAddressData(data.id)}
+                >
+                  Delete {data.id}
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            data-testid="setup-multi-page"
+            onClick={() => {
+              const data = createMockAddressData(DEFAULT_PAGE_DISPLAY_SIZE + 1);
+              refreshAddressData(data);
+            }}
+          >
+            Setup
+          </button>
+          <p data-testid="total-pages">{totalPages}</p>
+          <p data-testid="curr-page">{currentPage}</p>
+          <button
+            onClick={() => {
+              selectPage(2);
+            }}
+            data-testid="page-2"
+          >
+            Page 2
+          </button>
+        </div>
+      );
+    }
+    render(
+      <AddressDataContextProvider>
+        <TestComponentWithDataDeletion />
+      </AddressDataContextProvider>,
+    );
+    const setupButton = screen.getByTestId("setup-multi-page");
+    fireEvent.click(setupButton);
+    const totalPages = screen.getByTestId("total-pages");
+    const currPage = screen.getByTestId("curr-page");
+    expect(screen.getByText("address-0")).toBeTruthy();
+    expect(totalPages.innerHTML).toBe("2");
+    const selectPageButton = screen.getByTestId("page-2");
+    fireEvent.click(selectPageButton);
+    expect(currPage.innerHTML).toBe("2");
+    const lastItemDelete = screen.getByTestId(`delete-address-16`);
+    fireEvent.click(lastItemDelete);
+    expect(totalPages.innerHTML).toBe("1");
+    expect(currPage.innerHTML).toBe("1");
   });
 });
