@@ -25,11 +25,11 @@
     },
     "updateData": "更新地址",
     "updatingData": "正在更新地址"
-    }, 
-    "fetchFailed": "获取地址失败。请检查您的连接并重试",
-      "deleteResult": {
-    "success": "地址删除成功",
-    "cancelled": "删除请求已取消",
-    "failed": "删除地址失败"
+  }, 
+  "fetchFailed": "获取地址失败。请检查您的连接并重试",
+  "deleteResult": {
+  "success": "地址删除成功",
+  "cancelled": "删除请求已取消",
+  "failed": "删除地址失败"
   }
 }
