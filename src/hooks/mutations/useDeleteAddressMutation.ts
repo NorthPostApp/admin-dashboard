@@ -27,7 +27,7 @@ export function useDeleteAddressMutation() {
     },
     onError: (error) => {
       if (error.name === "AbortError" || error.name === "CanceledError") {
-        toast.info(t("deleteResult.cancelled"));
+        toast.info(t("deleteResult.canceled"));
         return;
       }
       toast.error(t("deleteResult.failed") + " " + error.message);

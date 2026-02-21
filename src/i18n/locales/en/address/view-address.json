@@ -29,7 +29,7 @@
   "fetchFailed": "Failed to fetch addresses. Please check your connection and try again",
   "deleteResult": {
     "success": "Address deleted successfully",
-    "cancelled": "Deletion request cancelled",
+    "canceled": "Deletion request canceled",
     "failed": "Failed to delete the address"
   }
 }
