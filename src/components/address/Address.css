@@ -1,11 +1,11 @@
 @import "../../index.css";
 
 .address-layout__grid {
-  @apply grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 overflow-y-auto px-2 sm:px-4 md:px-8;
+  @apply grid gap-5 overflow-y-auto px-2 sm:px-4 md:px-8 py-1;
 }
 
 .address-layout__sidebar {
-  @apply basis-1/3 border-l;
+  @apply border-l;
 }
 
 .address-component__prompt {
@@ -101,7 +101,7 @@
 }
 
 .address-component__filter {
-  @apply py-6 h-full flex flex-col justify-between max-h-full px-4 text-left;
+  @apply py-6 h-full flex flex-col justify-between max-h-full px-4 text-left w-full;
 }
 
 .address-component__filter__header {
