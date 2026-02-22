@@ -45,7 +45,7 @@
 }
 
 .address-component__popover__body__button__sm__danger {
-  @apply w-full flex justify-between gap-4 text-xs text-destructive hover:text-primary hover:bg-destructive dark:hover:bg-destructive;
+  @apply w-full flex justify-between gap-4 text-xs text-destructive hover:text-background hover:bg-destructive dark:hover:bg-destructive dark:hover:text-primary;
 }
 
 .address-component__popover__header {
