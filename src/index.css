@@ -1,4 +1,4 @@
-@import url("https://chinese-fonts-cdn.deno.dev/packages/lywkpmydb/dist/LXGWWenKaiMonoScreen/result.css");
+@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -128,7 +128,8 @@
     @apply bg-primary-foreground text-foreground flex m-0 h-dvh w-dvw;
   }
   html:lang(zh) {
-    font-family: "LXGW WenKai Mono Screen", system-ui, sans-serif;
+    font-family: "LXGW WenKai Mono TC", system-ui, sans-serif;
+    font-weight: 700;
   }
   html:lang(en) {
     font-family: Roboto, system-ui, sans-serif;
