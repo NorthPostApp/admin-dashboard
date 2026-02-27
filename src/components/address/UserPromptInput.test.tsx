@@ -4,7 +4,13 @@ import * as addressApi from "@/api/address";
 import { screen, fireEvent, waitFor, MOCK_ID_TOKEN } from "@/lib/test-utils";
 import { renderWithProviders } from "@/lib/test-wrappers";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
-import { DEFAULT_EFFORT, DEFAULT_MODEL, REASONING_EFFORTS } from "@/consts/app-config";
+import {
+  DEFAULT_EFFORT,
+  DEFAULT_MODEL,
+  DEFAULT_THINKING_LEVEL,
+  REASONING_EFFORTS,
+  THINKING_LEVELS,
+} from "@/consts/app-config";
 import UserPromptInput from "./UserPromptInput";
 import { toast } from "sonner";
 
@@ -70,8 +76,42 @@ describe("UserPromptInput", () => {
     expect(effortButton).toHaveProperty("disabled");
   });
 
-  it("switch between different efforts", async () => {
+  it("disables thinking level selector for non gemini-3 models", async () => {
     renderWithProviders(<UserPromptInput />);
+    // Change to gemini-2.5-flash model
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    await waitFor(() => {
+      const option = screen.getByText("gemini-2.5-flash");
+      fireEvent.click(option);
+    });
+    const effortButton = screen.getByTestId("address-userprompt-level");
+    expect(effortButton).toHaveProperty("disabled");
+  });
+
+  it("switch between different gemini thinking levels", async () => {
+    renderWithProviders(<UserPromptInput />);
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    THINKING_LEVELS.forEach(async (level) => {
+      const levelIcon = screen.getByTestId("address-userprompt-level");
+      fireEvent.click(levelIcon);
+      await waitFor(() => {
+        const option = screen.getByText(level);
+        fireEvent.click(option);
+        expect(screen.getByTestId(`level-${level}`)).toBeTruthy();
+      });
+    });
+  });
+
+  it("switch between different gpt efforts", async () => {
+    renderWithProviders(<UserPromptInput />);
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    await waitFor(() => {
+      const option = screen.getByText("gpt-5-nano");
+      fireEvent.click(option);
+    });
     REASONING_EFFORTS.forEach(async (effort) => {
       const effortIcon = screen.getByTestId("address-userprompt-effort");
       fireEvent.click(effortIcon);
@@ -159,7 +199,7 @@ describe("UserPromptInput", () => {
     expect(textarea.selectionEnd).toBe(6);
   });
 
-  it("submits form when Enter key is pressed without shift", async () => {
+  it("submits form with gemini and thinking", async () => {
     const UserInputWithSystemPrompt = () => {
       const { updateSystemPrompt } = useNewAddressContext();
       useEffect(() => {
@@ -181,7 +221,113 @@ describe("UserPromptInput", () => {
           systemPrompt: "system prompt",
           prompt: "Generate addresses",
           model: DEFAULT_MODEL,
+          thinkingLevel: DEFAULT_THINKING_LEVEL,
+        },
+        MOCK_ID_TOKEN,
+        expect.any(AbortSignal),
+      );
+    });
+  });
+
+  it("submits form with gemini but without thinking", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useNewAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    await waitFor(() => {
+      const option = screen.getByText("gemini-2.5-flash");
+      fireEvent.click(option);
+    });
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: false,
+    });
+    await waitFor(() => {
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith(
+        {
+          language: "EN",
+          systemPrompt: "system prompt",
+          prompt: "Generate addresses",
+          model: "gemini-2.5-flash",
+        },
+        MOCK_ID_TOKEN,
+        expect.any(AbortSignal),
+      );
+    });
+  });
+
+  it("submits form with gpt with default effort", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useNewAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    await waitFor(() => {
+      const option = screen.getByText("gpt-5-nano");
+      fireEvent.click(option);
+    });
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: false,
+    });
+    await waitFor(() => {
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith(
+        {
+          language: "EN",
+          systemPrompt: "system prompt",
+          prompt: "Generate addresses",
+          model: "gpt-5-nano",
           reasoningEffort: DEFAULT_EFFORT,
+        },
+        MOCK_ID_TOKEN,
+        expect.any(AbortSignal),
+      );
+    });
+  });
+
+  it("submits form with gpt withouteffort", async () => {
+    const UserInputWithSystemPrompt = () => {
+      const { updateSystemPrompt } = useNewAddressContext();
+      useEffect(() => {
+        updateSystemPrompt("EN", "system prompt");
+      }, [updateSystemPrompt]);
+      return <UserPromptInput />;
+    };
+    renderWithProviders(<UserInputWithSystemPrompt />);
+    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: "Generate addresses" } });
+    const modelButton = screen.getByText(DEFAULT_MODEL);
+    fireEvent.click(modelButton);
+    await waitFor(() => {
+      const option = screen.getByText("gpt-4.1-mini");
+      fireEvent.click(option);
+    });
+    fireEvent.keyDown(textarea, {
+      key: "Enter",
+      shiftKey: false,
+    });
+    await waitFor(() => {
+      expect(addressApi.generateAddresses).toHaveBeenCalledWith(
+        {
+          language: "EN",
+          systemPrompt: "system prompt",
+          prompt: "Generate addresses",
+          model: "gpt-4.1-mini",
         },
         MOCK_ID_TOKEN,
         expect.any(AbortSignal),

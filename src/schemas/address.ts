@@ -1,4 +1,9 @@
-import { GPT_MODELS, REASONING_EFFORTS, SUPPORTED_LANGUAGES } from "@/consts/app-config";
+import {
+  LLM_MODELS,
+  REASONING_EFFORTS,
+  SUPPORTED_LANGUAGES,
+  THINKING_LEVELS,
+} from "@/consts/app-config";
 import type { TFunction } from "i18next";
 import * as z from "zod";
 
@@ -48,8 +53,9 @@ const GenerateAddressesRequest = z.object({
   language: z.enum(SUPPORTED_LANGUAGES),
   systemPrompt: z.string().min(10),
   prompt: z.string().min(10),
-  model: z.enum(GPT_MODELS),
-  reasoningEffort: z.enum(REASONING_EFFORTS),
+  model: z.enum(LLM_MODELS),
+  reasoningEffort: z.enum(REASONING_EFFORTS).optional(),
+  thinkingLevel: z.enum(THINKING_LEVELS).optional(),
 });
 
 const GetAllAddressesResponse = z.object({
