@@ -17,6 +17,10 @@
       "label": "Reasoning Effort",
       "description": "Higher effort means thoughtful answers but slower."
     },
+    "thinkingLevel": {
+      "label": "Thinking Level",
+      "description": "Higher levels require the model to engage in deeper and longer reasoning."
+    },
     "controls": {
       "edit": "Edit",
       "save": "Save",

@@ -11,12 +11,15 @@ import {
   CircleStop,
 } from "lucide-react";
 import {
-  GPT_MODELS,
+  LLM_MODELS,
   REASONING_EFFORTS,
   DEFAULT_MODEL,
   DEFAULT_EFFORT,
-  type GPTModel,
+  DEFAULT_THINKING_LEVEL,
+  type LLMModel,
   type ReasonEffort,
+  type ThinkingLevel,
+  THINKING_LEVELS,
 } from "@/consts/app-config";
 import type { GenerateAddressesRequestSchema } from "@/schemas/address";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
@@ -42,6 +45,21 @@ const getEffortIcon = (effort: ReasonEffort | "none") => {
   }
 };
 
+const getThinkingLevelIcon = (level: ThinkingLevel | "none") => {
+  switch (level) {
+    case "minimal":
+      return <HeartMinus data-testid="level-minimal" />;
+    case "low":
+      return <Heart data-testid="level-low" />;
+    case "medium":
+      return <HeartPlus data-testid="level-medium" />;
+    case "high":
+      return <HeartPulse data-testid="level-high" />;
+    default:
+      return <HeartOff data-testid="level-none" />;
+  }
+};
+
 export default function UserPromptInput() {
   const { generating, systemPrompt, userPrompt, updateUserPrompt } =
     useNewAddressContext();
@@ -49,10 +67,15 @@ export default function UserPromptInput() {
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering
 
-  const [gptModel, setGptModel] = useState<GPTModel>(DEFAULT_MODEL);
+  const [llmModel, setLlmModel] = useState<LLMModel>(DEFAULT_MODEL);
   const [reasonEffort, setReasonEffort] = useState<ReasonEffort>(DEFAULT_EFFORT);
-  const handleChangeModel = (model: GPTModel) => setGptModel(model);
+  const [thinkingLevel, setThinkingLevel] =
+    useState<ThinkingLevel>(DEFAULT_THINKING_LEVEL);
+  const handleChangeModel = (model: LLMModel) => setLlmModel(model);
   const handleChangeEffort = (effort: ReasonEffort) => setReasonEffort(effort);
+  const handleChangeThinkingLevel = (level: ThinkingLevel) => setThinkingLevel(level);
+
+  const [modelType, modelVersion] = llmModel.split("-").slice(0, 2);
 
   const onBlur = () => {
     if (textareaRef.current) {
@@ -67,9 +90,8 @@ export default function UserPromptInput() {
     }
   };
 
-  const effortEnabled = () => {
-    return gptModel.startsWith("gpt-5"); // only gpt-5 models accept reasoning effort parameters
-  };
+  const effortEnabled = modelType === "gpt" && parseFloat(modelVersion) >= 5;
+  const thinkingLevelEnabled = modelType === "gemini" && parseFloat(modelVersion) >= 3;
 
   const submitRequest = (currentPrompt?: string) => {
     if (!systemPrompt) return;
@@ -77,10 +99,14 @@ export default function UserPromptInput() {
       language: systemPrompt.language,
       systemPrompt: systemPrompt.prompt,
       prompt: currentPrompt ? currentPrompt.trim() : userPrompt.trim(),
-      model: gptModel,
-      reasoningEffort: reasonEffort,
+      model: llmModel,
     };
     if (requestBody.prompt.length === 0) return;
+    if (effortEnabled) {
+      requestBody.reasoningEffort = reasonEffort;
+    } else if (thinkingLevelEnabled) {
+      requestBody.thinkingLevel = thinkingLevel;
+    }
     mutate(requestBody);
   };
 
@@ -132,40 +158,64 @@ export default function UserPromptInput() {
         <div className="address-component__prompt__actions">
           <div className="address-component__prompt__action__sub">
             <PopoverSelector
-              options={GPT_MODELS}
-              value={gptModel}
+              options={LLM_MODELS}
+              value={llmModel}
               title={t("prompt.models.label")}
               description={t("prompt.models.description")}
               onSelect={handleChangeModel}
-              popOverClassName="w-40"
+              popOverClassName="w-60"
             >
               <Button
                 size="sm"
                 variant="ghost"
-                className="address-component__prompt__trigger w-24 font-normal"
+                className="address-component__prompt__trigger font-normal"
                 disabled={generating}
               >
-                {gptModel}
+                {llmModel}
               </Button>
             </PopoverSelector>
-            <PopoverSelector
-              options={REASONING_EFFORTS}
-              value={reasonEffort}
-              title={t("prompt.effort.label")}
-              description={t("prompt.effort.description")}
-              onSelect={handleChangeEffort}
-              popOverClassName="w-46"
-            >
-              <Button
-                size="icon-sm"
-                variant="ghost"
-                data-testid="address-userprompt-effort"
-                className="address-component__prompt__trigger"
-                disabled={!effortEnabled() || generating}
+            {modelType === "gpt" && (
+              <PopoverSelector
+                options={REASONING_EFFORTS}
+                value={reasonEffort}
+                title={t("prompt.effort.label")}
+                description={t("prompt.effort.description")}
+                onSelect={handleChangeEffort}
+                popOverClassName="w-46"
               >
-                {effortEnabled() ? getEffortIcon(reasonEffort) : getEffortIcon("none")}
-              </Button>
-            </PopoverSelector>
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  data-testid="address-userprompt-effort"
+                  className="address-component__prompt__trigger"
+                  disabled={!effortEnabled || generating}
+                >
+                  {effortEnabled ? getEffortIcon(reasonEffort) : getEffortIcon("none")}
+                </Button>
+              </PopoverSelector>
+            )}
+            {modelType === "gemini" && (
+              <PopoverSelector
+                options={THINKING_LEVELS}
+                value={thinkingLevel}
+                title={t("prompt.thinkingLevel.label")}
+                description={t("prompt.thinkingLevel.description")}
+                onSelect={handleChangeThinkingLevel}
+                popOverClassName="w-46"
+              >
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  data-testid="address-userprompt-level"
+                  className="address-component__prompt__trigger"
+                  disabled={!thinkingLevelEnabled || generating}
+                >
+                  {thinkingLevelEnabled
+                    ? getThinkingLevelIcon(thinkingLevel)
+                    : getThinkingLevelIcon("none")}
+                </Button>
+              </PopoverSelector>
+            )}
           </div>
           <div className="address-component__prompt__action__sub">
             <Button
