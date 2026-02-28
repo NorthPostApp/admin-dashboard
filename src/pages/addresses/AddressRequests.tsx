@@ -1,6 +1,11 @@
-import { useAppContext } from "@/hooks/useAppContext";
+import { useTranslation } from "react-i18next";
+import Subheader from "@/pages/Subheader";
 
 export default function AddressRequests() {
-  const { language } = useAppContext();
-  return <div>Address requests for {language}</div>;
+  const { t } = useTranslation("address:request");
+  return (
+    <div className="address-body">
+      <Subheader title={t("title")}></Subheader>
+    </div>
+  );
 }

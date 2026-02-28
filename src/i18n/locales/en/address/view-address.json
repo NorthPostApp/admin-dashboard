@@ -1,5 +1,6 @@
 {
   "title": "View Addresses",
+  "loading": "Loading",
   "controls": {
       "edit": "Edit",
       "search": "Search",

@@ -21,13 +21,29 @@ i18n
           return import(`./locales/${language.toLowerCase()}/address/new-address.json`);
         case "address:viewAddress":
           return import(`./locales/${language.toLowerCase()}/address/view-address.json`);
+        case "address:overview":
+          return import(
+            `./locales/${language.toLowerCase()}/address/address-overview.json`
+          );
+        case "address:request":
+          return import(
+            `./locales/${language.toLowerCase()}/address/address-request.json`
+          );
       }
     }),
   )
   .init({
     lng: initialLanguage.toLowerCase(),
     fallbackLng: "en",
-    ns: ["webpage", "sidebar", "login", "address:newAddress", "address:viewAddress"],
+    ns: [
+      "webpage",
+      "sidebar",
+      "login",
+      "address:newAddress",
+      "address:viewAddress",
+      "address:overview",
+      "address:request",
+    ],
     debug: import.meta.env.Mode === "development",
     interpolation: {
       escapeValue: false,
