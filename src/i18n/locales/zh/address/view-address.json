@@ -1,5 +1,6 @@
 {
   "title": "查看地址",
+  "loading": "读取中",
   "controls": {
       "edit": "编辑",
       "search": "搜索",

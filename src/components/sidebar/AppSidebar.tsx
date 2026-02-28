@@ -29,7 +29,7 @@ export default function AppSidebar() {
   const { t } = useTranslation("sidebar");
   const { signOut } = useAuthContext();
   return (
-    <Sidebar className="sidebar" collapsible="icon">
+    <Sidebar className="sidebar" collapsible="offcanvas">
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>

@@ -4,18 +4,19 @@ import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
+import type { GetAllAddressesResponseSchema } from "@/schemas/address";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import Subheader from "@/pages/Subheader";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import PaginatedAddresses from "@/components/address/PaginatedAddresses";
 import PaginationBar from "@/components/address/PaginationBar";
 import SearchInput from "@/components/address/SearchInput";
 import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import "./AddressPage.css";
-import type { GetAllAddressesResponseSchema } from "@/schemas/address";
 
 export default function ViewAddresses() {
   const { t } = useTranslation("address:viewAddress");
@@ -123,7 +124,12 @@ export default function ViewAddresses() {
         <div className="address-view__flex__row">
           <Activity mode={isMobile && showFilters ? "hidden" : "visible"}>
             <div className="address-content__body__unbound">
-              {isFetching && <div>Loading</div>}
+              {isFetching && (
+                <div className="h-full flex items-center justify-center gap-2">
+                  <Spinner />
+                  <p>{t("loading")}</p>
+                </div>
+              )}
               {!isFetching && (
                 <PaginatedAddresses
                   currentPage={currentPage}
