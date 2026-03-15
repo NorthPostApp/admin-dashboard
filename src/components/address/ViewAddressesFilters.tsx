@@ -48,7 +48,6 @@ export default function ViewAddressesFilters() {
     if (!tagsData || shouldRefreshTags || tagsData.language !== language) {
       refetch()
         .then((response) => {
-          // TODO: add no table error handling here
           if (response.data !== undefined) {
             updateTagsData(response.data);
           }
@@ -69,7 +68,7 @@ export default function ViewAddressesFilters() {
 
   const getLastUpdated = (time: number | undefined) => {
     if (!time) return "";
-    const dateTime = new Date(time * 1000); //  `time` is a Unix timestamp in seconds; convert to milliseconds for the JavaScript Date constructor
+    const dateTime = new Date(time);
     const dateString = dateTime.toLocaleDateString();
     return dateString;
   };
