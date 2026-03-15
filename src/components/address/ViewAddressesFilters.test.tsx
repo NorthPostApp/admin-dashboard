@@ -56,12 +56,7 @@ const mockAddressData = {
 
 describe("ViewAddressesFilters", () => {
   beforeEach(() => {
-    // vi.resetAllMocks();
-    mockRefetch.mockReset();
-    mockRefetchAddressData.mockReset();
-    mockUseGetAllTagsQuery.mockReset();
-    mockUseGetAllAddressesQuery.mockReset();
-    vi.mocked(toast.error).mockReset();
+    vi.clearAllMocks();
     mockUseGetAllTagsQuery.mockReturnValue({
       refetch: mockRefetch,
       isFetching: false,

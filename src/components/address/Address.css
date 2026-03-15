@@ -61,7 +61,7 @@
 }
 
 .address-component__card {
-  @apply gap-3 p-2.5 h-full;
+  @apply gap-3 justify-between p-2.5 h-full;
 }
 
 .address-component__card__header {
