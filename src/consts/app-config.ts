@@ -4,14 +4,7 @@ import type { AdminUserData } from "@/schemas/user";
 export const SUPPORTED_LANGUAGES = ["EN", "ZH"] as const;
 export const THEMES = ["dark", "light", "system"] as const;
 export const LOCALSTORAGE_KEY = "northpost";
-export const LLM_MODELS = [
-  "gemini-3-flash-preview",
-  "gemini-2.5-flash",
-  "gemini-2.5-flash-lite",
-  "gpt-5-mini",
-  "gpt-5-nano",
-  "gpt-4.1-mini",
-] as const;
+export const LLM_MODELS = ["gemini-3-flash-preview", "gpt-5-mini", "gpt-5-nano"] as const;
 // reference: https://platform.openai.com/docs/guides/latest-model#gpt-5-2-parameter-compatibility
 // https://github.com/openai/openai-go/blob/1094636e1d496ed46d2f9e3b8cb5ee8614e443e9/shared/shared.go#L914
 export const REASONING_EFFORTS = ["low", "medium", "high", "xhigh"] as const;
@@ -39,7 +32,7 @@ export const DEFAULT_MODEL: LLMModel = "gemini-3-flash-preview";
 export const DEFAULT_LANGUAGE: Language = "EN";
 export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
-export const DEFAULT_THINKING_LEVEL: ThinkingLevel = "low";
+export const DEFAULT_THINKING_LEVEL: ThinkingLevel = "minimal";
 
 // For all addresses pagination, fetch 3 pages in advance
 export const DEFAULT_PAGE_DISPLAY_SIZE = 16;
