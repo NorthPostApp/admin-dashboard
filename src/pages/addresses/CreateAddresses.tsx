@@ -36,7 +36,7 @@ export default function CreateAddresses() {
   ];
 
   return (
-    <div className="address-body">
+    <div className="body">
       <Subheader
         title={t("title")}
         centralComponent={<TabsTrigger tabOptions={tabs} activeTab={activeTab} />}

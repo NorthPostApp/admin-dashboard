@@ -1,4 +1,4 @@
-import { BookA, type LucideIcon } from "lucide-react";
+import { BookA, Music, type LucideIcon } from "lucide-react";
 
 interface Service {
   titleKey: string;
@@ -21,5 +21,10 @@ export const SERVICE_CATALOG: Service[] = [
       { i18nKey: "addressRequests", path: "/addresses/requests" },
       { i18nKey: "newAddress", path: "/addresses/create" },
     ],
+  },
+  {
+    titleKey: "musicService",
+    icon: Music,
+    contents: [{ i18nKey: "list", path: "/musics/list" }],
   },
 ];

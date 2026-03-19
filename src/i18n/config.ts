@@ -29,6 +29,8 @@ i18n
           return import(
             `./locales/${language.toLowerCase()}/address/address-request.json`
           );
+        case "music:list":
+          return import(`./locales/${language.toLowerCase()}/music/music-list.json`);
       }
     }),
   )
@@ -43,6 +45,7 @@ i18n
       "address:viewAddress",
       "address:overview",
       "address:request",
+      "music:list",
     ],
     debug: import.meta.env.Mode === "development",
     interpolation: {

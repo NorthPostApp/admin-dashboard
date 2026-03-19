@@ -1,9 +1,5 @@
 @import "../../index.css";
 
-.address-body {
-  @apply flex-1 max-h-full overflow-y-auto flex flex-col h-full;
-}
-
 .address-create {
   @apply flex-1 flex justify-center overflow-y-auto px-10;
 }
