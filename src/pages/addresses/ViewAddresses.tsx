@@ -105,7 +105,7 @@ export default function ViewAddresses() {
       : Math.ceil((filteredAddresses?.length || 1) / DEFAULT_PAGE_DISPLAY_SIZE);
 
   return (
-    <div className="address-body">
+    <div className="body">
       <Subheader
         title={t("title")}
         centralComponent={

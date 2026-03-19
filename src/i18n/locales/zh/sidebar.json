@@ -6,5 +6,9 @@
     "viewAddresses": "查看地址",
     "addressRequests": "地址请求",
     "newAddress": "创建新地址"
+  },
+  "musicService": {
+    "title": "音乐服务",
+    "list": "音乐列表"
   }
 }
