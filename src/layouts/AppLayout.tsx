@@ -3,14 +3,14 @@ import NewAddressContextProvider from "@/contexts/NewAddressContextProvider";
 import AddressDataContextProvider from "@/contexts/AddressDataContextProvider";
 import AppSidebar, { SidebarProvider } from "@/components/sidebar/AppSidebar";
 import AppHeader from "@/components/header/AppHeader";
+import MusicContextProvider from "@/contexts/MusicContextProvider";
 import "./AppLayout.css";
-import MusicContextProvder from "@/contexts/MusicContextProvider";
 
 export default function AppLayout() {
   return (
     <AddressDataContextProvider>
       <NewAddressContextProvider>
-        <MusicContextProvder>
+        <MusicContextProvider>
           <SidebarProvider>
             <nav>
               <AppSidebar />
@@ -24,7 +24,7 @@ export default function AppLayout() {
               </div>
             </main>
           </SidebarProvider>
-        </MusicContextProvder>
+        </MusicContextProvider>
       </NewAddressContextProvider>
     </AddressDataContextProvider>
   );

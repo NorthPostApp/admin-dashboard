@@ -8,7 +8,11 @@ interface MusicContextType {
 
 const MusicContext = createContext<MusicContextType | undefined>(undefined);
 
-export default function MusicContextProvder({ children }: { children: React.ReactNode }) {
+export default function MusicContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [musicListData, setMusicListData] = useState<MusicListSchema | undefined>(
     undefined,
   );
