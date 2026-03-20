@@ -46,7 +46,6 @@ describe("MusicContextProvider", () => {
   });
 
   it("throws when useMusicContext is used outside provider", () => {
-    console.error = () => {};
     expect(() => render(<TestComponent />)).toThrow(
       "useMusicContext hook must be used within MusicContextProvider",
     );
