@@ -1,0 +1,12 @@
+@import "../../index.css";
+
+.music-table__row th:first-child,
+.music-table__row td:first-child {
+  @apply pl-4;
+  text-align: left;
+}
+
+.music-table__row th,
+.music-table__row td {
+  text-align: center;
+}

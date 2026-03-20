@@ -1,3 +1,10 @@
 {
-  "title": "音乐列表"
+  "title": "音乐列表",
+  "table": {
+    "title": "标题",
+    "genre": "音乐流派",
+    "duration": "时长",
+    "size": "文件大小",
+    "lastModified": "最后修改"
+  }
 }
