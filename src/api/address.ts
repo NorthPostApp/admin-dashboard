@@ -7,9 +7,8 @@ import {
   type UpdateAddressRequestSchema,
   type UpdateAddressResponseSchema,
 } from "@/schemas/address";
+import { BASE_URL, type ServiceError } from "@/api/shared";
 import type { Language } from "@/consts/app-config";
-
-type ServiceError = { error: string };
 
 type GetAllAddressesRequest = {
   language: Language;
@@ -21,8 +20,6 @@ type GetAllAddressesRequest = {
 type GetSystemPromptResponse = { data: string };
 type CreateNewAddressResponse = { id: string };
 type DeleteAddressResponse = { id: string };
-
-const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 
 async function createNewAddress(data: NewAddressRequestSchema, idToken: string) {
   const response = await fetch(BASE_URL + "/address", {

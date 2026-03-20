@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, type KeyboardEvent } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Sparkles,
-  HeartOff,
   HeartMinus,
   Heart,
   HeartPlus,
@@ -41,7 +40,7 @@ const getEffortIcon = (effort: ReasonEffort | "none") => {
     case "xhigh":
       return <HeartPulse data-testid="effort-xhigh" />;
     default:
-      return <HeartOff data-testid="effort-none" />;
+      return <></>;
   }
 };
 
@@ -56,7 +55,7 @@ const getThinkingLevelIcon = (level: ThinkingLevel | "none") => {
     case "high":
       return <HeartPulse data-testid="level-high" />;
     default:
-      return <HeartOff data-testid="level-none" />;
+      return <></>;
   }
 };
 

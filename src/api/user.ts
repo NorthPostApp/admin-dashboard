@@ -1,9 +1,7 @@
+import { BASE_URL, type ServiceError } from "@/api/shared";
 import type { AdminUserData } from "@/schemas/user";
 
-type ServiceError = { error: string };
 type SignInAdminUserResponse = { data: AdminUserData };
-
-const BASE_URL = import.meta.env.VITE_ADMIN_ENDPOINT;
 
 async function signInAdminUser(idToken: string, uid: string) {
   if (idToken.length === 0 || uid.length === 0) {

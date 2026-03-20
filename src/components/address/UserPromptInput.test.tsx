@@ -63,34 +63,6 @@ describe("UserPromptInput", () => {
     });
   });
 
-  // exclude these tests due to rhe removal of gpt-4 and gemini-2.5 models
-
-  // it("disables reasoning effort selector for non-gpt-5 models", async () => {
-  //   renderWithProviders(<UserPromptInput />);
-  //   // Change to gpt-4.1-mini model
-  //   const modelButton = screen.getByText(DEFAULT_MODEL);
-  //   fireEvent.click(modelButton);
-  //   await waitFor(() => {
-  //     const option = screen.getByText("gpt-4.1-mini");
-  //     fireEvent.click(option);
-  //   });
-  //   const effortButton = screen.getByTestId("address-userprompt-effort");
-  //   expect(effortButton).toHaveProperty("disabled");
-  // });
-
-  // it("disables thinking level selector for non gemini-3 models", async () => {
-  //   renderWithProviders(<UserPromptInput />);
-  //   // Change to gemini-2.5-flash model
-  //   const modelButton = screen.getByText(DEFAULT_MODEL);
-  //   fireEvent.click(modelButton);
-  //   await waitFor(() => {
-  //     const option = screen.getByText("gemini-2.5-flash");
-  //     fireEvent.click(option);
-  //   });
-  //   const effortButton = screen.getByTestId("address-userprompt-level");
-  //   expect(effortButton).toHaveProperty("disabled");
-  // });
-
   it("switch between different gemini thinking levels", async () => {
     renderWithProviders(<UserPromptInput />);
     const modelButton = screen.getByText(DEFAULT_MODEL);
@@ -231,41 +203,6 @@ describe("UserPromptInput", () => {
     });
   });
 
-  // it("submits form with gemini but without thinking", async () => {
-  //   const UserInputWithSystemPrompt = () => {
-  //     const { updateSystemPrompt } = useNewAddressContext();
-  //     useEffect(() => {
-  //       updateSystemPrompt("EN", "system prompt");
-  //     }, [updateSystemPrompt]);
-  //     return <UserPromptInput />;
-  //   };
-  //   renderWithProviders(<UserInputWithSystemPrompt />);
-  //   const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-  //   fireEvent.change(textarea, { target: { value: "Generate addresses" } });
-  //   const modelButton = screen.getByText(DEFAULT_MODEL);
-  //   fireEvent.click(modelButton);
-  //   await waitFor(() => {
-  //     const option = screen.getByText("gemini-2.5-flash");
-  //     fireEvent.click(option);
-  //   });
-  //   fireEvent.keyDown(textarea, {
-  //     key: "Enter",
-  //     shiftKey: false,
-  //   });
-  //   await waitFor(() => {
-  //     expect(addressApi.generateAddresses).toHaveBeenCalledWith(
-  //       {
-  //         language: "EN",
-  //         systemPrompt: "system prompt",
-  //         prompt: "Generate addresses",
-  //         model: "gemini-2.5-flash",
-  //       },
-  //       MOCK_ID_TOKEN,
-  //       expect.any(AbortSignal),
-  //     );
-  //   });
-  // });
-
   it("submits form with gpt with default effort", async () => {
     const UserInputWithSystemPrompt = () => {
       const { updateSystemPrompt } = useNewAddressContext();
@@ -301,41 +238,6 @@ describe("UserPromptInput", () => {
       );
     });
   });
-
-  // it("submits form with gpt withouteffort", async () => {
-  //   const UserInputWithSystemPrompt = () => {
-  //     const { updateSystemPrompt } = useNewAddressContext();
-  //     useEffect(() => {
-  //       updateSystemPrompt("EN", "system prompt");
-  //     }, [updateSystemPrompt]);
-  //     return <UserPromptInput />;
-  //   };
-  //   renderWithProviders(<UserInputWithSystemPrompt />);
-  //   const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-  //   fireEvent.change(textarea, { target: { value: "Generate addresses" } });
-  //   const modelButton = screen.getByText(DEFAULT_MODEL);
-  //   fireEvent.click(modelButton);
-  //   await waitFor(() => {
-  //     const option = screen.getByText("gpt-4.1-mini");
-  //     fireEvent.click(option);
-  //   });
-  //   fireEvent.keyDown(textarea, {
-  //     key: "Enter",
-  //     shiftKey: false,
-  //   });
-  //   await waitFor(() => {
-  //     expect(addressApi.generateAddresses).toHaveBeenCalledWith(
-  //       {
-  //         language: "EN",
-  //         systemPrompt: "system prompt",
-  //         prompt: "Generate addresses",
-  //         model: "gpt-4.1-mini",
-  //       },
-  //       MOCK_ID_TOKEN,
-  //       expect.any(AbortSignal),
-  //     );
-  //   });
-  // });
 
   it("does not submit when Enter is pressed with empty prompt", async () => {
     const UserInputWithSystemPrompt = () => {

@@ -1,3 +1,10 @@
 {
-  "title": "Music List"
+  "title": "Music List",
+  "table": {
+    "title": "Title",
+    "genre": "Genre",
+    "duration": "Duration",
+    "size": "File Size",
+    "lastModified": "Last Modified"
+  }
 }
