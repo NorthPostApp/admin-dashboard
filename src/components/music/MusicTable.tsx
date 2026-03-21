@@ -1,4 +1,4 @@
-import { Play } from "lucide-react";
+import { AudioLines, Play } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import type { MusicListSchema } from "@/schemas/music";
 import {
@@ -9,10 +9,13 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import "./Music.css";
 
 type MusicTableProps = {
   musicListData: MusicListSchema;
+  currentPlaying: string | undefined;
+  onSelectMusic: (musicFilename: string) => void;
 };
 
 const parseMusicTitle = (name: string) => {
@@ -40,12 +43,16 @@ const parseDuration = (seconds: number) => {
   return "--:--";
 };
 
-export default function MusicTable({ musicListData }: MusicTableProps) {
+export default function MusicTable({
+  musicListData,
+  currentPlaying,
+  onSelectMusic,
+}: MusicTableProps) {
   const { t } = useTranslation("music:list");
   return (
-    <div className="border rounded-xl max-h-full overflow-hidden">
+    <div className="music-table">
       <Table>
-        <TableHeader className="bg-accent">
+        <TableHeader className="music-table__header">
           <TableRow className="music-table__row">
             <TableHead>{t("table.title")}</TableHead>
             <TableHead>{t("table.genre")}</TableHead>
@@ -64,7 +71,28 @@ export default function MusicTable({ musicListData }: MusicTableProps) {
               <TableCell>{parseMusicSize(music.size)}</TableCell>
               <TableCell>{parseLastModified(music.lastModified)}</TableCell>
               <TableCell>
-                <Play size={14} />
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  className="music-table__row__play group"
+                  onClick={() => {
+                    if (currentPlaying !== music.filename) {
+                      onSelectMusic(music.filename);
+                    }
+                  }}
+                >
+                  {currentPlaying === music.filename ? (
+                    <AudioLines
+                      className="group-hover:stroke-background"
+                      data-testid="music-table-playing"
+                    />
+                  ) : (
+                    <Play
+                      className="group-hover:fill-background"
+                      data-testid="music-table-play"
+                    />
+                  )}
+                </Button>
               </TableCell>
             </TableRow>
           ))}
