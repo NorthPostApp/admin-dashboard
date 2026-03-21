@@ -6,5 +6,9 @@
     "viewAddresses": "View Addresses",
     "addressRequests": "Address Requests",
     "newAddress": "Create New Address"
+  },
+  "musicService": {
+    "title": "Music Service",
+    "list": "Music List"
   }
 }

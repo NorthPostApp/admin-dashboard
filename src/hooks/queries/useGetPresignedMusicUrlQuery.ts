@@ -1,15 +1,14 @@
-import type { Language } from "@/consts/app-config";
+import { getPresignedMusicUrl } from "@/api/music";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useQuery } from "@tanstack/react-query";
-import { getAllTags } from "@/api/address";
 
-export function useGetAllTagsQuery(language: Language, refresh: boolean = false) {
+export function useGetPresignedMusicUrlQuery(filename: string) {
   const { user } = useAuthContext();
   const query = useQuery({
-    queryKey: ["tags", language],
+    queryKey: ["musicUrl", filename],
     queryFn: async ({ signal }) => {
       const idToken = (await user?.getIdToken()) || "";
-      return getAllTags(language, idToken, refresh, signal);
+      return getPresignedMusicUrl(idToken, filename, signal);
     },
     enabled: false,
   });

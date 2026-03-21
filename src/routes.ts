@@ -13,6 +13,8 @@ const ViewAddresses = lazy(() => import("@/pages/addresses/ViewAddresses"));
 const AddressRequests = lazy(() => import("@/pages/addresses/AddressRequests"));
 const CreateAddresses = lazy(() => import("@/pages/addresses/CreateAddresses"));
 const AddressOverview = lazy(() => import("@/pages/addresses/Overview"));
+// music
+const MusicList = lazy(() => import("@/pages/musics/MusicList"));
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +37,13 @@ export const router = createBrowserRouter([
               { path: "requests", Component: AddressRequests },
               { path: "create", Component: CreateAddresses },
               { path: "overview", Component: AddressOverview },
+            ],
+          },
+          {
+            path: "musics",
+            children: [
+              { index: true, Component: MusicList },
+              { path: "list", Component: MusicList },
             ],
           },
         ],

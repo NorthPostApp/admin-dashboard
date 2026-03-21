@@ -1,15 +1,14 @@
-import type { Language } from "@/consts/app-config";
+import { getMusicList } from "@/api/music";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useQuery } from "@tanstack/react-query";
-import { getAllTags } from "@/api/address";
 
-export function useGetAllTagsQuery(language: Language, refresh: boolean = false) {
+export function useGetMusicListQuery(refresh: boolean = false) {
   const { user } = useAuthContext();
   const query = useQuery({
-    queryKey: ["tags", language],
+    queryKey: ["musicList"],
     queryFn: async ({ signal }) => {
       const idToken = (await user?.getIdToken()) || "";
-      return getAllTags(language, idToken, refresh, signal);
+      return getMusicList(idToken, refresh, signal);
     },
     enabled: false,
   });
