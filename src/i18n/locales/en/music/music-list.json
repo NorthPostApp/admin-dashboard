@@ -5,6 +5,7 @@
     "genre": "Genre",
     "duration": "Duration",
     "size": "File Size",
-    "lastModified": "Last Modified"
+    "lastModified": "Last Modified",
+    "mostRecentlyAdded": "Most Recently Added"
   }
 }

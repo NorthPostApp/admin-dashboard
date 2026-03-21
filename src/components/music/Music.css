@@ -5,7 +5,7 @@
 }
 
 .music-table {
-  @apply border rounded-xl overflow-hidden;
+  @apply h-full border rounded-xl overflow-hidden;
 }
 
 .music-table__header {

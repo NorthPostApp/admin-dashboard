@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { useGetMusicListQuery } from "@/hooks/queries/useGetMusicListQuery";
 import { useMusicContext } from "@/hooks/useMusicContext";
 import MusicTable from "@/components/music/MusicTable";
 import Subheader from "@/pages/Subheader";
 import { Spinner } from "@/components/ui/spinner";
 import MusicPlayer from "@/components/music/MusicPlayer";
+import { Button } from "@/components/ui/button";
 import "./MusicPage.css";
 
 export default function MusicList() {
@@ -43,17 +46,44 @@ export default function MusicList() {
     }
   }, [fetchMusicList, musicListData, shouldRefreshData]);
 
+  const mostRecentAdded = useMemo(() => {
+    if (!musicListData || musicListData.length == 0) return undefined;
+    let recentModified = musicListData[0].lastModified;
+    musicListData.forEach((music) => {
+      if (music.lastModified > recentModified) recentModified = music.lastModified;
+    });
+    return recentModified;
+  }, [musicListData]);
+
   return (
     <div className="body">
       <Subheader title={t("title")} />
       <div className="music-view">
-        {isFetching && <Spinner className="mx-auto my-auto" />}
+        {!musicListData && isFetching && <Spinner className="mx-auto my-auto" />}
         {musicListData && (
-          <MusicTable
-            musicListData={musicListData}
-            currentPlaying={currentMusic}
-            onSelectMusic={handleSelectMusic}
-          />
+          <div className="music-view__table">
+            <MusicTable
+              musicListData={musicListData}
+              currentPlaying={currentMusic}
+              onSelectMusic={handleSelectMusic}
+            />
+            <div className="music-view__table__footer">
+              {mostRecentAdded && (
+                <p>
+                  {`${t("table.mostRecentlyAdded")} ${new Date(mostRecentAdded).toLocaleDateString()}`}
+                </p>
+              )}
+              <Button
+                variant="ghost"
+                data-testid="music-view__refresh"
+                size={"icon-sm"}
+                className={cn("rounded-full", isFetching && "animate-spin")}
+                onClick={() => setShouldRefreshData(true)}
+              >
+                <RefreshCcw />
+              </Button>
+            </div>
+          </div>
         )}
         <MusicPlayer filename={currentMusic} />
       </div>
