@@ -27,4 +27,25 @@ async function getMusicList(
   return MusicList.parse(musicListData);
 }
 
-export { getMusicList };
+async function getPresignedMusicUrl(
+  idToken: string,
+  filename: string,
+  signal?: AbortSignal,
+) {
+  const url = new URL(`${BASE_URL}/music/${filename}`);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${idToken}`,
+    },
+    signal,
+  });
+  if (!response.ok) {
+    const errorData = (await response.json()) as ServiceError;
+    const errorMessage = errorData.error || `Error getting music url ${response.status}`;
+    throw new Error(errorMessage);
+  }
+  return (await response.json()).data;
+}
+
+export { getMusicList, getPresignedMusicUrl };

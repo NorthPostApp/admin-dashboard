@@ -6,12 +6,20 @@ import { useMusicContext } from "@/hooks/useMusicContext";
 import MusicTable from "@/components/music/MusicTable";
 import Subheader from "@/pages/Subheader";
 import { Spinner } from "@/components/ui/spinner";
+import MusicPlayer from "@/components/music/MusicPlayer";
+import "./MusicPage.css";
 
 export default function MusicList() {
   const { t } = useTranslation("music:list");
   const { musicListData, updateMusicListData } = useMusicContext();
   const [shouldRefreshData, setShouldRefreshData] = useState(false);
   const { refetch, isFetching } = useGetMusicListQuery(shouldRefreshData);
+
+  // controls music player
+  const [currentMusic, setCurrentMusic] = useState<string | undefined>(undefined);
+  const handleSelectMusic = (musicFilename: string) => {
+    setCurrentMusic(musicFilename);
+  };
 
   const fetchMusicList = useCallback(() => {
     refetch()
@@ -38,9 +46,16 @@ export default function MusicList() {
   return (
     <div className="body">
       <Subheader title={t("title")} />
-      <div className="w-full h-full p-6">
+      <div className="music-view">
         {isFetching && <Spinner className="mx-auto my-auto" />}
-        {musicListData && <MusicTable musicListData={musicListData} />}
+        {musicListData && (
+          <MusicTable
+            musicListData={musicListData}
+            currentPlaying={currentMusic}
+            onSelectMusic={handleSelectMusic}
+          />
+        )}
+        <MusicPlayer filename={currentMusic} />
       </div>
     </div>
   );
