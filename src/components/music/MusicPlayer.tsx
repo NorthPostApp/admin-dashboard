@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Pause, Play } from "lucide-react";
 import { useMusicPlayer } from "@/hooks/useMusicPlayer";
 import { useGetPresignedMusicUrlQuery } from "@/hooks/queries/useGetPresignedMusicUrlQuery";
+import "./Music.css";
 
 type MusicPlayerProps = {
   filename: string | undefined;

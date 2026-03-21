@@ -42,7 +42,8 @@ async function getPresignedMusicUrl(
   });
   if (!response.ok) {
     const errorData = (await response.json()) as ServiceError;
-    const errorMessage = errorData.error || `Error getting music url ${response.status}`;
+    const errorMessage =
+      errorData.error || `Error getting music url for "${filename}": ${response.status}`;
     throw new Error(errorMessage);
   }
   return (await response.json()).data;

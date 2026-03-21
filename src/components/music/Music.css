@@ -1,6 +1,6 @@
 @import "../../index.css";
 
-[data-slot="table-container"] {
+.music-table [data-slot="table-container"] {
   @apply max-h-full overflow-y-auto;
 }
 

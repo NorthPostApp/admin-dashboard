@@ -29,8 +29,12 @@ export function useMusicPlayer() {
   }, []);
 
   const play = useCallback(() => {
-    audioRef.current?.play();
-    setIsPlaying(true);
+    if (audioRef.current) {
+      audioRef.current.play().then(() => {
+        // only turn isPlaying on when successfully plays the music
+        setIsPlaying(true);
+      });
+    }
   }, []);
   const pause = useCallback(() => {
     audioRef.current?.pause();
