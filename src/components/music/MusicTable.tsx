@@ -9,6 +9,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { parseMusicDuration } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import "./Music.css";
 
@@ -32,15 +33,6 @@ const parseLastModified = (millisecond: number) => {
 
 const parseMusicSize = (size: number) => {
   return `${size} MB`;
-};
-
-const parseDuration = (seconds: number) => {
-  if (seconds && seconds > -1) {
-    const min = String(Math.floor(seconds / 60)).padStart(2, "0");
-    const sec = String(Math.round(seconds % 60)).padStart(2, "0");
-    return `${min}:${sec}`;
-  }
-  return "--:--";
 };
 
 export default function MusicTable({
@@ -67,7 +59,7 @@ export default function MusicTable({
             <TableRow key={music.filename} className="music-table__row">
               <TableCell>{parseMusicTitle(music.title)}</TableCell>
               <TableCell>{music.genre}</TableCell>
-              <TableCell>{parseDuration(music.durationSec)}</TableCell>
+              <TableCell>{parseMusicDuration(music.durationSec)}</TableCell>
               <TableCell>{parseMusicSize(music.size)}</TableCell>
               <TableCell>{parseLastModified(music.lastModified)}</TableCell>
               <TableCell>

@@ -12,6 +12,14 @@ const mockMusicList: MusicListSchema = [
     size: 4,
     lastModified: new Date("2024-01-15").getTime(),
   },
+  {
+    filename: "song_two.mp3",
+    title: "song_two",
+    genre: "Pop",
+    durationSec: 185,
+    size: 4,
+    lastModified: new Date("2024-02-15").getTime(),
+  },
 ];
 
 const mockSelectMusic = vi.fn();
@@ -38,7 +46,7 @@ describe("MusicTable", () => {
   it("renders music data in a row", () => {
     render(
       <MusicTable
-        musicListData={mockMusicList}
+        musicListData={[mockMusicList[0]]}
         currentPlaying={undefined}
         onSelectMusic={mockSelectMusic}
       />,
@@ -53,10 +61,26 @@ describe("MusicTable", () => {
     expect(mockSelectMusic).toHaveBeenCalledWith("song_one.mp3");
   });
 
-  it("renders row with song playing", () => {
+  it("switch song when the other play button clicked", () => {
     render(
       <MusicTable
         musicListData={mockMusicList}
+        currentPlaying={"song_one.mp3"}
+        onSelectMusic={mockSelectMusic}
+      />,
+    );
+    const playingButton = screen.getByTestId("music-table-playing");
+    fireEvent.click(playingButton);
+    expect(mockSelectMusic).not.toHaveBeenCalled();
+    const playButton = screen.getByTestId("music-table-play");
+    fireEvent.click(playButton);
+    expect(mockSelectMusic).toHaveBeenCalledWith("song_two.mp3");
+  });
+
+  it("renders row with song playing", () => {
+    render(
+      <MusicTable
+        musicListData={[mockMusicList[0]]}
         currentPlaying={"song_one.mp3"}
         onSelectMusic={mockSelectMusic}
       />,
