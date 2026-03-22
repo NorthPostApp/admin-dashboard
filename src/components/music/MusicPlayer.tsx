@@ -1,16 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import { useMusicPlayer } from "@/hooks/useMusicPlayer";
 import { useGetPresignedMusicUrlQuery } from "@/hooks/queries/useGetPresignedMusicUrlQuery";
+import { parseMusicDuration } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 import "./Music.css";
 
 type MusicPlayerProps = {
   filename: string | undefined;
 };
 
+const PLAY_BUTTON_SIZE = 22;
+
 export default function MusicPlayer({ filename }: MusicPlayerProps) {
   const { refetch } = useGetPresignedMusicUrlQuery(filename || "");
-  const { isPlaying, load, play, pause } = useMusicPlayer();
+  const [seeking, setSeeking] = useState<boolean>(false);
+  const { isPlaying, duration, currentTime, load, play, pause, seek } = useMusicPlayer();
+  const [sliderTime, setSliderTime] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (filename !== undefined && filename !== "") {
@@ -23,8 +29,15 @@ export default function MusicPlayer({ filename }: MusicPlayerProps) {
     }
   }, [filename, refetch, play, load]);
 
+  useEffect(() => {
+    if (!seeking && currentTime !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSliderTime(currentTime);
+    }
+  }, [currentTime, seeking]);
+
   return (
-    <div>
+    <div className="music-player">
       <button
         disabled={filename === undefined}
         onClick={() => {
@@ -35,11 +48,33 @@ export default function MusicPlayer({ filename }: MusicPlayerProps) {
         className="music-table__audio__play"
       >
         {isPlaying ? (
-          <Pause size={24} strokeWidth={1} className="fill-background" />
+          <Pause size={PLAY_BUTTON_SIZE} strokeWidth={1} className="fill-background" />
         ) : (
-          <Play size={24} strokeWidth={1} className="fill-background" />
+          <Play size={PLAY_BUTTON_SIZE} strokeWidth={1} className="fill-background" />
         )}
       </button>
+      <div className="music-player__info">
+        <p>{filename}</p>
+        <div className="music-player__progress">
+          <p className="music-player__progress__time">
+            {parseMusicDuration(currentTime)}
+          </p>
+          <Slider
+            defaultValue={[0]}
+            max={duration}
+            value={[sliderTime || 0]}
+            onValueChange={(value) => {
+              setSeeking(true);
+              setSliderTime(value[0]);
+            }}
+            onValueCommit={(value) => {
+              seek(value[0]);
+              setSeeking(false);
+            }}
+          />
+          <p className="music-player__progress__time">{parseMusicDuration(duration)}</p>
+        </div>
+      </div>
     </div>
   );
 }
