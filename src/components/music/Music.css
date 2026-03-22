@@ -24,9 +24,25 @@
 }
 
 .music-table__row__play {
-  @apply w-6 text-primary/60 h-6 p-1 rounded-full hover:bg-primary dark:hover:bg-accent-foreground;
+  @apply text-primary/60 h-6 w-6 p-1 rounded-full hover:bg-primary dark:hover:bg-accent-foreground;
 }
 
 .music-table__audio__play {
   @apply not-disabled:hover:cursor-pointer bg-primary rounded-full p-2 disabled:opacity-40;
+}
+
+.music-player {
+  @apply flex w-full bg-sidebar/30 px-4 py-3 gap-10 max-w-160 mx-auto justify-between items-center rounded-full border border-accent;
+}
+
+.music-player__info {
+  @apply flex-1 text-sm text-center space-y-1;
+}
+
+.music-player__progress {
+  @apply flex gap-3 text-xs justify-between items-center;
+}
+
+.music-player__progress__time {
+  @apply w-10;
 }
