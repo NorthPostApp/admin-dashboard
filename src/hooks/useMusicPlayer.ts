@@ -68,13 +68,18 @@ export function useMusicPlayer() {
     }
   }, []);
 
-  const seek = useCallback((time: number) => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = time;
-      audioRef.current.play();
-      setCurrentTime(time);
-    }
-  }, []);
+  const seek = useCallback(
+    (time: number) => {
+      if (audioRef.current) {
+        audioRef.current.currentTime = time;
+        if (isPlaying) {
+          audioRef.current.play();
+        }
+        setCurrentTime(time);
+      }
+    },
+    [isPlaying],
+  );
 
   const pause = useCallback(() => {
     audioRef.current?.pause();
