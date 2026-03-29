@@ -29,13 +29,6 @@ export default function MusicPlayer({ filename }: MusicPlayerProps) {
     }
   }, [filename, refetch, play, load]);
 
-  useEffect(() => {
-    if (!seeking && currentTime !== undefined) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSliderTime(currentTime);
-    }
-  }, [currentTime, seeking]);
-
   return (
     <div className="music-player">
       <button
@@ -62,7 +55,7 @@ export default function MusicPlayer({ filename }: MusicPlayerProps) {
           <Slider
             defaultValue={[0]}
             max={duration}
-            value={[sliderTime || 0]}
+            value={[(seeking ? sliderTime : currentTime) || 0]}
             onValueChange={(value) => {
               setSeeking(true);
               setSliderTime(value[0]);
