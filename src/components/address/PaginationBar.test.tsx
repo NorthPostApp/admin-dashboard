@@ -14,7 +14,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={1}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -29,7 +28,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={1}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -45,7 +43,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={3}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -56,25 +53,11 @@ describe("PaginationBar", () => {
     expect(mockSelectPageAction).not.toHaveBeenCalled();
   });
 
-  it("shows ellipsis when hasMore is true", () => {
-    render(
-      <PaginationBar
-        totalPages={3}
-        currPage={2}
-        hasMore={true}
-        loading={false}
-        selectPageAction={mockSelectPageAction}
-      />,
-    );
-    expect(screen.getByTestId("pagination-ellipsis")).toBeTruthy();
-  });
-
   it("calls selectPageAction when page is clicked", () => {
     render(
       <PaginationBar
         totalPages={3}
         currPage={1}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -90,7 +73,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={1}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -106,7 +88,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={2}
-        hasMore={false}
         loading={false}
         selectPageAction={mockSelectPageAction}
       />,
@@ -122,7 +103,6 @@ describe("PaginationBar", () => {
       <PaginationBar
         totalPages={3}
         currPage={2}
-        hasMore={false}
         loading={true}
         selectPageAction={mockSelectPageAction}
       />,

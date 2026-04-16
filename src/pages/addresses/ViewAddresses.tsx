@@ -1,12 +1,11 @@
-import { Activity, useCallback, useEffect, useMemo, useState } from "react";
+import { Activity, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
-import type { GetAllAddressesResponseSchema } from "@/schemas/address";
+import type { GetAddressesResponseSchema } from "@/schemas/address";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
+import { useGetAddressesQuery } from "@/hooks/queries/useGetAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import Subheader from "@/pages/Subheader";
@@ -14,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import PaginatedAddresses from "@/components/address/PaginatedAddresses";
 import PaginationBar from "@/components/address/PaginationBar";
-import SearchInput from "@/components/address/SearchInput";
+// import SearchInput from "@/components/address/SearchInput";
 import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import "./AddressPage.css";
 
@@ -23,97 +22,78 @@ export default function ViewAddresses() {
   const isMobile = useIsMobile();
   const { language } = useAppContext();
   const {
+    pagedAddressData,
     totalPages,
     currentPage,
-    addressData,
     refreshAddressData,
-    updateNextPageData,
+    updatePagedData,
     selectPage,
-    selectedTags,
+    prevLanguage,
   } = useAddressDataContext();
   const [showFilters, setShowFilters] = useState<boolean>(false);
-  const [searchText, setSearchText] = useState<string>("");
-  const onChangeSearchText = (text: string) => {
-    if (currentPage !== 1) selectPage(1);
-    setSearchText(text);
-  };
   const onToggleFilters = () => {
     setShowFilters((prev) => !prev);
   };
 
-  const shouldRefreshData = language !== addressData?.language;
+  const shouldRefreshData = language !== prevLanguage;
 
-  const { isFetching, refetch } = useGetAllAddressesQuery(
+  // fix this part
+  const { isFetching, refetch } = useGetAddressesQuery(
     language,
-    shouldRefreshData ? [] : selectedTags,
-    addressData?.lastDocId,
+    currentPage,
+    "",
+    [],
+    // shouldRefreshData ? [] : selectedTags,
     shouldRefreshData,
   );
 
-  const filteredAddresses = useMemo(() => {
-    if (searchText.length === 0) return addressData?.addresses;
-    return addressData?.addresses.filter((address) => {
-      return (
-        address.id === searchText ||
-        address.name.includes(searchText) ||
-        address.briefIntro.includes(searchText)
-      );
-    });
-  }, [searchText, addressData]);
-
   // get first page data when first loading the page or refetching data
   const refetchData = useCallback(
-    (
-      callbackFn: (data: GetAllAddressesResponseSchema) => void,
-      resetPageNumber: boolean = false,
-    ) => {
+    (callbackFn: (data: GetAddressesResponseSchema) => void) => {
       if (isFetching) return; // see if this can avoid multiple refetching happen
       refetch().then((result) => {
         if (result.data) {
           callbackFn(result.data);
-          if (resetPageNumber && currentPage !== 1) selectPage(1);
         } else if (result.error) {
           toast.error("failed to fetch data, please check your internet connection");
         }
       });
     },
-    [refetch, isFetching, currentPage, selectPage],
+    [refetch, isFetching],
   );
 
   const loadInitialAddressData = useCallback(() => {
-    if (!addressData || shouldRefreshData) {
-      refetchData(refreshAddressData, true);
-    }
-  }, [addressData, shouldRefreshData, refreshAddressData, refetchData]);
+    refetchData(refreshAddressData);
+  }, [refreshAddressData, refetchData]);
 
-  const loadNextPageData = useCallback(() => {
-    refetchData(updateNextPageData);
-  }, [updateNextPageData, refetchData]);
+  const loadPagedData = useCallback(() => {
+    if (pagedAddressData.length !== 0 && pagedAddressData[currentPage - 1]) return;
+    refetchData(updatePagedData);
+  }, [updatePagedData, refetchData, currentPage, pagedAddressData]);
 
   // initial loading
   useEffect(() => {
-    if (!isFetching) loadInitialAddressData();
-  }, [loadInitialAddressData, isFetching]);
+    if (shouldRefreshData) {
+      loadInitialAddressData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldRefreshData]);
 
   useEffect(() => {
-    if (currentPage > totalPages && !isFetching) loadNextPageData();
-  }, [loadNextPageData, currentPage, totalPages, isFetching]);
-
-  const filteredPages =
-    searchText.length === 0
-      ? totalPages
-      : Math.ceil((filteredAddresses?.length || 1) / DEFAULT_PAGE_DISPLAY_SIZE);
+    loadPagedData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   return (
     <div className="body">
       <Subheader
         title={t("title")}
-        centralComponent={
-          <SearchInput
-            onChange={onChangeSearchText}
-            placeholder={t("filters.searchPlaceholder")}
-          />
-        }
+        // centralComponent={
+        //   <SearchInput
+        //     onChange={onChangeSearchText}
+        //     placeholder={t("filters.searchPlaceholder")}
+        //   />
+        // }
         sideComponent={
           <Button onClick={onToggleFilters} variant="ghost" size="icon-sm">
             <ListFilter width={20} />
@@ -133,14 +113,13 @@ export default function ViewAddresses() {
               {!isFetching && (
                 <PaginatedAddresses
                   currentPage={currentPage}
-                  addresses={filteredAddresses || []}
+                  addresses={pagedAddressData[currentPage - 1] || []}
                 />
               )}
-              {addressData && (
+              {pagedAddressData.length !== 0 && (
                 <PaginationBar
-                  totalPages={searchText.length === 0 ? totalPages : filteredPages}
+                  totalPages={totalPages}
                   currPage={currentPage}
-                  hasMore={addressData?.hasMore}
                   loading={isFetching}
                   selectPageAction={selectPage}
                 />
