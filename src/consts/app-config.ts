@@ -34,9 +34,8 @@ export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
 export const DEFAULT_THINKING_LEVEL: ThinkingLevel = "minimal";
 
-// For all addresses pagination, fetch 3 pages in advance
-export const DEFAULT_PAGE_DISPLAY_SIZE = 16;
-export const DEFAULT_PAGE_FETCH_SIZE = DEFAULT_PAGE_DISPLAY_SIZE * 3;
+// export const DEFAULT_PAGE_SIZE = 16;
+export const DEFAULT_PAGE_SIZE = 15;
 
 export function getLocalAppConfig(): AppConfigLocalstorageType {
   const localData = getLocalData();

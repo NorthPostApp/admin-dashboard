@@ -1,5 +1,5 @@
 import {
-  GetAllAddressesResponse,
+  GetAddressesResponse,
   GetAllTagsResponse,
   type GenerateAddressesRequestSchema,
   type GenerateAddressesResponseSchema,
@@ -10,11 +10,12 @@ import {
 import { BASE_URL, type ServiceError } from "@/api/shared";
 import type { Language } from "@/consts/app-config";
 
-type GetAllAddressesRequest = {
+type GetAddressesRequest = {
   language: Language;
-  tags?: string[];
+  page: number;
   pageSize?: number;
-  lastDocId?: string;
+  keywords?: string;
+  tags?: string[];
 };
 
 type GetSystemPromptResponse = { data: string };
@@ -82,8 +83,8 @@ async function deleteAddress(
   return (await response.json()).data as DeleteAddressResponse;
 }
 
-async function getAllAddresses(
-  requestBody: GetAllAddressesRequest,
+async function getAddresses(
+  requestBody: GetAddressesRequest,
   idToken: string,
   signal?: AbortSignal,
 ) {
@@ -103,7 +104,7 @@ async function getAllAddresses(
     throw new Error(errorMessage);
   }
   const addressData = (await response.json()).data;
-  return GetAllAddressesResponse.parse(addressData);
+  return GetAddressesResponse.parse(addressData);
 }
 
 async function generateAddresses(
@@ -183,11 +184,11 @@ export {
   deleteAddress,
   getSystemPrompt,
   generateAddresses,
-  getAllAddresses,
+  getAddresses,
   updateAddress,
   getAllTags,
   type CreateNewAddressResponse,
   type DeleteAddressResponse,
   type GetSystemPromptResponse,
-  type GetAllAddressesRequest,
+  type GetAddressesRequest,
 };

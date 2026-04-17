@@ -58,11 +58,11 @@ const GenerateAddressesRequest = z.object({
   thinkingLevel: z.enum(THINKING_LEVELS).optional(),
 });
 
-const GetAllAddressesResponse = z.object({
+const GetAddressesResponse = z.object({
   addresses: z.array(AddressItemWithTime),
   totalCount: z.number(),
-  hasMore: z.boolean(),
-  lastDocId: z.string(),
+  totalPages: z.number(),
+  page: z.number(),
   language: z.enum(SUPPORTED_LANGUAGES),
 });
 
@@ -80,7 +80,7 @@ type NewAddressRequestSchema = z.infer<typeof NewAddressRequest>;
 type GenerateAddressesRequestSchema = z.infer<typeof GenerateAddressesRequest>;
 type GenerateAddressesResponseSchema = z.infer<typeof GenerateAddressesResponse>;
 type GeneratedAddressSchema = z.infer<typeof GeneratedAddress>;
-type GetAllAddressesResponseSchema = z.infer<typeof GetAllAddressesResponse>;
+type GetAddressesResponseSchema = z.infer<typeof GetAddressesResponse>;
 type UpdateAddressRequestSchema = z.infer<typeof UpdateAddressRequest>;
 type UpdateAddressResponseSchema = z.infer<typeof UpdateAddressResponse>;
 type GetAllTagsResponseSchema = z.infer<typeof GetAllTagsResponse>;
@@ -159,7 +159,7 @@ export {
   NewAddressRequest,
   GenerateAddressesRequest,
   GenerateAddressesResponse,
-  GetAllAddressesResponse,
+  GetAddressesResponse,
   UpdateAddressRequest,
   UpdateAddressResponse,
   Address,
@@ -177,6 +177,6 @@ export {
   type GeneratedAddressSchema,
   type UpdateAddressRequestSchema,
   type UpdateAddressResponseSchema,
-  type GetAllAddressesResponseSchema,
+  type GetAddressesResponseSchema,
   type GetAllTagsResponseSchema,
 };

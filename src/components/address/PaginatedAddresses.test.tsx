@@ -2,7 +2,7 @@ import { it, vi, describe, beforeEach, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import type { AddressItemWithTimeSchema } from "@/schemas/address";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
+import { DEFAULT_PAGE_SIZE } from "@/consts/app-config";
 import PaginatedAddresses from "./PaginatedAddresses";
 
 vi.mock("./AddressCard", () => ({
@@ -47,18 +47,13 @@ describe("PaginatedAddresses", () => {
     vi.clearAllMocks();
   });
 
-  it("renders addresses for page 1 only", () => {
-    const addresses = Array.from({ length: DEFAULT_PAGE_DISPLAY_SIZE + 4 }).map(
-      (_, index) => createMockAddress(`addr-${index}`, `Person ${index}`),
+  it("renders addresses", () => {
+    const addresses = Array.from({ length: DEFAULT_PAGE_SIZE }).map((_, index) =>
+      createMockAddress(`addr-${index}`, `Person ${index}`),
     );
     renderWithProviders(<PaginatedAddresses currentPage={1} addresses={addresses} />);
     expect(screen.getByTestId("address-card-addr-1")).toBeTruthy();
-    expect(
-      screen.getByTestId(`address-card-addr-${DEFAULT_PAGE_DISPLAY_SIZE - 1}`),
-    ).toBeTruthy();
-    expect(
-      screen.queryByTestId(`address-card-addr-${DEFAULT_PAGE_DISPLAY_SIZE + 1}`),
-    ).toBeFalsy();
+    expect(screen.getByTestId(`address-card-addr-${DEFAULT_PAGE_SIZE - 1}`)).toBeTruthy();
   });
 });
 

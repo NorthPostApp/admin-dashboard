@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { toast } from "sonner";
 import { fireEvent, screen, waitFor } from "@/lib/test-utils";
 import { renderWithProviders } from "@/lib/test-wrappers";
-import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import ViewAddressesFilters from "./ViewAddressesFilters";
 
 // Mock sonner toast
@@ -16,8 +15,7 @@ vi.mock("@/consts/app-config", async () => {
   const actual = await vi.importActual("@/consts/app-config");
   return {
     ...actual,
-    DEFAULT_PAGE_DISPLAY_SIZE: 1,
-    DEFAULT_PAGE_FETCH_SIZE: 3,
+    DEFAULT_PAGE_SIZE: 1,
   };
 });
 
@@ -25,14 +23,14 @@ vi.mock("@/consts/app-config", async () => {
 const mockRefetch = vi.fn();
 const mockRefetchAddressData = vi.fn();
 const mockUseGetAllTagsQuery = vi.fn();
-const mockUseGetAllAddressesQuery = vi.fn();
+const mockUseGetAddressesQuery = vi.fn();
 
 vi.mock("@/hooks/queries/useGetAllTagsQuery", () => ({
   useGetAllTagsQuery: (...args: unknown[]) => mockUseGetAllTagsQuery(...args),
 }));
 
-vi.mock("@/hooks/queries/useGetAllAddressesQuery", () => ({
-  useGetAllAddressesQuery: (...args: unknown[]) => mockUseGetAllAddressesQuery(...args),
+vi.mock("@/hooks/queries/useGetAddressesQuery", () => ({
+  useGetAddressesQuery: (...args: unknown[]) => mockUseGetAddressesQuery(...args),
 }));
 
 const mockTagsData = {
@@ -50,8 +48,10 @@ const mockAddressData = {
     { id: "3", name: "Address 3" },
     { id: "4", name: "Address 4" },
   ],
-  lastDocId: "last-doc-id",
   totalCount: 4,
+  totalPages: 1,
+  page: 1,
+  language: "en",
 };
 
 describe("ViewAddressesFilters", () => {
@@ -61,7 +61,7 @@ describe("ViewAddressesFilters", () => {
       refetch: mockRefetch,
       isFetching: false,
     });
-    mockUseGetAllAddressesQuery.mockReturnValue({
+    mockUseGetAddressesQuery.mockReturnValue({
       refetch: mockRefetchAddressData,
       isFetching: false,
     });
@@ -160,7 +160,7 @@ describe("ViewAddressesFilters", () => {
   });
 
   it("should not call refetch when already fetching address data", async () => {
-    mockUseGetAllAddressesQuery.mockReturnValue({
+    mockUseGetAddressesQuery.mockReturnValue({
       refetch: mockRefetchAddressData,
       isFetching: true,
     });
@@ -188,43 +188,6 @@ describe("ViewAddressesFilters", () => {
     fireEvent.click(updateButton);
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(expect.any(String));
-    });
-  });
-
-  it("should refresh address data and reset to page 1 when on different page", async () => {
-    mockRefetchAddressData.mockResolvedValue({
-      data: mockAddressData,
-    });
-    const TestComponent = () => {
-      const { selectPage, currentPage } = useAddressDataContext();
-      return (
-        <>
-          <ViewAddressesFilters />
-          <div data-testid="current-page">{currentPage}</div>
-          <button data-testid="select-page-2" onClick={() => selectPage(2)}>
-            Go to Page 2
-          </button>
-        </>
-      );
-    };
-    renderWithProviders(<TestComponent />);
-    await waitFor(() => {
-      expect(screen.getByText(/Update Addresses/i)).toBeTruthy();
-    });
-    const updateButton = screen.getByText(/Update Addresses/i);
-    fireEvent.click(updateButton);
-    await waitFor(() => {
-      expect(mockRefetchAddressData).toHaveBeenCalled();
-    });
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId("select-page-2"));
-    });
-    await waitFor(() => {
-      expect(screen.getByTestId("current-page").textContent).toBe("2");
-    });
-    fireEvent.click(screen.getByText(/Update Addresses/i));
-    await waitFor(() => {
-      expect(screen.getByTestId("current-page").textContent).toBe("1");
     });
   });
 });

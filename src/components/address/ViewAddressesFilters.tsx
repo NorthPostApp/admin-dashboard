@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useGetAllTagsQuery } from "@/hooks/queries/useGetAllTagsQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
-import { useGetAllAddressesQuery } from "@/hooks/queries/useGetAllAddressesQuery";
+import { useGetAddressesQuery } from "@/hooks/queries/useGetAddressesQuery";
 import { Button } from "@/components/ui/button";
 import CheckboxSection from "@/components/address/CheckboxSection";
 import { Spinner } from "@/components/ui/spinner";
@@ -16,11 +16,9 @@ export default function ViewAddressesFilters() {
   const { language } = useAppContext();
   const {
     tagsData,
-    currentPage,
     selectedTags,
     updateTagsData,
     refreshAddressData,
-    selectPage,
     updateSelectedTags,
     clearTagSelections,
   } = useAddressDataContext();
@@ -29,14 +27,13 @@ export default function ViewAddressesFilters() {
   const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefreshTags);
   // the following query is used to refetch the address data with selected tags
   const { refetch: refetchAddressData, isFetching: isFetchingAddressData } =
-    useGetAllAddressesQuery(language, selectedTags);
+    useGetAddressesQuery(language, 1, "", selectedTags, true);
 
   const updateAddressData = () => {
     if (isFetchingAddressData) return;
     refetchAddressData().then((result) => {
       if (result.data) {
         refreshAddressData(result.data);
-        if (currentPage !== 1) selectPage(1);
       } else if (result.error) {
         toast.error(t("fetchFailed"));
       }
