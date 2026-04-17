@@ -17,6 +17,7 @@ export default function ViewAddressesFilters() {
   const {
     tagsData,
     selectedTags,
+    searchKeyword,
     updateTagsData,
     refreshAddressData,
     updateSelectedTags,
@@ -27,7 +28,7 @@ export default function ViewAddressesFilters() {
   const { refetch, isFetching } = useGetAllTagsQuery(language, shouldRefreshTags);
   // the following query is used to refetch the address data with selected tags
   const { refetch: refetchAddressData, isFetching: isFetchingAddressData } =
-    useGetAddressesQuery(language, 1, "", selectedTags, true);
+    useGetAddressesQuery(language, 1, searchKeyword, selectedTags, true);
 
   const updateAddressData = () => {
     if (isFetchingAddressData) return;

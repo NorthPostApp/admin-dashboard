@@ -11,12 +11,14 @@ interface AddressDataContextProviderType {
   pagedAddressData: AddressItemWithTimeSchema[][];
   totalPages: number;
   currentPage: number;
+  searchKeyword: string;
   prevLanguage: Language | undefined;
   selectedTags: string[];
   tagsData: GetAllTagsResponseSchema | undefined;
   selectPage: (page: number) => void;
   updatePagedData: (getAddressesResponse: GetAddressesResponseSchema) => void;
   updateTagsData: (tagsData: GetAllTagsResponseSchema | undefined) => void;
+  updateSearchKeyword: (keyword: string) => void;
   updateSelectedTags: (tag: string) => void;
   clearTagSelections: () => void;
   refreshAddressData: (getAddressesResponse: GetAddressesResponseSchema) => void;
@@ -37,12 +39,17 @@ export default function AddressDataContextProvider({
     [],
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [totalPages, setTotalPages] = useState<number>(1);
   const [prevLanguage, setPrevLanguage] = useState<Language>();
   const [tagsData, setTagsData] = useState<GetAllTagsResponseSchema | undefined>(
     undefined,
   );
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const updateSearchKeyword = (keyword: string) => {
+    setSearchKeyword(keyword);
+  };
 
   const updateSelectedTags = (tag: string) => {
     setSelectedTags((prev) => {
@@ -79,7 +86,7 @@ export default function AddressDataContextProvider({
   const refreshAddressData = (getAddressesResponse: GetAddressesResponseSchema) => {
     const { totalPages: fetchedTotalPages, language, addresses } = getAddressesResponse;
     const newPagedAddresses: AddressItemWithTimeSchema[][] = Array.from(
-      { length: totalPages },
+      { length: fetchedTotalPages },
       () => [] as AddressItemWithTimeSchema[],
     );
     newPagedAddresses[0] = addresses;
@@ -117,9 +124,11 @@ export default function AddressDataContextProvider({
     currentPage,
     totalPages,
     tagsData,
-    selectPage,
+    searchKeyword,
     prevLanguage,
     selectedTags,
+    selectPage,
+    updateSearchKeyword,
     updatePagedData,
     updateTagsData,
     updateSelectedTags,

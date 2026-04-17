@@ -34,8 +34,7 @@ export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
 export const DEFAULT_THINKING_LEVEL: ThinkingLevel = "minimal";
 
-// export const DEFAULT_PAGE_SIZE = 16;
-export const DEFAULT_PAGE_SIZE = 15;
+export const DEFAULT_PAGE_SIZE = 16;
 
 export function getLocalAppConfig(): AppConfigLocalstorageType {
   const localData = getLocalData();
