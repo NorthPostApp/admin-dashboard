@@ -1,7 +1,7 @@
 @import "../../index.css";
 
 .address-layout__grid {
-  @apply grid gap-5 overflow-y-auto px-2 sm:px-4 md:px-8 py-1;
+  @apply w-full grid gap-5 overflow-y-auto px-2 sm:px-4 md:px-8 py-1;
 }
 
 .address-layout__sidebar {

@@ -25,6 +25,7 @@ export default function ViewAddresses() {
     pagedAddressData,
     totalPages,
     currentPage,
+    selectedTags,
     refreshAddressData,
     updatePagedData,
     selectPage,
@@ -37,13 +38,11 @@ export default function ViewAddresses() {
 
   const shouldRefreshData = language !== prevLanguage;
 
-  // fix this part
   const { isFetching, refetch } = useGetAddressesQuery(
     language,
     currentPage,
     "",
-    [],
-    // shouldRefreshData ? [] : selectedTags,
+    shouldRefreshData ? [] : selectedTags,
     shouldRefreshData,
   );
 
@@ -88,12 +87,6 @@ export default function ViewAddresses() {
     <div className="body">
       <Subheader
         title={t("title")}
-        // centralComponent={
-        //   <SearchInput
-        //     onChange={onChangeSearchText}
-        //     placeholder={t("filters.searchPlaceholder")}
-        //   />
-        // }
         sideComponent={
           <Button onClick={onToggleFilters} variant="ghost" size="icon-sm">
             <ListFilter width={20} />

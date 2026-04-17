@@ -4,7 +4,6 @@ import type {
   GetAllTagsResponseSchema,
   AddressItemWithTimeSchema,
   GetAddressesResponseSchema,
-  // AddressItemWithtimeSchema,
 } from "@/schemas/address";
 import { createContext, useState } from "react";
 
@@ -16,7 +15,6 @@ interface AddressDataContextProviderType {
   selectedTags: string[];
   tagsData: GetAllTagsResponseSchema | undefined;
   selectPage: (page: number) => void;
-  // updateNextPageData: (nextPageData: GetAddressesResponseSchema) => void;
   updatePagedData: (getAddressesResponse: GetAddressesResponseSchema) => void;
   updateTagsData: (tagsData: GetAllTagsResponseSchema | undefined) => void;
   updateSelectedTags: (tag: string) => void;
@@ -38,7 +36,6 @@ export default function AddressDataContextProvider({
   const [pagedAddressData, setPagedAddressData] = useState<AddressItemWithTimeSchema[][]>(
     [],
   );
-  // const []
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [prevLanguage, setPrevLanguage] = useState<Language>();
@@ -81,7 +78,8 @@ export default function AddressDataContextProvider({
 
   const refreshAddressData = (getAddressesResponse: GetAddressesResponseSchema) => {
     const { totalPages: fetchedTotalPages, language, addresses } = getAddressesResponse;
-    const newPagedAddresses = Array(totalPages).map(
+    const newPagedAddresses: AddressItemWithTimeSchema[][] = Array.from(
+      { length: totalPages },
       () => [] as AddressItemWithTimeSchema[],
     );
     newPagedAddresses[0] = addresses;
@@ -122,7 +120,6 @@ export default function AddressDataContextProvider({
     selectPage,
     prevLanguage,
     selectedTags,
-    // updateNextPageData,
     updatePagedData,
     updateTagsData,
     updateSelectedTags,
