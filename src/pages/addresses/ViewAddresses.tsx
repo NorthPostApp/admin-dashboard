@@ -9,12 +9,12 @@ import { useGetAddressesQuery } from "@/hooks/queries/useGetAddressesQuery";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import Subheader from "@/pages/Subheader";
+import PaginatedAddresses from "@/components/address/PaginatedAddresses";
+import SearchInput from "@/components/address/SearchInput";
+import PaginationBar from "@/components/address/PaginationBar";
+import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import PaginatedAddresses from "@/components/address/PaginatedAddresses";
-import PaginationBar from "@/components/address/PaginationBar";
-// import SearchInput from "@/components/address/SearchInput";
-import ViewAddressesFilters from "@/components/address/ViewAddressesFilters";
 import "./AddressPage.css";
 
 export default function ViewAddresses() {
@@ -23,6 +23,8 @@ export default function ViewAddresses() {
   const { language } = useAppContext();
   const {
     pagedAddressData,
+    searchKeyword,
+    updateSearchKeyword,
     totalPages,
     currentPage,
     selectedTags,
@@ -41,7 +43,7 @@ export default function ViewAddresses() {
   const { isFetching, refetch } = useGetAddressesQuery(
     language,
     currentPage,
-    "",
+    shouldRefreshData ? "" : searchKeyword,
     shouldRefreshData ? [] : selectedTags,
     shouldRefreshData,
   );
@@ -66,14 +68,19 @@ export default function ViewAddresses() {
   }, [refreshAddressData, refetchData]);
 
   const loadPagedData = useCallback(() => {
-    if (pagedAddressData.length !== 0 && pagedAddressData[currentPage - 1]) return;
+    if (
+      pagedAddressData.length !== 0 &&
+      pagedAddressData[currentPage - 1] && // technically we can get rid of this. but preserve it for safety
+      pagedAddressData[currentPage - 1].length !== 0
+    )
+      return;
     refetchData(updatePagedData);
   }, [updatePagedData, refetchData, currentPage, pagedAddressData]);
-
   // initial loading
   useEffect(() => {
     if (shouldRefreshData) {
       loadInitialAddressData();
+      updateSearchKeyword(""); // should also clean up the keyword
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shouldRefreshData]);
@@ -87,6 +94,14 @@ export default function ViewAddresses() {
     <div className="body">
       <Subheader
         title={t("title")}
+        centralComponent={
+          <SearchInput
+            value={searchKeyword}
+            onChange={updateSearchKeyword}
+            placeholder={t("filters.searchPlaceholder")}
+            onSubmit={loadInitialAddressData}
+          />
+        }
         sideComponent={
           <Button onClick={onToggleFilters} variant="ghost" size="icon-sm">
             <ListFilter width={20} />

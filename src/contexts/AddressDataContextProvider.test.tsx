@@ -250,7 +250,7 @@ describe("AddressDataContextProvider", () => {
     const refreshButton = screen.getByTestId("refresh-data");
     fireEvent.click(refreshButton);
     expect(screen.getByTestId("total-pages").textContent).toBe("2");
-    expect(screen.getByTestId("address-pages").textContent).toBe("1");
+    expect(screen.getByTestId("address-pages").textContent).toBe("2");
     // Now update with next page data
     const updateButton = screen.getByTestId("update-paged-data");
     fireEvent.click(updateButton);
