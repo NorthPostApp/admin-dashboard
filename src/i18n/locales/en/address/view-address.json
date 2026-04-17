@@ -16,7 +16,7 @@
     "description": "This action cannot be undone"
   },
   "filters": {
-    "searchPlaceholder": "Search name or brief intro",
+    "searchPlaceholder": "Search by name or brief intro",
     "filterByTags": "Filter by tags",
     "tagsUpdatedAt": "Tags updated at",
     "categories": {
