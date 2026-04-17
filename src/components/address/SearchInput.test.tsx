@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import SearchInput from "./SearchInput";
 
 describe("SearchInput", () => {
@@ -13,42 +13,42 @@ describe("SearchInput", () => {
 
   it("renders with placeholder text", () => {
     const mockOnChange = vi.fn();
-    render(<SearchInput onChange={mockOnChange} placeholder="Search addresses..." />);
+    render(
+      <SearchInput onChange={mockOnChange} placeholder="Search addresses..." value="" />,
+    );
     expect(screen.getByPlaceholderText("Search addresses...")).toBeTruthy();
   });
 
   it("renders search icon", () => {
     const mockOnChange = vi.fn();
-    render(<SearchInput onChange={mockOnChange} placeholder="Search" />);
+    render(<SearchInput onChange={mockOnChange} placeholder="Search" value="abc" />);
     const searchIcon = document.querySelector("svg");
     expect(searchIcon).toBeTruthy();
   });
 
-  it("debounces onChange callback with default delay (400ms)", async () => {
+  it("trigger change event", () => {
     const mockOnChange = vi.fn();
-    render(<SearchInput onChange={mockOnChange} placeholder="Search" />);
-    const input = screen.getByPlaceholderText("Search");
-    fireEvent.change(input, { target: { value: "test" } });
-    expect(mockOnChange).not.toHaveBeenCalled();
-    vi.advanceTimersByTime(399);
-    expect(mockOnChange).not.toHaveBeenCalled();
-    vi.advanceTimersByTime(1);
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
-    expect(mockOnChange).toHaveBeenCalledWith("test");
+    render(<SearchInput onChange={mockOnChange} placeholder="Search" value={""} />);
+    const input = screen.getByRole("textbox");
+    expect(input).toBeTruthy();
+    fireEvent.change(input, { target: { value: "abc" } });
+    expect(mockOnChange).toHaveBeenCalledWith("abc");
   });
 
-  it("resets debounce timer on subsequent input changes", () => {
+  it("click submit search icon", () => {
     const mockOnChange = vi.fn();
-    render(<SearchInput onChange={mockOnChange} placeholder="Search" />);
-    const input = screen.getByPlaceholderText("Search");
-    fireEvent.change(input, { target: { value: "a" } });
-    vi.advanceTimersByTime(200);
-    fireEvent.change(input, { target: { value: "ab" } });
-    vi.advanceTimersByTime(200);
-    fireEvent.change(input, { target: { value: "abc" } });
-    expect(mockOnChange).not.toHaveBeenCalled();
-    vi.advanceTimersByTime(400);
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
-    expect(mockOnChange).toHaveBeenCalledWith("abc");
+    const mockOnSubmit = vi.fn();
+    render(
+      <SearchInput
+        onChange={mockOnChange}
+        onSubmit={mockOnSubmit}
+        placeholder="Search"
+        value="abc"
+      />,
+    );
+    const searchButton = screen.getByRole("button");
+    expect(searchButton).toBeTruthy();
+    fireEvent.click(searchButton);
+    expect(mockOnSubmit).toHaveBeenCalled();
   });
 });
