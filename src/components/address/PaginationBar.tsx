@@ -4,14 +4,13 @@ import {
   PaginationItem,
   PaginationPrevious,
   PaginationLink,
-  PaginationEllipsis,
+  // PaginationEllipsis,
   PaginationNext,
 } from "@/components/ui/pagination";
 
 type PaginationBarProps = {
   totalPages: number;
   currPage: number;
-  hasMore: boolean;
   loading: boolean;
   selectPageAction: (page: number) => void;
 };
@@ -19,12 +18,11 @@ type PaginationBarProps = {
 export default function PaginationBar({
   totalPages,
   currPage,
-  hasMore,
   loading,
   selectPageAction,
 }: PaginationBarProps) {
   const prevDisabled = currPage <= 1;
-  const nextDisabled = currPage >= totalPages ? !hasMore : false;
+  const nextDisabled = currPage >= totalPages;
   return (
     <Pagination className="py-3">
       <PaginationContent>
@@ -43,11 +41,11 @@ export default function PaginationBar({
             <PaginationLink isActive={page === currPage}>{page}</PaginationLink>
           </PaginationItem>
         ))}
-        {hasMore && (
+        {/* {hasMore && (
           <PaginationItem>
             <PaginationEllipsis data-testid="pagination-ellipsis" />
           </PaginationItem>
-        )}
+        )} */}
         <PaginationItem>
           <PaginationNext
             data-testid="pagination-next"

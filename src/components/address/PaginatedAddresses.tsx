@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { DEFAULT_PAGE_DISPLAY_SIZE } from "@/consts/app-config";
 import type { AddressItemWithTimeSchema } from "@/schemas/address";
 import { cn } from "@/lib/utils";
 import { useElementInnerSize } from "@/hooks/useElementInnerSize";
@@ -19,20 +18,9 @@ const getColumnNumber = (innerWidth: number): string => {
   return "grid-cols-4";
 };
 
-export default function PaginatedAddresses({
-  currentPage,
-  addresses,
-}: PaginatedAddressesProps) {
+export default function PaginatedAddresses({ addresses }: PaginatedAddressesProps) {
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const innerSizes = useElementInnerSize(layoutRef);
-
-  // currentPage - 1 because the page settings are 1-i
-  const currDataRange = [
-    (currentPage - 1) * DEFAULT_PAGE_DISPLAY_SIZE,
-    currentPage * DEFAULT_PAGE_DISPLAY_SIZE,
-  ] as const;
-  const currPageData = addresses.slice(...currDataRange);
-
   return (
     <div
       className={cn(
@@ -43,7 +31,7 @@ export default function PaginatedAddresses({
       )}
       ref={layoutRef}
     >
-      {currPageData.map((address) => (
+      {addresses.map((address) => (
         <div key={address.id}>
           <AddressCard
             addressItem={address}

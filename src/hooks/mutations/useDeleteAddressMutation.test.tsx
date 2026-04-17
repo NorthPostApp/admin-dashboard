@@ -6,11 +6,14 @@ import { useDeleteAddressMutation } from "./useDeleteAddressMutation";
 import { deleteAddress, type DeleteAddressResponse } from "@/api/address";
 import AuthContextProvider from "@/contexts/AuthContextProvider";
 import AppContextProvider from "@/contexts/AppContextProvider";
-import AddressDataContextProvider from "@/contexts/AddressDataContextProvider";
+import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import { MOCK_ID_TOKEN } from "@/lib/test-utils";
 
 vi.mock("sonner");
 vi.mock("@/api/address");
+vi.mock("@/hooks/useAddressDataContext");
+
+const mockDeleteSingleAddressData = vi.fn();
 
 const createWrapper = () => {
   const queryClient = new QueryClient({
@@ -22,9 +25,7 @@ const createWrapper = () => {
   return ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
-        <AppContextProvider>
-          <AddressDataContextProvider>{children}</AddressDataContextProvider>
-        </AppContextProvider>
+        <AppContextProvider>{children}</AppContextProvider>
       </AuthContextProvider>
     </QueryClientProvider>
   );
@@ -33,6 +34,9 @@ const createWrapper = () => {
 describe("useDeleteAddressMutation", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(useAddressDataContext).mockReturnValue({
+      deleteSingleAddressData: mockDeleteSingleAddressData,
+    } as unknown as ReturnType<typeof useAddressDataContext>);
   });
 
   it("should successfully delete an address", async () => {
@@ -48,10 +52,11 @@ describe("useDeleteAddressMutation", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(deleteAddress).toHaveBeenCalledWith(
       mockAddressId,
-      "EN", // default language from AppContext
+      "EN",
       MOCK_ID_TOKEN,
       expect.any(AbortSignal),
     );
+    expect(mockDeleteSingleAddressData).toHaveBeenCalledWith(mockAddressId);
     expect(toast.success).toHaveBeenCalledWith(expect.stringContaining(mockAddressId));
   });
 
@@ -66,6 +71,7 @@ describe("useDeleteAddressMutation", () => {
     });
     result.current.mutate(mockAddressId);
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
+    expect(mockDeleteSingleAddressData).toHaveBeenCalledWith(mockAddressId);
     expect(result.current.data).toEqual(mockResponse);
   });
 
@@ -141,6 +147,7 @@ describe("useDeleteAddressMutation", () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
     expect(deleteAddress).toHaveBeenCalledTimes(2);
     expect(result.current.data?.id).toBe(mockAddressId2);
+    expect(mockDeleteSingleAddressData).toHaveBeenCalledWith(mockAddressId2);
     expect(toast.success).toHaveBeenCalledWith(expect.stringContaining(mockAddressId2));
   });
 
