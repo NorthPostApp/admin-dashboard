@@ -13,3 +13,19 @@ export const parseMusicDuration = (seconds: number | undefined) => {
   }
   return "--:--";
 };
+
+export const parseBytes = (bytes: number): string => {
+  const size = bytes / Math.pow(1024, 2);
+  if (size <= 1024) {
+    return `${size.toFixed(2)} MB`;
+  } else {
+    return `${(size / 1024).toFixed(2)} GB`;
+  }
+};
+
+export const getPercentage = (numerator: number, denominator: number) => {
+  if (numerator === 0 || denominator === 0) {
+    return 0;
+  }
+  return numerator / denominator;
+};

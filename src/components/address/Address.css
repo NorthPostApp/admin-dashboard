@@ -127,3 +127,7 @@
 .address-component__checkbox {
   @apply w-fit flex items-center gap-1.5 text-sm px-2 py-1 rounded-md border hover:cursor-pointer;
 }
+
+.address-component__info__row {
+  @apply w-full flex justify-between items-center text-sm;
+}
