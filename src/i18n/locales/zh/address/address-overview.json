@@ -1,3 +1,10 @@
 {
-  "title": "概览"
+  "title": "概览",
+  "typesense": {
+    "title": "Typesense 状态",
+    "cpu": "CPU",
+    "disk": "磁盘",
+    "memory": "内存",
+    "network": "网络"
+  }
 }

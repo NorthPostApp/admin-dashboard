@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -7,7 +7,6 @@
 
 :root {
   line-height: 1.5;
-  font-size: 1.03rem;
   font-weight: 400;
   font-optical-sizing: auto;
   font-synthesis: none;
@@ -128,10 +127,12 @@
     @apply bg-primary-foreground text-foreground flex m-0 h-dvh w-dvw;
   }
   html:lang(zh) {
-    font-family: "LXGW WenKai Mono TC", system-ui, sans-serif;
+    font-family: "LXGW WenKai TC", system-ui, sans-serif;
+    font-size: 1.04rem;
   }
   html:lang(en) {
     font-family: Roboto, system-ui, sans-serif;
+    font-size: 1.03rem;
   }
   #root {
     @apply w-full;

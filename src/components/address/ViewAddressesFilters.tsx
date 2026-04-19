@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { RefreshCcw, Eraser } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useGetAllTagsQuery } from "@/hooks/queries/useGetAllTagsQuery";
 import { useAppContext } from "@/hooks/useAppContext";
@@ -9,7 +10,6 @@ import { useGetAddressesQuery } from "@/hooks/queries/useGetAddressesQuery";
 import { Button } from "@/components/ui/button";
 import CheckboxSection from "@/components/address/CheckboxSection";
 import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
 
 export default function ViewAddressesFilters() {
   const { t } = useTranslation("address:viewAddress");

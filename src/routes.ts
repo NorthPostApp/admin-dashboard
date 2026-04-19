@@ -1,7 +1,10 @@
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router";
+import { queryClient } from "@/lib/queryClient";
+import { typesenseInfoLoader } from "@/hooks/loaders/typesenseInfoLoader";
 import AppLayout from "@/layouts/AppLayout";
 import ProtectedRoute from "@/layouts/ProtectedRoute";
+import { Spinner } from "@/components/ui/spinner";
 
 // lazy imports for chunk size reduction
 // home
@@ -32,11 +35,22 @@ export const router = createBrowserRouter([
           {
             path: "addresses",
             children: [
-              { index: true, Component: AddressOverview },
+              {
+                index: true,
+                Component: AddressOverview,
+                loader: typesenseInfoLoader(queryClient),
+                HydrateFallback: Spinner,
+              },
+
+              {
+                path: "overview",
+                Component: AddressOverview,
+                loader: typesenseInfoLoader(queryClient),
+                HydrateFallback: Spinner,
+              },
               { path: "view", Component: ViewAddresses },
               { path: "requests", Component: AddressRequests },
               { path: "create", Component: CreateAddresses },
-              { path: "overview", Component: AddressOverview },
             ],
           },
           {
