@@ -1,0 +1,93 @@
+import type { TypesenseInfoSchema } from "@/schemas/typesense";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn, getPercentage, parseBytes } from "@/lib/utils";
+import ProgressBar from "@/components/address/overview/ProgressBar";
+import { ArrowDown, ArrowUp } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import "../Address.css";
+import { Button } from "@/components/ui/button";
+import { useSyncTypesenseMutation } from "@/hooks/mutations/useSyncTypesenseMutation";
+
+type TypesenseInfoProps = {
+  systemInfo: TypesenseInfoSchema;
+};
+
+export default function TypesenseInfoCard({ systemInfo }: TypesenseInfoProps) {
+  const { t } = useTranslation("address:overview");
+  const { mutate, isPending } = useSyncTypesenseMutation();
+  const {
+    health,
+    systemCpuActivePercentage,
+    systemDiskTotalBytes,
+    systemDiskUsedBytes,
+    systemMemoryTotalBytes,
+    systemMemoryUsedBytes,
+    systemNetworkSentBytes,
+    systemNetworkReceivedBytes,
+  } = systemInfo;
+  return (
+    <Card className="w-md h-fit gap-3">
+      <CardHeader>
+        <CardTitle>
+          <div className="w-full flex items-center justify-between">
+            <p>{t("typesense.title")}</p>
+            <span
+              className={cn(
+                "w-2.5 h-2.5 rounded-full animate-pulse",
+                health ? "bg-chart-2" : "bg-chart-1",
+              )}
+            />
+          </div>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="address-component__card__content">
+          <div className="address-component__info__row">
+            <p>{t("typesense.cpu")}</p>
+            <ProgressBar
+              value={systemCpuActivePercentage}
+              bodyLabel={`${systemCpuActivePercentage}%`}
+            />
+          </div>
+          <div className="address-component__info__row">
+            <p>{t("typesense.disk")}:</p>
+            <ProgressBar
+              value={getPercentage(systemDiskUsedBytes, systemDiskTotalBytes) * 100}
+              bodyLabel={`${parseBytes(systemDiskUsedBytes)}`}
+              label={`${parseBytes(systemDiskTotalBytes)}`}
+            />
+          </div>
+          <div className="address-component__info__row">
+            <p>{t("typesense.memory")}:</p>
+            <ProgressBar
+              value={getPercentage(systemMemoryUsedBytes, systemMemoryTotalBytes) * 100}
+              bodyLabel={`${parseBytes(systemMemoryUsedBytes)}`}
+              label={`${parseBytes(systemMemoryTotalBytes)}`}
+            />
+          </div>
+          <div className="address-component__info__row">
+            <p>{t("typesense.network")}:</p>
+            <div className="flex gap-4 items-center text-xs">
+              <div className="flex items-center gap-1">
+                <ArrowUp size={16} />
+                <p>{parseBytes(systemNetworkSentBytes)}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <ArrowDown size={16} />
+                <p>{parseBytes(systemNetworkReceivedBytes)}</p>
+              </div>
+            </div>
+          </div>
+          <Button
+            className="h-8 mt-2"
+            variant="outline"
+            disabled={isPending}
+            onClick={() => mutate()}
+          >
+            {isPending ? t("typesense.syncing") : t("typesense.sync")}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

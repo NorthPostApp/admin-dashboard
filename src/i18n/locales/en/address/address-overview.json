@@ -1,3 +1,15 @@
 {
-  "title": "Overview"
+  "title": "Overview",
+  "typesense": {
+    "title": "Typesense Status",
+    "cpu": "CPU",
+    "disk":"Disk",
+    "memory": "Memory",
+    "network":"Network",
+    "sync": "Sync Addresses",
+    "syncing": "Syncing..."
+  },
+  "syncResult": {
+    "success": "Sync complete. Total: {{total}}, Success: {{success}}, Failed: {{failed}}"
+  }
 }
