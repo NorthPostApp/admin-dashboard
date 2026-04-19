@@ -1,7 +1,7 @@
 import type { TypesenseInfoSchema } from "@/schemas/typesense";
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn, getPercentage, parseBytes } from "@/lib/utils";
-import { Progress } from "@/components/ui/progress";
+import ProgressBar from "@/components/address/overview/ProgressBar";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../Address.css";
@@ -38,7 +38,7 @@ export default function TypesenseInfoCard({ systemInfo }: TypesenseInfoProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col text-sm gap-2">
+        <div className="address-component__card__content">
           <div className="address-component__info__row">
             <p>{t("typesense.cpu")}</p>
             <ProgressBar
@@ -78,29 +78,5 @@ export default function TypesenseInfoCard({ systemInfo }: TypesenseInfoProps) {
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-export function ProgressBar({
-  value,
-  bodyLabel,
-  label,
-}: {
-  value: number;
-  bodyLabel?: string;
-  label?: string;
-}) {
-  return (
-    <div className="flex gap-1 max-w-70 w-full text-xs">
-      <div className="w-full relative">
-        <Progress value={value} className="h-4 bg-primary/30" />
-        {bodyLabel && (
-          <p className="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] text-background font-bold">
-            {bodyLabel}
-          </p>
-        )}
-      </div>
-      {label && <p className="w-20 text-right">{label}</p>}
-    </div>
   );
 }

@@ -38,16 +38,19 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 Component: AddressOverview,
+                loader: typesenseInfoLoader(queryClient),
+                HydrateFallback: Spinner,
               },
-              { path: "view", Component: ViewAddresses },
-              { path: "requests", Component: AddressRequests },
-              { path: "create", Component: CreateAddresses },
+
               {
                 path: "overview",
                 Component: AddressOverview,
                 loader: typesenseInfoLoader(queryClient),
                 HydrateFallback: Spinner,
               },
+              { path: "view", Component: ViewAddresses },
+              { path: "requests", Component: AddressRequests },
+              { path: "create", Component: CreateAddresses },
             ],
           },
           {

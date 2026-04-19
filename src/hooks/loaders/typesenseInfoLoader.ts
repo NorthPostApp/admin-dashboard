@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 const typesenseInfoQueryOptions = (idToken: string) => {
   return queryOptions({
-    queryKey: ["systemInfo"],
+    queryKey: ["typesense", "info"],
     queryFn: ({ signal }) => getTypesenseInfo(idToken, signal),
     staleTime: 10000, // avoid aggressive refreshing
   });
