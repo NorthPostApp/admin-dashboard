@@ -19,7 +19,7 @@ export default function ProgressBar({
           </p>
         )}
       </div>
-      {label && <p className="w-20 text-right">{label}</p>}
+      {label && <p className="w-26 text-right">{label}</p>}
     </div>
   );
 }
