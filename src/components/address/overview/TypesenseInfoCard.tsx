@@ -5,6 +5,8 @@ import ProgressBar from "@/components/address/overview/ProgressBar";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../Address.css";
+import { Button } from "@/components/ui/button";
+import { useSyncTypesenseMutation } from "@/hooks/mutations/useSyncTypesenseMutation";
 
 type TypesenseInfoProps = {
   systemInfo: TypesenseInfoSchema;
@@ -12,6 +14,7 @@ type TypesenseInfoProps = {
 
 export default function TypesenseInfoCard({ systemInfo }: TypesenseInfoProps) {
   const { t } = useTranslation("address:overview");
+  const { mutate, isPending } = useSyncTypesenseMutation();
   const {
     health,
     systemCpuActivePercentage,
@@ -75,6 +78,14 @@ export default function TypesenseInfoCard({ systemInfo }: TypesenseInfoProps) {
               </div>
             </div>
           </div>
+          <Button
+            className="h-8 mt-2"
+            variant="outline"
+            disabled={isPending}
+            onClick={() => mutate()}
+          >
+            {isPending ? t("typesense.syncing") : t("typesense.sync")}
+          </Button>
         </div>
       </CardContent>
     </Card>

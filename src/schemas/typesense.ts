@@ -11,6 +11,18 @@ const TypesenseInfo = z.object({
   systemNetworkReceivedBytes: z.number(),
 });
 
-type TypesenseInfoSchema = z.infer<typeof TypesenseInfo>;
+const TypesenseSyncResult = z.object({
+  total: z.number(),
+  success: z.number(),
+  failed: z.number(),
+});
 
-export { TypesenseInfo, type TypesenseInfoSchema };
+type TypesenseInfoSchema = z.infer<typeof TypesenseInfo>;
+type TypesenseSyncResultSchema = z.infer<typeof TypesenseSyncResult>;
+
+export {
+  TypesenseInfo,
+  TypesenseSyncResult,
+  type TypesenseInfoSchema,
+  type TypesenseSyncResultSchema,
+};

@@ -5,6 +5,11 @@
     "cpu": "CPU",
     "disk":"Disk",
     "memory": "Memory",
-    "network":"Network"
+    "network":"Network",
+    "sync": "Sync Addresses",
+    "syncing": "Syncing..."
+  },
+  "syncResult": {
+    "success": "Sync complete. Total: {{total}}, Success: {{success}}, Failed: {{failed}}"
   }
 }
