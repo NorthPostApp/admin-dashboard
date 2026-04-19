@@ -1,8 +1,16 @@
-import { describe, it, expect } from "vitest";
-import { screen } from "@testing-library/react";
+import { vi, describe, it, expect, beforeEach } from "vitest";
+import { fireEvent, screen } from "@testing-library/react";
 import TypesenseInfoCard from "./TypesenseInfoCard";
 import { renderWithProviders } from "@/lib/test-wrappers";
 import type { TypesenseInfoSchema } from "@/schemas/typesense";
+import { useSyncTypesenseMutation } from "@/hooks/mutations/useSyncTypesenseMutation";
+
+vi.mock("@/hooks/mutations/useSyncTypesenseMutation", () => ({
+  useSyncTypesenseMutation: vi.fn(),
+}));
+
+const mockMutate = vi.fn();
+const mockUseTypesenseMutation = vi.mocked(useSyncTypesenseMutation);
 
 const baseSystemInfo: TypesenseInfoSchema = {
   health: true,
@@ -16,6 +24,14 @@ const baseSystemInfo: TypesenseInfoSchema = {
 };
 
 describe("TypesenseInfoCard", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseTypesenseMutation.mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+    } as unknown as ReturnType<typeof useSyncTypesenseMutation>);
+  });
+
   it("renders the title", () => {
     renderWithProviders(<TypesenseInfoCard systemInfo={baseSystemInfo} />);
     expect(screen.getByText("Typesense Status")).toBeTruthy();
@@ -51,5 +67,29 @@ describe("TypesenseInfoCard", () => {
     );
     const dot = document.querySelector(".bg-chart-1");
     expect(dot).not.toBeNull();
+  });
+
+  it("show syncing state", () => {
+    mockUseTypesenseMutation.mockReturnValue({
+      mutate: mockMutate,
+      isPending: true,
+    } as unknown as ReturnType<typeof useSyncTypesenseMutation>);
+    renderWithProviders(
+      <TypesenseInfoCard systemInfo={{ ...baseSystemInfo, health: true }} />,
+    );
+    expect(screen.getByText(/syncing/i)).toBeTruthy();
+  });
+
+  it("trigger sync mutation", () => {
+    mockUseTypesenseMutation.mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+    } as unknown as ReturnType<typeof useSyncTypesenseMutation>);
+    renderWithProviders(
+      <TypesenseInfoCard systemInfo={{ ...baseSystemInfo, health: true }} />,
+    );
+    const syncButton = screen.getByText(/sync/i);
+    fireEvent.click(syncButton);
+    expect(mockMutate).toHaveBeenCalled();
   });
 });
