@@ -83,7 +83,7 @@ describe("UserPromptInput", () => {
     const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
     await waitFor(() => {
-      const option = screen.getByText("gpt-5-nano");
+      const option = screen.getByText("gpt-5.4-mini");
       fireEvent.click(option);
     });
     REASONING_EFFORTS.forEach(async (effort) => {
@@ -217,7 +217,7 @@ describe("UserPromptInput", () => {
     const modelButton = screen.getByText(DEFAULT_MODEL);
     fireEvent.click(modelButton);
     await waitFor(() => {
-      const option = screen.getByText("gpt-5-nano");
+      const option = screen.getByText("gpt-5.4-mini");
       fireEvent.click(option);
     });
     fireEvent.keyDown(textarea, {
@@ -230,7 +230,7 @@ describe("UserPromptInput", () => {
           language: "EN",
           systemPrompt: "system prompt",
           prompt: "Generate addresses",
-          model: "gpt-5-nano",
+          model: "gpt-5.4-mini",
           reasoningEffort: DEFAULT_EFFORT,
         },
         MOCK_ID_TOKEN,
