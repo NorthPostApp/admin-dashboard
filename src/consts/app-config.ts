@@ -5,6 +5,7 @@ export const SUPPORTED_LANGUAGES = ["EN", "ZH"] as const;
 export const THEMES = ["dark", "light", "system"] as const;
 export const LOCALSTORAGE_KEY = "northpost";
 export const LLM_MODELS = [
+  "gemini-3.5-flash",
   "gemini-3-flash-preview",
   "gpt-5-mini",
   "gpt-5.4-mini",
@@ -73,5 +74,7 @@ export function clearLocalUserData() {
 }
 
 function getLocalData() {
-  return JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}") as LocalStorageType;
+  return JSON.parse(
+    localStorage.getItem(LOCALSTORAGE_KEY) || "{}",
+  ) as LocalStorageType;
 }
