@@ -11,8 +11,8 @@ import {
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
 import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
-import InputAndButton from "@/components/address/InputAndButton";
-import TagBadge from "@/components/address/TagBadge";
+import InputAndButton from "@/components/address/shared/InputAndButton";
+import TagBadge from "@/components/address/shared/TagBadge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

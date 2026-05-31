@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
-import { Spinner } from "../ui/spinner";
+import clsx from "clsx";
+import { Spinner } from "../../ui/spinner";
 
 type TimerProps = {
   label: string;
   interval: number; // in milliseconds
+};
+
+const styles = {
+  body: clsx(
+    "flex items-center justify-between w-full max-w-70 h-12 text-primary/50 text-sm mx-auto",
+  ),
+  content: clsx("flex justify-center items-center gap-3"),
 };
 
 let timeout: number;
@@ -23,8 +31,8 @@ export default function Timer({ label, interval }: TimerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <div className="flex items-center justify-between w-full max-w-70 h-12 text-primary/50 text-sm mx-auto">
-      <div className="flex justify-center items-center gap-3">
+    <div className={styles.body}>
+      <div className={styles.content}>
         <Spinner />
         <p>{label + ".".repeat(Math.floor(timer / 500) % 4)}</p>
       </div>

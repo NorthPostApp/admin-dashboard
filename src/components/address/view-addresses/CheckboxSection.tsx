@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { ChevronDownIcon } from "lucide-react";
+import clsx from "clsx";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -7,13 +8,23 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Checkbox } from "@/components/ui/checkbox";
-import "./Address.css";
 
 type CheckboxSectionProps = {
   title: string;
   options: string[];
   selectedOptions: string[];
   toggleOption: (option: string) => void;
+};
+
+const styles = {
+  body: clsx("my-4"),
+  trigger: clsx("w-full flex justify-between text-sm mb-2 group"),
+  triggerIcon: clsx("group-data-[state=open]:rotate-180 transition-transform"),
+  content: clsx("flex flex-wrap gap-x-3 gap-y-2 px-2.5"),
+  checkbox: clsx(
+    "w-fit flex items-center gap-1.5 text-sm px-2 py-1 rounded-md border hover:cursor-pointer group",
+  ),
+  checkboxInput: clsx("group-hover:cursor-pointer"),
 };
 
 export default function CheckboxSection({
@@ -23,14 +34,14 @@ export default function CheckboxSection({
   toggleOption,
 }: CheckboxSectionProps) {
   return (
-    <Collapsible className="my-4" defaultOpen={true}>
+    <Collapsible className={styles.body} defaultOpen={true}>
       <CollapsibleTrigger asChild>
-        <Button variant="ghost" className="address-component__collapsible__trigger group">
+        <Button variant="ghost" className={styles.trigger}>
           {title}
-          <ChevronDownIcon className="group-data-[state=open]:rotate-180 transition-transform" />
+          <ChevronDownIcon className={styles.triggerIcon} />
         </Button>
       </CollapsibleTrigger>
-      <CollapsibleContent className="address-component__collapsible__content">
+      <CollapsibleContent className={styles.content}>
         {options.map((tag) => (
           <MemoCheckbox
             key={`${title}-${tag}`}
@@ -57,13 +68,13 @@ const MemoCheckbox = memo(
   ({ tag, checked, toggleTag }: MemoCheckboxProps) => {
     return (
       <div
-        className="address-component__checkbox group"
+        className={styles.checkbox}
         onClick={(e) => {
           e.stopPropagation();
           toggleTag(tag);
         }}
       >
-        <Checkbox checked={checked} className="group-hover:cursor-pointer" />
+        <Checkbox checked={checked} className={styles.checkboxInput} />
         <p>{tag}</p>
       </div>
     );

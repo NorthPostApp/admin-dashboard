@@ -23,7 +23,7 @@ import {
 import type { GenerateAddressesRequestSchema } from "@/schemas/address";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useGenerateAddressesMutation } from "@/hooks/mutations/useGenerateAddressesMutation";
-import { PopoverSelector } from "@/components/address/PopoverSelector";
+import { PopoverSelector } from "@/components/address/shared/PopoverSelector";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldLabel } from "@/components/ui/field";

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import Timer from "@/components/address/Timer";
+import Timer from "@/components/address/shared/Timer";
 import AddressCard from "@/components/address/view-addresses/AddressCard";
 import GeneratedAddressActions from "@/components/address/GeneratedAddressActions";
 import {

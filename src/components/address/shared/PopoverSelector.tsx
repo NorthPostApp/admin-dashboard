@@ -14,6 +14,14 @@ type PopoverSelectorProps<T> = {
   popOverClassName?: string;
 } & PropsWithChildren;
 
+const styles = {
+  body: "p-2 flex flex-col items-baseline",
+  header: "px-2 border-b w-full pb-2",
+  headerTitle: "text-sm font-bold",
+  headerDescription: "text-xs opacity-60 pt-1",
+  button: "w-full flex justify-between gap-4",
+};
+
 export function PopoverSelector<T>({
   options,
   value,
@@ -26,12 +34,10 @@ export function PopoverSelector<T>({
   return (
     <Popover>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-      <PopoverContent
-        className={cn("address-component__popover__body", popOverClassName)}
-      >
-        <div className="address-component__popover__header">
-          <p className="address-component__popover__header__title">{title}</p>
-          <p className="address-component__popover__header__description">{description}</p>
+      <PopoverContent className={cn(styles.body, popOverClassName)}>
+        <div className={styles.header}>
+          <p className={styles.headerTitle}>{title}</p>
+          <p className={styles.headerDescription}>{description}</p>
         </div>
         {options.map((item) => {
           return (
@@ -39,8 +45,8 @@ export function PopoverSelector<T>({
               <Button
                 variant={item === value ? "secondary" : "ghost"}
                 className={cn(
-                  "address-component__popover__body__button",
-                  item === value ? "opacity-100" : "opacity-50"
+                  styles.button,
+                  item === value ? "opacity-100" : "opacity-50",
                 )}
                 onClick={() => onSelect(item)}
               >

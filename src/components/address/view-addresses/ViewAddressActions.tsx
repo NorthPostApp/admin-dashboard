@@ -13,7 +13,10 @@ import { useDeleteAddressMutation } from "@/hooks/mutations/useDeleteAddressMuta
 import { useUpdateAddressMutation } from "@/hooks/mutations/useUpdateAddressMutation";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { PopoverMenu, type PopoverControls } from "@/components/address/PopoverMenu";
+import {
+  PopoverMenu,
+  type PopoverControls,
+} from "@/components/address/shared/PopoverMenu";
 import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
 import DeleteAddressDialog from "@/components/address/view-addresses/DeleteAddressDialog";
 
