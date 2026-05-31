@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
-import { Spinner } from "../../ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 type TimerProps = {
   label: string;
@@ -14,19 +14,18 @@ const styles = {
   content: clsx("flex justify-center items-center gap-3"),
 };
 
-let timeout: number;
-
 export default function Timer({ label, interval }: TimerProps) {
   const [timer, setTimer] = useState<number>(0);
+  const timerRef = useRef<number>(null);
   useEffect(() => {
-    if (timeout) {
-      clearInterval(timeout);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
     }
-    timeout = setInterval(() => {
+    timerRef.current = setInterval(() => {
       setTimer((prev) => prev + interval);
     }, interval);
     return () => {
-      clearInterval(timeout);
+      if (timerRef.current) clearInterval(timerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
