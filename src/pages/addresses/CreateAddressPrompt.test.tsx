@@ -4,15 +4,15 @@ import { renderWithProviders } from "@/lib/test-wrappers";
 import { screen } from "@testing-library/react";
 
 // Mock the child components
-vi.mock("@/components/address/SystemPromptInput", () => ({
+vi.mock("@/components/address/create-addresses/SystemPromptInput", () => ({
   default: () => <div data-testid="system-prompt-input">SystemPromptInput Mock</div>,
 }));
 
-vi.mock("@/components/address/UserPromptInput", () => ({
+vi.mock("@/components/address/create-addresses/UserPromptInput", () => ({
   default: () => <div data-testid="user-prompt-input">UserPromptInput Mock</div>,
 }));
 
-vi.mock("@/components/address/GeneratedAddresses", () => ({
+vi.mock("@/components/address/create-addresses/GeneratedAddresses", () => ({
   default: () => <div data-testid="generated-addresses">GeneratedAddresses Mock</div>,
 }));
 

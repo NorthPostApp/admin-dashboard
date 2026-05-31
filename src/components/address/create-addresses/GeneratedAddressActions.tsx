@@ -16,10 +16,16 @@ import {
   PopoverMenu,
   type PopoverControls,
 } from "@/components/address/shared/PopoverMenu";
-import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/create-addresses/AddressFromJsonDialog";
+import clsx from "clsx";
 
 type GeneratedAddressActionsProps = {
   addressItem: GeneratedAddressSchema;
+};
+
+const styles = {
+  menuButton: clsx("w-full flex justify-between gap-4 text-xs"),
+  trigger: clsx("text-primary/70 px-2 text-left"),
 };
 
 export default function GeneratedAddressActions({
@@ -41,7 +47,7 @@ export default function GeneratedAddressActions({
             const addressBody = { language, ...addressItem } as NewAddressRequestSchema;
             mutate(addressBody);
           }}
-          className="address-component__popover__body__button__sm"
+          className={styles.menuButton}
         >
           {t("prompt.controls.save")}
         </Button>
@@ -53,7 +59,7 @@ export default function GeneratedAddressActions({
         <Button
           variant="ghost"
           size="sm"
-          className="address-component__popover__body__button__sm"
+          className={styles.menuButton}
           onClick={() => {
             setEditDialogOpen(true);
           }}
@@ -68,7 +74,7 @@ export default function GeneratedAddressActions({
         <Button
           variant="ghost"
           size="sm"
-          className="address-component__popover__body__button__sm"
+          className={styles.menuButton}
           onClick={() => {
             const searchQuery = `${addressItem.name} ${addressItem.address.country}`;
             const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
@@ -93,7 +99,7 @@ export default function GeneratedAddressActions({
         <Button
           size="icon-sm"
           variant="ghost"
-          className="address-component__prompt__trigger"
+          className={styles.trigger}
           type="button"
           disabled={isPending}
         >

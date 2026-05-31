@@ -6,9 +6,9 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field";
-import SystemPromptInput from "@/components/address/SystemPromptInput";
-import UserPromptInput from "@/components/address/UserPromptInput";
-import GeneratedAddresses from "@/components/address/GeneratedAddresses";
+import SystemPromptInput from "@/components/address/create-addresses/SystemPromptInput";
+import UserPromptInput from "@/components/address/create-addresses/UserPromptInput";
+import GeneratedAddresses from "@/components/address/create-addresses/GeneratedAddresses";
 
 export default function CreateAddressPrompt() {
   const { t } = useTranslation("address:newAddress");

@@ -27,7 +27,20 @@ import { PopoverSelector } from "@/components/address/shared/PopoverSelector";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { FieldLabel } from "@/components/ui/field";
-import "./Address.css";
+import clsx from "clsx";
+
+const styles = {
+  prompt: clsx(
+    "border rounded-lg p-2 focus-within:shadow-md transition-shadow duration-200",
+  ),
+  textarea: clsx(
+    "shadow-none max-h-60 h-30 border-none resize-none focus-visible:ring-0 dark:bg-transparent",
+  ),
+  actions: clsx("flex justify-between items-center"),
+  actionSub: clsx("flex gap-1.5"),
+  trigger: clsx("text-primary/70 px-2 text-left"),
+  modelTrigger: clsx("text-primary/70 px-2 text-left font-normal"),
+};
 
 const getEffortIcon = (effort: ReasonEffort | "none") => {
   switch (effort) {
@@ -145,17 +158,17 @@ export default function UserPromptInput() {
   return (
     <>
       <FieldLabel htmlFor="prompt">{t("prompt.userPrompt")}</FieldLabel>
-      <div className="address-component__prompt">
+      <div className={styles.prompt}>
         <Textarea
           id="prompt"
           onBlur={onBlur}
           ref={textareaRef}
           disabled={generating}
-          className="address-component__prompt__textarea"
+          className={styles.textarea}
           onKeyDown={keyboardControl}
         />
-        <div className="address-component__prompt__actions">
-          <div className="address-component__prompt__action__sub">
+        <div className={styles.actions}>
+          <div className={styles.actionSub}>
             <PopoverSelector
               options={LLM_MODELS}
               value={llmModel}
@@ -167,7 +180,7 @@ export default function UserPromptInput() {
               <Button
                 size="sm"
                 variant="ghost"
-                className="address-component__prompt__trigger font-normal"
+                className={styles.modelTrigger}
                 disabled={generating}
               >
                 {llmModel}
@@ -186,7 +199,7 @@ export default function UserPromptInput() {
                   size="icon-sm"
                   variant="ghost"
                   data-testid="address-userprompt-effort"
-                  className="address-component__prompt__trigger"
+                  className={styles.trigger}
                   disabled={!effortEnabled || generating}
                 >
                   {effortEnabled ? getEffortIcon(reasonEffort) : getEffortIcon("none")}
@@ -206,7 +219,7 @@ export default function UserPromptInput() {
                   size="icon-sm"
                   variant="ghost"
                   data-testid="address-userprompt-level"
-                  className="address-component__prompt__trigger"
+                  className={styles.trigger}
                   disabled={!thinkingLevelEnabled || generating}
                 >
                   {thinkingLevelEnabled
@@ -216,11 +229,11 @@ export default function UserPromptInput() {
               </PopoverSelector>
             )}
           </div>
-          <div className="address-component__prompt__action__sub">
+          <div className={styles.actionSub}>
             <Button
               size="icon-sm"
               variant="ghost"
-              className="address-component__prompt__trigger"
+              className={styles.trigger}
               data-testid="address-userprompt-clear"
               type="button"
               onClick={clearInput}

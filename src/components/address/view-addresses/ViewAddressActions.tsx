@@ -17,7 +17,7 @@ import {
   PopoverMenu,
   type PopoverControls,
 } from "@/components/address/shared/PopoverMenu";
-import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/create-addresses/AddressFromJsonDialog";
 import DeleteAddressDialog from "@/components/address/view-addresses/DeleteAddressDialog";
 
 const styles = {

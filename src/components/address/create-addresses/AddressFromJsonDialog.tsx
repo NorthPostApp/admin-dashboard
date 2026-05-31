@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import clsx from "clsx";
 
 type AddressFromJsonDialogProps = {
   handleJsonSave: (formData: AddressItemSchema) => void;
@@ -22,6 +23,12 @@ type AddressFromJsonDialogProps = {
   setOpen?: (open: boolean) => void;
   initialData?: string;
 } & PropsWithChildren;
+
+const styles = {
+  content: clsx("sm:max-w-[600px]"),
+  textarea: clsx("h-70"),
+  warning: clsx("text-destructive text-sm"),
+};
 
 export default function AddressFromJsonDialog({
   handleJsonSave,
@@ -68,7 +75,7 @@ export default function AddressFromJsonDialog({
     <Dialog open={dialogOpenState} onOpenChange={setDialogOpenState}>
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
       <DialogContent
-        className="address-content__dialog__content"
+        className={styles.content}
         container={document.querySelector("main") ?? undefined}
       >
         <DialogHeader>
@@ -78,14 +85,11 @@ export default function AddressFromJsonDialog({
         <Textarea
           ref={textAreaRef}
           defaultValue={initialData}
-          className="address-content__dialog__textarea"
+          className={styles.textarea}
           id="json-content"
         />
         {errorMessage.length > 0 && (
-          <p
-            className="address-content__dialog__warning"
-            data-testid="address-content__dialog__warning"
-          >
+          <p className={styles.warning} data-testid="address-content__dialog__warning">
             {errorMessage}
           </p>
         )}

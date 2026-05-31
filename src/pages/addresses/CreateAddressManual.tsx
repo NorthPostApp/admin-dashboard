@@ -10,7 +10,7 @@ import {
 } from "@/schemas/address";
 import { useAppContext } from "@/hooks/useAppContext";
 import { useCreateNewAddressMutation } from "@/hooks/mutations/useCreateNewAddressMutation";
-import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/create-addresses/AddressFromJsonDialog";
 import InputAndButton from "@/components/address/shared/InputAndButton";
 import TagBadge from "@/components/address/shared/TagBadge";
 import { Input } from "@/components/ui/input";
