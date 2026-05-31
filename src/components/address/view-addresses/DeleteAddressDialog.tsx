@@ -1,5 +1,6 @@
-import type { AddressItemWithTimeSchema } from "@/schemas/address";
+import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import type { AddressItemWithTimeSchema } from "@/schemas/address";
 import {
   Dialog,
   DialogClose,
@@ -10,6 +11,11 @@ import {
   DialogHeader,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+
+const styles = {
+  content: clsx("sm:max-w-[600px]"),
+  addressInfo: clsx("text-sm text-primary space-y-1"),
+};
 
 type DeleteAddressDialogProps = {
   addressItem: AddressItemWithTimeSchema;
@@ -28,14 +34,14 @@ export default function DeleteAddressDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
-        className="address-content__dialog__content"
+        className={styles.content}
         container={document.querySelector("main") ?? undefined}
       >
         <DialogHeader>
           <DialogTitle>{t("deleteDialog.title")}</DialogTitle>
           <DialogDescription>{t("deleteDialog.description")}</DialogDescription>
         </DialogHeader>
-        <div className="text-sm text-primary space-y-1">
+        <div className={styles.addressInfo}>
           <p>ID: {addressItem.id}</p>
           <p>{addressItem.name}</p>
           <p>{addressItem.briefIntro}</p>

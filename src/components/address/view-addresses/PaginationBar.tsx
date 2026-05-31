@@ -4,7 +4,6 @@ import {
   PaginationItem,
   PaginationPrevious,
   PaginationLink,
-  // PaginationEllipsis,
   PaginationNext,
 } from "@/components/ui/pagination";
 
@@ -41,11 +40,6 @@ export default function PaginationBar({
             <PaginationLink isActive={page === currPage}>{page}</PaginationLink>
           </PaginationItem>
         ))}
-        {/* {hasMore && (
-          <PaginationItem>
-            <PaginationEllipsis data-testid="pagination-ellipsis" />
-          </PaginationItem>
-        )} */}
         <PaginationItem>
           <PaginationNext
             data-testid="pagination-next"

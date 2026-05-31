@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EllipsisVertical } from "lucide-react";
+import clsx from "clsx";
 import {
   addressItemsEqual,
   type AddressItemSchema,
@@ -14,7 +15,15 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { PopoverMenu, type PopoverControls } from "@/components/address/PopoverMenu";
 import AddressFromJsonDialog from "@/components/address/AddressFromJsonDialog";
-import DeleteAddressDialog from "@/components/address/DeleteAddressDialog";
+import DeleteAddressDialog from "@/components/address/view-addresses/DeleteAddressDialog";
+
+const styles = {
+  popoverButton: clsx("w-full flex justify-between gap-4 text-xs"),
+  dangerPopoverButton: clsx(
+    "w-full flex justify-between gap-4 text-xs text-destructive hover:text-background hover:bg-destructive dark:hover:bg-destructive dark:hover:text-primary",
+  ),
+  trigger: clsx("text-primary/70 px-2 text-left"),
+};
 
 type ViewAddressActionsProps = {
   addressItem: AddressItemWithTimeSchema;
@@ -39,7 +48,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           onClick={() => {
             setEditDialogOpen(true);
           }}
-          className="address-component__popover__body__button__sm"
+          className={styles.popoverButton}
         >
           {t("controls.edit")}
         </Button>
@@ -56,7 +65,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
             const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`;
             window.open(googleSearchUrl, "_blank");
           }}
-          className="address-component__popover__body__button__sm"
+          className={styles.popoverButton}
         >
           {t("controls.search")}
         </Button>
@@ -68,7 +77,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
         <Button
           variant="ghost"
           size="sm"
-          className="address-component__popover__body__button__sm__danger"
+          className={styles.dangerPopoverButton}
           onClick={() => {
             setDeleteDialogOpen(true);
           }}
@@ -109,7 +118,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
         <Button
           size="icon-sm"
           variant="ghost"
-          className="address-component__prompt__trigger"
+          className={styles.trigger}
           type="button"
           disabled={pending}
         >

@@ -11,6 +11,18 @@ import { Button } from "@/components/ui/button";
 import CheckboxSection from "@/components/address/CheckboxSection";
 import { Spinner } from "@/components/ui/spinner";
 
+const styles = {
+  filter: cn(
+    "py-6 h-full flex flex-col justify-between max-h-full px-4 text-left w-full",
+  ),
+  header: cn("flex justify-between items-center border-b pb-3 px-3"),
+  section: cn("max-h-full overflow-y-auto flex-1"),
+  spinner: cn("mx-auto my-6 opacity-55"),
+  footerInfo: cn("flex justify-between items-center pb-2 opacity-55"),
+  updatedAt: cn("text-sm"),
+  updateButton: cn("w-full"),
+};
+
 export default function ViewAddressesFilters() {
   const { t } = useTranslation("address:viewAddress");
   const { language } = useAppContext();
@@ -72,8 +84,8 @@ export default function ViewAddressesFilters() {
   };
 
   return (
-    <div className="address-component__filter">
-      <div className="address-component__filter__header">
+    <div className={styles.filter}>
+      <div className={styles.header}>
         <p>{t("filters.filterByTags")}</p>
         <Button
           variant={"ghost"}
@@ -84,10 +96,10 @@ export default function ViewAddressesFilters() {
           <Eraser />
         </Button>
       </div>
-      <div className="address-component__filter__section">
+      <div className={styles.section}>
         {isFetching && (
           <Spinner
-            className="mx-auto my-6 opacity-55"
+            className={styles.spinner}
             data-testid="view-addresses-filters-spinner"
           />
         )}
@@ -104,8 +116,8 @@ export default function ViewAddressesFilters() {
           ))}
       </div>
       <div>
-        <div className="address-component__filter__footer__info">
-          <h2 className="text-sm">
+        <div className={styles.footerInfo}>
+          <h2 className={styles.updatedAt}>
             {t("filters.tagsUpdatedAt")}: {getLastUpdated(tagsData?.refreshedAt)}
           </h2>
           <Button
@@ -122,7 +134,7 @@ export default function ViewAddressesFilters() {
         </div>
         <Button
           variant="outline"
-          className="w-full"
+          className={styles.updateButton}
           onClick={updateAddressData}
           disabled={isFetchingAddressData}
         >

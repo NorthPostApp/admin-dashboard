@@ -1,9 +1,5 @@
 @import "../../index.css";
 
-.address-layout__grid {
-  @apply w-full grid gap-5 overflow-y-auto px-2 sm:px-4 md:px-8 py-1;
-}
-
 .address-layout__sidebar {
   @apply border-l;
 }
@@ -44,10 +40,6 @@
   @apply w-full flex justify-between gap-4 text-xs;
 }
 
-.address-component__popover__body__button__sm__danger {
-  @apply w-full flex justify-between gap-4 text-xs text-destructive hover:text-background hover:bg-destructive dark:hover:bg-destructive dark:hover:text-primary;
-}
-
 .address-component__popover__header {
   @apply px-2 border-b w-full pb-2;
 }
@@ -60,32 +52,8 @@
   @apply text-xs opacity-60 pt-1;
 }
 
-.address-component__card {
-  @apply gap-3 justify-between p-2.5 h-full;
-}
-
-.address-component__card__header {
-  @apply px-1;
-}
-
-.address-component__card__title {
-  @apply w-full flex justify-between gap-2 items-center;
-}
-
-.address-component__card__description {
-  @apply text-xs text-primary/50;
-}
-
 .address-component__card__content {
   @apply flex flex-col gap-3 px-1;
-}
-
-.address-component__card__content__lines {
-  @apply text-sm text-primary/60;
-}
-
-.address-component__card__content__tags {
-  @apply w-full flex flex-wrap gap-1;
 }
 
 .address-component__carousel {
@@ -94,26 +62,6 @@
 
 .address-component__tag {
   @apply flex gap-2 items-center h-5 bg-primary/80;
-}
-
-.address-component__search {
-  @apply rounded-full h-8 w-full;
-}
-
-.address-component__filter {
-  @apply py-6 h-full flex flex-col justify-between max-h-full px-4 text-left w-full;
-}
-
-.address-component__filter__header {
-  @apply flex justify-between items-center border-b pb-3 px-3;
-}
-
-.address-component__filter__section {
-  @apply max-h-full overflow-y-auto flex-1;
-}
-
-.address-component__filter__footer__info {
-  @apply flex justify-between items-center pb-2 opacity-55;
 }
 
 .address-component__collapsible__trigger {

@@ -88,7 +88,7 @@ describe("AddressCard", () => {
     render(<AddressCard addressItem={mockAddressItem} actions={mockActions} />);
     const description = screen.getByText("A fictional character for testing purposes");
     expect(description).toBeTruthy();
-    expect(description.className).toContain("address-component__card__description");
+    expect(description.className).toContain("text-xs");
   });
 
   it("renders CardDescription component with briefIntro text content", () => {

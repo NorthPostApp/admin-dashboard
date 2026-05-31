@@ -3,7 +3,7 @@ import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import Timer from "@/components/address/Timer";
-import AddressCard from "@/components/address/AddressCard";
+import AddressCard from "@/components/address/view-addresses/AddressCard";
 import GeneratedAddressActions from "@/components/address/GeneratedAddressActions";
 import {
   Carousel,
