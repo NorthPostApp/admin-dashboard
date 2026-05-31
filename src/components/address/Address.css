@@ -1,5 +1,0 @@
-@import "../../index.css";
-
-.address-layout__sidebar {
-  @apply border-l;
-}
