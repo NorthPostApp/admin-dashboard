@@ -8,7 +8,7 @@ import { useAppContext } from "@/hooks/useAppContext";
 import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 import { useGetAddressesQuery } from "@/hooks/queries/useGetAddressesQuery";
 import { Button } from "@/components/ui/button";
-import CheckboxSection from "@/components/address/CheckboxSection";
+import CheckboxSection from "@/components/address/view-addresses/CheckboxSection";
 import { Spinner } from "@/components/ui/spinner";
 
 const styles = {

@@ -1,4 +1,5 @@
 import type { PropsWithChildren, ReactNode } from "react";
+import clsx from "clsx";
 import {
   Popover,
   PopoverTrigger,
@@ -16,11 +17,15 @@ type PopoverMenuProps = {
   controls: PopoverControls[];
 } & PropsWithChildren;
 
+const styles = {
+  body: clsx("p-2 flex flex-col items-baseline w-22"),
+};
+
 export function PopoverMenu({ id, controls, ...props }: PopoverMenuProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>{props.children}</PopoverTrigger>
-      <PopoverContent className="address-component__popover__body w-22">
+      <PopoverContent className={styles.body}>
         {controls.map((controlItem) => (
           <PopoverClose key={id + controlItem.name} asChild>
             {controlItem.actionComponent}

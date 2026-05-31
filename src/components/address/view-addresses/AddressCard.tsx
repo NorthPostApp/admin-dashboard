@@ -6,7 +6,7 @@ import {
   type AddressItemSchema,
   addressItemsEqual,
 } from "@/schemas/address";
-import TagBadge from "@/components/address/TagBadge";
+import TagBadge from "@/components/address/shared/TagBadge";
 import {
   Card,
   CardContent,

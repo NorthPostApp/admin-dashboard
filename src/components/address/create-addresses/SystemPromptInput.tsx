@@ -7,7 +7,13 @@ import { useSystemPromptQuery } from "@/hooks/queries/useSystemPromptQuery";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { FieldLabel } from "@/components/ui/field";
-import "./Address.css";
+import clsx from "clsx";
+
+const styles = {
+  editButton: clsx("text-xs h-full px-2 opacity-50 hover:opacity-90 focus:ring-0 mx-1"),
+  label: clsx("w-full flex justify-between"),
+  textarea: clsx("resize-none transition-all duration-150"),
+};
 
 // a wrapper component for the prompt edit button
 function EditButton({ label, callbackFn }: { label: string; callbackFn: () => void }) {
@@ -16,7 +22,7 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
       variant="outline"
       type="button"
       size="sm"
-      className="address-component__edit__button"
+      className={styles.editButton}
       onClick={callbackFn}
     >
       {label}
@@ -88,7 +94,7 @@ export default function SystemPromptInput() {
 
   return (
     <>
-      <FieldLabel htmlFor="system-prompt" className="w-full flex justify-between">
+      <FieldLabel htmlFor="system-prompt" className={styles.label}>
         <span>{t("prompt.systemPrompt")}</span>
         {getEditButtons()}
       </FieldLabel>
@@ -97,7 +103,7 @@ export default function SystemPromptInput() {
         ref={textareaRef}
         disabled={!editing}
         className={cn(
-          "resize-none transition-all duration-150",
+          styles.textarea,
           isFetching || (systemPrompt && systemPrompt.prompt.length === 0)
             ? "h-4"
             : "h-90",

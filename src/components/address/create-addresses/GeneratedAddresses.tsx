@@ -2,9 +2,9 @@ import { useTranslation } from "react-i18next";
 import { useNewAddressContext } from "@/hooks/useNewAddressContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import Timer from "@/components/address/Timer";
+import Timer from "@/components/address/shared/Timer";
 import AddressCard from "@/components/address/view-addresses/AddressCard";
-import GeneratedAddressActions from "@/components/address/GeneratedAddressActions";
+import GeneratedAddressActions from "@/components/address/create-addresses/GeneratedAddressActions";
 import {
   Carousel,
   CarouselContent,
@@ -12,7 +12,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import "./Address.css";
+
+const styles = {
+  carousel: "w-full mx-auto my-2",
+};
 
 export default function GeneratedAddresses() {
   const isMobile = useIsMobile();
@@ -31,7 +34,7 @@ export default function GeneratedAddresses() {
           watchDrag: !isMobile,
         }}
         orientation={isMobile ? "vertical" : "horizontal"}
-        className={cn("address-component__carousel", !isMobile && "max-w-[88%]")}
+        className={cn(styles.carousel, !isMobile && "max-w-[88%]")}
         onKeyDownCapture={(e) => {
           e.stopPropagation(); // avoid carousel left/right key control blocks cursor navigation in the modal textarea component
         }}
