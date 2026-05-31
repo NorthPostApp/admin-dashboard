@@ -47,7 +47,7 @@ i18n
       "address:request",
       "music:list",
     ],
-    debug: import.meta.env.Mode === "development",
+    debug: import.meta.env.DEV && import.meta.env.MODE !== "test",
     interpolation: {
       escapeValue: false,
     },

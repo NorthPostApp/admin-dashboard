@@ -11,7 +11,7 @@ vi.mock("@/hooks/useAppContext", () => ({
   })),
 }));
 
-vi.mock("@/components/address/DeleteAddressDialog", () => ({
+vi.mock("@/components/address/view-addresses/DeleteAddressDialog", () => ({
   default: vi.fn((params) => (
     <div>
       <p>Delete Dialog</p>

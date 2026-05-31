@@ -1,10 +1,15 @@
 import { Search } from "lucide-react";
+import clsx from "clsx";
 import {
   InputGroup,
   InputGroupInput,
   InputGroupAddon,
 } from "@/components/ui/input-group";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+
+const styles = {
+  inputGroup: clsx("rounded-full h-8 w-full"),
+};
 
 type SearchInputProps = {
   onChange: (text: string) => void;
@@ -20,7 +25,7 @@ export default function SearchInput({
   placeholder,
 }: SearchInputProps) {
   return (
-    <InputGroup className="address-component__search">
+    <InputGroup className={styles.inputGroup}>
       <InputGroupInput
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
