@@ -2,6 +2,7 @@ import { Activity, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
+import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import type { GetAddressesResponseSchema } from "@/schemas/address";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -15,7 +16,19 @@ import PaginationBar from "@/components/address/view-addresses/PaginationBar";
 import ViewAddressesFilters from "@/components/address/view-addresses/ViewAddressesFilters";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import "./AddressPage.css";
+
+const styles = {
+  view: clsx("flex-1 flex justify-center overflow-y-auto"),
+  viewRow: clsx("flex w-full"),
+  contentBody: clsx("flex flex-col justify-between w-full max-h-full text-left pt-6"),
+  loading: clsx("h-full flex items-center justify-center gap-2"),
+  filters: (showFilters: boolean, isMobile: boolean) =>
+    cn(
+      "border-l",
+      showFilters ? "visible" : "hidden",
+      isMobile ? "" : "w-[30%] min-w-72",
+    ),
+};
 
 export default function ViewAddresses() {
   const { t } = useTranslation("address:viewAddress");
@@ -108,12 +121,12 @@ export default function ViewAddresses() {
           </Button>
         }
       ></Subheader>
-      <div className="address-view">
-        <div className="address-view__flex__row">
+      <div className={styles.view}>
+        <div className={styles.viewRow}>
           <Activity mode={isMobile && showFilters ? "hidden" : "visible"}>
-            <div className="address-content__body__unbound">
+            <div className={styles.contentBody}>
               {isFetching && (
-                <div className="h-full flex items-center justify-center gap-2">
+                <div className={styles.loading}>
                   <Spinner />
                   <p>{t("loading")}</p>
                 </div>
@@ -134,13 +147,7 @@ export default function ViewAddresses() {
               )}
             </div>
           </Activity>
-          <div
-            className={cn(
-              "address-layout__sidebar",
-              showFilters ? "visible" : "hidden",
-              isMobile ? "" : "w-[30%] min-w-72",
-            )}
-          >
+          <div className={styles.filters(showFilters, isMobile)}>
             <ViewAddressesFilters />
           </div>
         </div>

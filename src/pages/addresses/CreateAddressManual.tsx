@@ -1,5 +1,6 @@
 import type z from "zod";
 import { useCallback, useEffect } from "react";
+import clsx from "clsx";
 import { useForm, revalidateLogic } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -31,6 +32,21 @@ import {
 type FormFields =
   | Exclude<keyof AddressItemSchema, "address">
   | `address.${keyof z.infer<typeof Address>}`;
+
+const styles = {
+  create: clsx("flex-1 flex justify-center overflow-y-auto px-10"),
+  contentBody: clsx("flex flex-col justify-between w-full max-w-240 text-left pt-6"),
+  formGroup: clsx("gap-4"),
+  formField: clsx("gap-2"),
+  formTextarea: clsx("resize-none h-30"),
+  formTags: clsx("w-full flex flex-wrap gap-1"),
+  dialogTrigger: clsx(
+    "mx-2 text-xs h-full opacity-50 underline hover:opacity-90 focus:ring-0",
+  ),
+  formSeparator: clsx("my-0.5"),
+  addressGrid: clsx("grid grid-cols-2 gap-4"),
+  submit: clsx("mx-auto w-full mb-6"),
+};
 
 export default function CreateAddressesManual() {
   const { language } = useAppContext();
@@ -105,7 +121,7 @@ export default function CreateAddressesManual() {
         children={(field) => {
           const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
           return (
-            <Field className="address-content__form__field">
+            <Field className={styles.formField}>
               <FieldLabel htmlFor="name">{label}</FieldLabel>
               {type === "input" && (
                 <Input
@@ -121,7 +137,7 @@ export default function CreateAddressesManual() {
               )}
               {type === "textarea" && (
                 <Textarea
-                  className="address-content__form__textarea"
+                  className={styles.formTextarea}
                   id={field.name}
                   name={field.name}
                   value={field.state.value}
@@ -148,7 +164,7 @@ export default function CreateAddressesManual() {
         children={(field) => {
           const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
           return (
-            <Field className="address-content__form__field">
+            <Field className={styles.formField}>
               <FieldLabel htmlFor="tags">{t("form.basicInfo.tags.label")}</FieldLabel>
               <InputAndButton
                 id="tags"
@@ -158,7 +174,7 @@ export default function CreateAddressesManual() {
                 onButtonClick={handleAddTag}
               />
               {field.state.value.length > 0 && (
-                <div className="address-content__form__tags">
+                <div className={styles.formTags}>
                   {field.state.value.map((tag) => (
                     <TagBadge
                       key={tag}
@@ -182,15 +198,15 @@ export default function CreateAddressesManual() {
   }, [language, form, cleanupFn]);
 
   return (
-    <div className="address-create">
+    <div className={styles.create}>
       <form
-        className="address-content__body"
+        className={styles.contentBody}
         onSubmit={(e) => {
           e.preventDefault();
           form.handleSubmit();
         }}
       >
-        <FieldGroup className="address-content__form__group">
+        <FieldGroup className={styles.formGroup}>
           <FieldSet>
             <FieldLegend>
               <span>{t("form.basicInfo.legend")}</span>
@@ -199,17 +215,13 @@ export default function CreateAddressesManual() {
                 title={t("json.title")}
                 description={t("json.description")}
               >
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="address-content__dialog__trigger"
-                >
+                <Button variant="link" size="sm" className={styles.dialogTrigger}>
                   {t("json.trigger")}
                 </Button>
               </AddressFromJsonDialog>
             </FieldLegend>
             <FieldDescription>{t("form.basicInfo.description")}</FieldDescription>
-            <FieldGroup className="address-content__form__group">
+            <FieldGroup className={styles.formGroup}>
               {getFormTextField({
                 fieldName: "name",
                 label: t("form.basicInfo.name.label"),
@@ -224,7 +236,7 @@ export default function CreateAddressesManual() {
               })}
             </FieldGroup>
           </FieldSet>
-          <FieldSeparator className="address-content__form__separator" />
+          <FieldSeparator className={styles.formSeparator} />
           <FieldSet>
             <FieldLegend>{t("form.address.legend")}</FieldLegend>
             <FieldDescription>{t("form.address.description")}</FieldDescription>
@@ -243,7 +255,7 @@ export default function CreateAddressesManual() {
               label: t("form.address.line2.label"),
               placeholder: t("form.address.line2.placeholder"),
             })}
-            <div className="grid grid-cols-2 gap-4">
+            <div className={styles.addressGrid}>
               {getFormTextField({
                 fieldName: "address.city",
                 label: t("form.address.city.label"),
@@ -266,13 +278,9 @@ export default function CreateAddressesManual() {
               })}
             </div>
           </FieldSet>
-          <FieldSeparator className="address-content__form__separator" />
+          <FieldSeparator className={styles.formSeparator} />
           <Field orientation="horizontal">
-            <Button
-              type="submit"
-              className="address-content__form__submit"
-              disabled={submitPending}
-            >
+            <Button type="submit" className={styles.submit} disabled={submitPending}>
               {submitPending && <Spinner />}
               {submitPending ? t("form.loading") : t("form.submit")}
             </Button>

@@ -1,11 +1,17 @@
 import { useTranslation } from "react-i18next";
 import { useLoaderData, useRevalidator } from "react-router";
 import { RefreshCcw } from "lucide-react";
+import clsx from "clsx";
 import type { TypesenseInfoSchema } from "@/schemas/typesense";
 import Subheader from "@/pages/Subheader";
 import TypesenseInfoCard from "@/components/address/overview/TypesenseInfoCard";
 import { Button } from "@/components/ui/button";
-import "./AddressPage.css";
+
+const styles = {
+  view: clsx("flex-1 flex justify-center overflow-y-auto"),
+  contentBody: clsx("flex flex-col justify-between w-full max-h-full text-left pt-6"),
+  cardGrid: clsx("px-6 flex flex-wrap gap-3"),
+};
 
 export default function Overview() {
   const { t } = useTranslation("address:overview");
@@ -21,9 +27,9 @@ export default function Overview() {
           </Button>
         }
       ></Subheader>
-      <div className="address-view">
-        <div className="address-content__body__unbound">
-          <div className="px-6 flex flex-wrap gap-3">
+      <div className={styles.view}>
+        <div className={styles.contentBody}>
+          <div className={styles.cardGrid}>
             <TypesenseInfoCard systemInfo={typesenseSystemInfo} />
           </div>
         </div>

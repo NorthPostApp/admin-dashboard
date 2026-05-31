@@ -5,7 +5,6 @@ import CreateAddressesManual from "@/pages/addresses/CreateAddressManual";
 import CreateAddressPrompt from "@/pages/addresses/CreateAddressPrompt";
 import Subheader from "@/pages/Subheader";
 import TabsTrigger, { type TabOption } from "@/components/ui/tabs-trigger";
-import "./AddressPage.css";
 
 type AddressCreationTab = "prompt" | "manual";
 
