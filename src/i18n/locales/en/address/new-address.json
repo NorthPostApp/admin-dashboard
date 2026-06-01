@@ -3,7 +3,7 @@
   "tabs": {
     "prompt": "Prompt",
     "manual": "Manual"
-  }, 
+  },
   "prompt": {
     "legend": "Create address from prompt",
     "description": "Generate a new address by providing a prompt. Select the LLM model and reasoning effort to customize the result.",
@@ -108,6 +108,8 @@
     "description": "Paste a JSON object containing address data. The form fields will be automatically populated with the parsed values.",
     "cancel": "Cancel",
     "save": "Save changes",
+    "regenerate": "Regenerate",
+    "regenerating": "Re-generating...",
     "title-edit": "Edit address",
     "description-edit": "Edit the generated address. The address won't be uploaded to the database until you click the save option on the card again."
   }

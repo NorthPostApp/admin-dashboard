@@ -3,6 +3,7 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import AddressFromJsonDialog from "./AddressFromJsonDialog";
 import { renderWithProviders } from "@/lib/test-wrappers";
+import type { AddressItemSchema } from "@/schemas/address";
 
 // Mock the useAppContext hook
 vi.mock("@/hooks/useAppContext", () => ({
@@ -12,6 +13,12 @@ vi.mock("@/hooks/useAppContext", () => ({
 }));
 const mockHandleJsonSave = vi.fn();
 
+// Mock useGenerateAddressesMutation
+const mockUseGenerateAddressesMutation = vi.hoisted(() => vi.fn());
+vi.mock("@/hooks/mutations/useGenerateAddressesMutation", () => ({
+  useGenerateAddressesMutation: mockUseGenerateAddressesMutation,
+}));
+
 const renderTestComponent = () => {
   return renderWithProviders(
     <AddressFromJsonDialog
@@ -20,13 +27,17 @@ const renderTestComponent = () => {
       handleJsonSave={mockHandleJsonSave}
     >
       <button>import from json</button>
-    </AddressFromJsonDialog>
+    </AddressFromJsonDialog>,
   );
 };
 
 describe("AddressFromJsonDialog", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseGenerateAddressesMutation.mockImplementation(() => ({
+      mutate: vi.fn(),
+      isPending: false,
+    }));
   });
 
   it("should render the trigger button", () => {
@@ -128,7 +139,7 @@ describe("AddressFromJsonDialog", () => {
         description="description"
         handleJsonSave={mockHandleJsonSave}
         open={true}
-      />
+      />,
     );
     expect(screen.getByText(/description/i)).toBeTruthy();
   });
@@ -158,18 +169,18 @@ describe("AddressFromJsonDialog", () => {
   });
 
   it("should populate textarea with initialData when provided", () => {
-    const initialData = JSON.stringify(mockData, null, 2);
+    const stringifyData = JSON.stringify(mockData, null, 2);
     renderWithProviders(
       <AddressFromJsonDialog
         title="title"
         description="description"
         handleJsonSave={mockHandleJsonSave}
-        initialData={initialData}
+        initialData={mockData as AddressItemSchema}
         open={true}
-      />
+      />,
     );
     const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-    expect(textarea.value).toBe(initialData);
+    expect(textarea.value).toBe(stringifyData);
   });
 
   it("should close dialog after successful save when using controlled state", async () => {

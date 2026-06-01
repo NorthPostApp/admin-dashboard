@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EllipsisVertical } from "lucide-react";
 import clsx from "clsx";
@@ -17,7 +17,7 @@ import {
   PopoverMenu,
   type PopoverControls,
 } from "@/components/address/shared/PopoverMenu";
-import AddressFromJsonDialog from "@/components/address/create-addresses/AddressFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/shared/AddressFromJsonDialog";
 import DeleteAddressDialog from "@/components/address/view-addresses/DeleteAddressDialog";
 
 const styles = {
@@ -39,6 +39,7 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
   const { mutate, isPending: isUpdateAddressPending } = useUpdateAddressMutation();
   const { mutate: deleteAddressMutate, isPending: isDeleteAddressIsPending } =
     useDeleteAddressMutation();
+
   const { t } = useTranslation("address:viewAddress");
   const { id, createdAt, updatedAt, ...prevAddress } = addressItem;
   const controls: PopoverControls[] = [
@@ -91,11 +92,6 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
     },
   ];
 
-  const stringData = useMemo(() => {
-    const data = JSON.stringify(prevAddress, null, 2);
-    return data;
-  }, [prevAddress]);
-
   const handleSaveNewAddress = (newAddress: AddressItemSchema) => {
     if (!addressItemsEqual(prevAddress, newAddress)) {
       // the updatedAt timestamp will be updated in the backend
@@ -133,8 +129,9 @@ export default function ViewAddressActions({ addressItem }: ViewAddressActionsPr
           title={t("editDialog.title")}
           description={t("editDialog.description")}
           handleJsonSave={handleSaveNewAddress}
-          initialData={stringData}
+          initialData={prevAddress}
           open={editDialogOpen}
+          enableRegenerate={true}
           setOpen={setEditDialogOpen}
         />
       )}

@@ -32,8 +32,8 @@ function EditButton({ label, callbackFn }: { label: string; callbackFn: () => vo
 
 export default function SystemPromptInput() {
   const { language } = useAppContext();
-  const { systemPrompt, updateSystemPrompt } = useNewAddressContext();
-  const { isFetching, refetch } = useSystemPromptQuery(language);
+  const { updateSystemPrompt } = useNewAddressContext();
+  const { data: promptData, isFetching, isError } = useSystemPromptQuery(language);
   const { t } = useTranslation("address:newAddress");
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -50,7 +50,7 @@ export default function SystemPromptInput() {
   const cancelEditing = () => {
     setEditing(false);
     if (textareaRef && textareaRef.current) {
-      textareaRef.current.value = systemPrompt?.prompt || "";
+      textareaRef.current.value = promptData?.data || "";
     }
   };
 
@@ -68,29 +68,19 @@ export default function SystemPromptInput() {
   };
 
   useEffect(() => {
-    // only do auto refetch when system language changed
-    if (!systemPrompt || systemPrompt.language !== language) {
-      updateSystemPrompt(language, t("prompt.state.loadingSystemPrompt"));
-      refetch().then((result) => {
-        let fetchedPrompt = "";
-        if (result.data?.data) {
-          updateSystemPrompt(language, result.data.data);
-          fetchedPrompt = result.data.data;
-        } else if (result.error) {
-          // the tanstack query doesn't "throw" error by default
-          // so we use result.error instead of catch
-          updateSystemPrompt(language, t("failed.fetch"));
-          fetchedPrompt = t("failed.fetch");
-        }
-        if (textareaRef && textareaRef.current) {
-          textareaRef.current.value = fetchedPrompt;
-        }
-      });
+    if (promptData?.data && textareaRef.current) {
+      textareaRef.current.value = promptData.data;
+      updateSystemPrompt(language, promptData.data);
     }
-    if (textareaRef && textareaRef.current) {
-      textareaRef.current.value = systemPrompt?.prompt || "";
-    }
-  }, [language, systemPrompt, refetch, updateSystemPrompt, t]);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [promptData]);
+
+  useEffect(() => {
+    if (!textareaRef.current) return;
+    if (isFetching) textareaRef.current.value = t("prompt.state.loadingSystemPrompt");
+    if (isError) textareaRef.current.value = t("failed.fetch");
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetching, isError]);
 
   return (
     <>
@@ -104,9 +94,7 @@ export default function SystemPromptInput() {
         disabled={!editing}
         className={cn(
           styles.textarea,
-          isFetching || (systemPrompt && systemPrompt.prompt.length === 0)
-            ? "h-4"
-            : "h-90",
+          isFetching || (promptData && promptData.data.length === 0) ? "h-4" : "h-90",
         )}
       />
     </>

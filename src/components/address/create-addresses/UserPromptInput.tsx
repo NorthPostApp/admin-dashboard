@@ -73,9 +73,19 @@ const getThinkingLevelIcon = (level: ThinkingLevel | "none") => {
 };
 
 export default function UserPromptInput() {
-  const { generating, systemPrompt, userPrompt, updateUserPrompt } =
-    useNewAddressContext();
-  const { mutate, cancelRequest } = useGenerateAddressesMutation();
+  const {
+    generating,
+    systemPrompt,
+    userPrompt,
+    updateUserPrompt,
+    setGeneratingState,
+    saveGeneratedAddresses,
+  } = useNewAddressContext();
+
+  const { mutate, cancelRequest } = useGenerateAddressesMutation(
+    setGeneratingState,
+    saveGeneratedAddresses,
+  );
   const { t } = useTranslation("address:newAddress");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // use textarea ref to reduce the rerendering
 

@@ -8,24 +8,26 @@ import type {
 } from "@/schemas/address";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../useAuthContext";
-import { useNewAddressContext } from "../useNewAddressContext";
 
-export function useGenerateAddressesMutation() {
+export function useGenerateAddressesMutation(
+  setGenerating?: (newState: boolean) => void,
+  savedResult?: (addresses: GenerateAddressesResponseSchema) => void,
+) {
   const { t } = useTranslation("address:newAddress");
   const { user } = useAuthContext();
-  const { setGeneratingState, saveGeneratedAddresses } = useNewAddressContext();
+  // const { setGeneratingState, saveGeneratedAddresses } = useNewAddressContext();
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const mutation = useMutation({
     mutationFn: async (requestBody: GenerateAddressesRequestSchema) => {
-      setGeneratingState(true);
+      if (setGenerating) setGenerating(true);
       abortControllerRef.current?.abort(); // clean up if there exists a current controller
       abortControllerRef.current = new AbortController();
       const idToken = (await user?.getIdToken()) || "";
       return generateAddresses(requestBody, idToken, abortControllerRef.current.signal);
     },
     onError: (error) => {
-      setGeneratingState(false);
+      if (setGenerating) setGenerating(false);
       if (error.name === "AbortError" || error.name === "CanceledError") {
         toast.info(`${t("failed.canceled")}`);
         return;
@@ -33,20 +35,20 @@ export function useGenerateAddressesMutation() {
       toast.error(error.message);
     },
     onSuccess: (data: GenerateAddressesResponseSchema) => {
-      setGeneratingState(false);
+      if (setGenerating) setGenerating(false);
       const names = data.map((address) => address.name);
       if (names.length === 0) {
         toast.error(`${t("failed.generated")}`);
         return;
       }
-      saveGeneratedAddresses(data);
+      if (savedResult) savedResult(data);
       toast.success(`${t("success.generated")}: ${names.join(", ")}`);
     },
   });
 
   const cancelRequest = () => {
     abortControllerRef.current?.abort();
-    setGeneratingState(false);
+    if (setGenerating) setGenerating(false);
   };
 
   return { ...mutation, cancelRequest };
