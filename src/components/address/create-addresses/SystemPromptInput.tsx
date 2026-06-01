@@ -77,8 +77,16 @@ export default function SystemPromptInput() {
 
   useEffect(() => {
     if (!textareaRef.current) return;
-    if (isFetching) textareaRef.current.value = t("prompt.state.loadingSystemPrompt");
-    if (isError) textareaRef.current.value = t("failed.fetch");
+    if (isFetching) {
+      const content = t("prompt.state.loadingSystemPrompt");
+      textareaRef.current.value = content;
+      updateSystemPrompt(language, content);
+    }
+    if (isError) {
+      const content = t("failed.fetch");
+      textareaRef.current.value = content;
+      updateSystemPrompt(language, content);
+    }
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFetching, isError]);
 

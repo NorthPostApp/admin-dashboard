@@ -53,6 +53,9 @@ export default function AddressFromJsonDialog({
   const { t } = useTranslation("address:newAddress");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const updateErrorMessage = (message: string) => {
+    if (errorMessage !== message) setErrorMessage(message);
+  };
   const stringData = useMemo(() => {
     const data = JSON.stringify(initialData, null, 2);
     return data;
@@ -70,8 +73,13 @@ export default function AddressFromJsonDialog({
   const [regenerating, setRegenerating] = useState<boolean>(false);
   const replaceWithRegeneratedContent = (data: GenerateAddressesResponseSchema) => {
     if (data.length > 0 && textAreaRef.current) {
-      const validFields = AddressItem.parse(data[0]);
-      textAreaRef.current.value = JSON.stringify(validFields, null, 2);
+      const result = AddressItem.safeParse(data[0]);
+      if (result.success) {
+        textAreaRef.current.value = JSON.stringify(result.data, null, 2);
+        updateErrorMessage("");
+      } else {
+        updateErrorMessage(result.error.message);
+      }
     }
   };
   const { data: systemPrompt } = useSystemPromptQuery(language);
@@ -81,14 +89,19 @@ export default function AddressFromJsonDialog({
   const regenerateAddress = () => {
     if (!initialData || !enableRegenerate) return;
     const prompt = `${initialData?.name}, ${initialData?.briefIntro}`;
-    const requestBody = GenerateAddressesRequest.parse({
+    const result = GenerateAddressesRequest.safeParse({
       language,
       systemPrompt: systemPrompt?.data,
       prompt,
       model: DEFAULT_MODEL,
       thinkingLevel: DEFAULT_THINKING_LEVEL,
     });
-    regenerateMutate(requestBody);
+    if (result.success) {
+      regenerateMutate(result.data);
+      updateErrorMessage("");
+    } else {
+      updateErrorMessage(result.error.message);
+    }
   };
 
   // parse JSON content, throws error when parsing / model inference failed
