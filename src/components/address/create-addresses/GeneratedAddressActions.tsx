@@ -16,7 +16,7 @@ import {
   PopoverMenu,
   type PopoverControls,
 } from "@/components/address/shared/PopoverMenu";
-import AddressFromJsonDialog from "@/components/address/create-addresses/AddressFromJsonDialog";
+import AddressFromJsonDialog from "@/components/address/shared/AddressFromJsonDialog";
 import clsx from "clsx";
 
 type GeneratedAddressActionsProps = {
@@ -87,11 +87,7 @@ export default function GeneratedAddressActions({
     },
   ];
 
-  const stringifyData = () => {
-    const { id: _, ...addressWithoutID } = addressItem;
-    const data = JSON.stringify(addressWithoutID, null, 2);
-    return data;
-  };
+  const { id: _, ...addressWithoutID } = addressItem;
 
   return (
     <>
@@ -116,7 +112,7 @@ export default function GeneratedAddressActions({
               updateGeneratedAddress(addressItem.id, newAddress);
             }
           }}
-          initialData={stringifyData()}
+          initialData={addressWithoutID}
           open={editDialogOpen}
           setOpen={setEditDialogOpen}
         />

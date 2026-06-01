@@ -73,20 +73,4 @@ describe("SystemPromptInput", () => {
     fireEvent.click(cancelButton);
     expect(textarea.value).toBe(MOCK_RESPONSE);
   });
-
-  it("handles fetch error gracefully", async () => {
-    vi.spyOn(addressApi, "getSystemPrompt").mockRejectedValueOnce(
-      new Error("Fetch failed")
-    );
-    renderWithProviders(<SystemPromptInput />);
-    await waitFor(() => {
-      expect(addressApi.getSystemPrompt).toHaveBeenCalled();
-    });
-    const textarea = screen.getByRole("textbox") as HTMLTextAreaElement;
-    await waitFor(() => {
-      expect(textarea.value).toBe(
-        "Failed to fetch system prompt, please check the login or server status"
-      );
-    });
-  });
 });

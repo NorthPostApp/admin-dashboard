@@ -12,7 +12,8 @@ export function useSystemPromptQuery(language: Language) {
       const idToken = (await user?.getIdToken()) || "";
       return getSystemPrompt(language, idToken, signal);
     },
-    enabled: false,
+    staleTime: Infinity,
+    retry: 2,
   });
   return query;
 }

@@ -33,7 +33,7 @@ export interface UserDataLocalstorageType {
   user?: AdminUserData;
 }
 
-export const DEFAULT_MODEL: LLMModel = "gemini-3-flash-preview";
+export const DEFAULT_MODEL: LLMModel = "gemini-3.5-flash";
 export const DEFAULT_LANGUAGE: Language = "EN";
 export const DEFAULT_THEME: Theme = "system";
 export const DEFAULT_EFFORT: ReasonEffort = "low";
@@ -74,7 +74,5 @@ export function clearLocalUserData() {
 }
 
 function getLocalData() {
-  return JSON.parse(
-    localStorage.getItem(LOCALSTORAGE_KEY) || "{}",
-  ) as LocalStorageType;
+  return JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY) || "{}") as LocalStorageType;
 }
