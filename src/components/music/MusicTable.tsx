@@ -11,12 +11,25 @@ import {
 } from "@/components/ui/table";
 import { parseMusicDuration } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import "./Music.css";
+import clsx from "clsx";
 
 type MusicTableProps = {
   musicListData: MusicListSchema;
   currentPlaying: string | undefined;
   onSelectMusic: (musicFilename: string) => void;
+};
+
+const styles = {
+  body: clsx(
+    "h-full border rounded-xl overflow-hidden **:data-[slot=table-container]:max-h-full **:data-[slot=table-container]:overflow-y-auto",
+  ),
+  header: clsx("bg-accent sticky top-0 z-10"),
+  row: clsx(
+    "[&>th]:text-center [&>td]:text-center [&>th:first-child]:pl-4 [&>td:first-child]:pl-4 [&>th:first-child]:text-left [&>td:first-child]:text-left",
+  ),
+  playButton: clsx(
+    "text-primary/60 h-6 w-6 p-1 rounded-full hover:bg-primary dark:hover:bg-accent-foreground group",
+  ),
 };
 
 const parseMusicTitle = (name: string) => {
@@ -42,10 +55,10 @@ export default function MusicTable({
 }: MusicTableProps) {
   const { t } = useTranslation("music:list");
   return (
-    <div className="music-table">
+    <div className={styles.body}>
       <Table>
-        <TableHeader className="music-table__header">
-          <TableRow className="music-table__row">
+        <TableHeader className={styles.header}>
+          <TableRow className={styles.row}>
             <TableHead>{t("table.title")}</TableHead>
             <TableHead>{t("table.genre")}</TableHead>
             <TableHead>{t("table.duration")}</TableHead>
@@ -56,7 +69,7 @@ export default function MusicTable({
         </TableHeader>
         <TableBody>
           {musicListData.map((music) => (
-            <TableRow key={music.filename} className="music-table__row">
+            <TableRow key={music.filename} className={styles.row}>
               <TableCell>{parseMusicTitle(music.title)}</TableCell>
               <TableCell>{music.genre}</TableCell>
               <TableCell>{parseMusicDuration(music.durationSec)}</TableCell>
@@ -66,7 +79,7 @@ export default function MusicTable({
                 <Button
                   size="icon-sm"
                   variant="ghost"
-                  className="music-table__row__play group"
+                  className={styles.playButton}
                   onClick={() => {
                     if (currentPlaying !== music.filename) {
                       onSelectMusic(music.filename);

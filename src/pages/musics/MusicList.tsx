@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
+import clsx from "clsx";
 import { cn } from "@/lib/utils";
 import { useGetMusicListQuery } from "@/hooks/queries/useGetMusicListQuery";
 import { useMusicContext } from "@/hooks/useMusicContext";
@@ -10,7 +11,14 @@ import Subheader from "@/pages/Subheader";
 import { Spinner } from "@/components/ui/spinner";
 import MusicPlayer from "@/components/music/MusicPlayer";
 import { Button } from "@/components/ui/button";
-import "./MusicPage.css";
+
+const styles = {
+  view: clsx(
+    "w-full h-full max-h-full overflow-y-hidden p-6 flex flex-col gap-3 justify-between",
+  ),
+  table: clsx("max-h-full flex flex-col gap-2 justify-start overflow-y-hidden"),
+  tableFooter: clsx("text-sm flex justify-end items-center gap-3 px-2 text-primary/70"),
+};
 
 export default function MusicList() {
   const { t } = useTranslation("music:list");
@@ -58,16 +66,16 @@ export default function MusicList() {
   return (
     <div className="body">
       <Subheader title={t("title")} />
-      <div className="music-view">
+      <div className={styles.view}>
         {!musicListData && isFetching && <Spinner className="mx-auto my-auto" />}
         {musicListData && (
-          <div className="music-view__table">
+          <div className={styles.table}>
             <MusicTable
               musicListData={musicListData}
               currentPlaying={currentMusic}
               onSelectMusic={handleSelectMusic}
             />
-            <div className="music-view__table__footer">
+            <div className={styles.tableFooter}>
               {mostRecentAdded && (
                 <p>
                   {`${t("table.mostRecentlyAdded")} ${new Date(mostRecentAdded).toLocaleDateString()}`}
