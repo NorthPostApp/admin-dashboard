@@ -13,6 +13,10 @@ vi.mock("./AddressCard", () => ({
   )),
 }));
 
+vi.mock("@/hooks/useElementInnerSize", () => ({
+  useElementInnerSize: vi.fn(),
+}));
+
 // Mock ResizeObserver
 globalThis.ResizeObserver = class ResizeObserver {
   observe() {}
@@ -58,12 +62,6 @@ describe("PaginatedAddresses", () => {
 });
 
 describe("getColumnNumber via useElementInnerSize mock", () => {
-  beforeEach(() => {
-    vi.mock("@/hooks/useElementInnerSize", () => ({
-      useElementInnerSize: vi.fn(),
-    }));
-  });
-
   const widthCases: [number, string][] = [
     [300, "grid-cols-1"],
     [600, "grid-cols-2"],

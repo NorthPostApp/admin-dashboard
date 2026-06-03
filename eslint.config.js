@@ -15,6 +15,7 @@ export default defineConfig([
     ".vscode",
     "public",
     "src/components/ui", //this is for the shadcn components
+    "src/hooks/use-mobile.ts",
   ]),
   {
     files: ["**/*.{ts,tsx}"],

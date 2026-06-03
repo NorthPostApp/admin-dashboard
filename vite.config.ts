@@ -1,18 +1,16 @@
 /// <reference types="vitest/config" />
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: process.env.VITEST ? [] : ["babel-plugin-react-compiler"],
-      },
-    }),
+    react(),
     tailwindcss(),
+    babel({ presets: process.env.VITEST ? [] : [reactCompilerPreset()] }),
   ],
   resolve: {
     alias: {
@@ -27,7 +25,6 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/lib/test-utils.ts",
     coverage: {
-      // include: ["src/**/*.{ts,tsx}"], for the next step
       exclude: [
         "**/components/ui/**",
         "*.css",
@@ -40,14 +37,15 @@ export default defineConfig({
   },
   build: {
     emptyOutDir: true,
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          "vendor-react": ["react", "react-dom", "react-router"],
-          "vendor-tanstack": ["@tanstack/react-form", "@tanstack/react-query"],
-          "vendor-i18n": ["i18next", "react-i18next", "i18next-resources-to-backend"],
-          "vendor-firebase": ["firebase/auth", "firebase/app"],
-          zod: ["zod"],
+        codeSplitting: {
+          groups: [
+            { test: /node_modules\/(react|react-dom|react-router)/, name: "react" },
+            { test: /node_modules\/@tanstack\/react-query/, name: "tanstack-query" },
+            { test: /node_modules\/(firebase\/auth|firebase\/app)/, name: "firebase" },
+            { test: /node_modules\/zod/, name: "zod" },
+          ],
         },
       },
     },
