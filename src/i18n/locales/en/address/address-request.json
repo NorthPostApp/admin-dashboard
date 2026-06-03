@@ -1,3 +1,26 @@
 {
-  "title": "Address Requests"
+  "title": "Address Requests",
+  "status": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed"
+  },
+  "table": {
+    "content": "Content",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "status": "Status"
+  },
+  "sidebar": {
+    "content": "Request Content",
+    "requestID": "ID",
+    "requestBy": "User",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "status": "Status",
+    "notes": "Notes",
+    "save": "Save",
+    "empty": "Click a request in the table to start processing"
+  }
 }

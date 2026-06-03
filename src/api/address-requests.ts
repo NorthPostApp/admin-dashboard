@@ -29,7 +29,6 @@ const getAddressRequestList = async (
     throw new Error(errorMessage);
   }
   const parseResult = AddressRequestsSchema.safeParse((await response.json()).data);
-  // console.log(parseResult);
   if (!parseResult.success) {
     throw new Error(parseResult.error.message);
   }
