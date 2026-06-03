@@ -17,7 +17,7 @@ import RequestsTable from "@/components/address/requests/RequestsTable";
 import ProcessSidebar from "@/components/address/requests/ProcessSidebar";
 
 const styles = {
-  container: clsx("w-full h-full flex overflow-h"),
+  container: clsx("w-full h-full flex overflow-hidden"),
   table: clsx("flex-1 p-6"),
   sidebar: clsx("w-[30%] min-w-70 border-l"),
 };
