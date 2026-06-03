@@ -29,7 +29,7 @@ export default function TabsTrigger({ tabOptions, activeTab }: TabsButtonProps) 
     <div className="relative flex bg-accent w-fit px-2 rounded-full py-0.5 shadow-sm mx-auto">
       <div
         className={
-          "absolute bg-primary w-22 top-1 h-[calc(100%-0.5rem)] rounded-full transition-normal duration-150 ease-in-out"
+          "absolute bg-primary w-24 top-1 h-[calc(100%-0.5rem)] rounded-full transition-normal duration-150 ease-in-out"
         }
         style={{ left: bgPlacement.left, width: bgPlacement.width }}
       ></div>
@@ -41,7 +41,7 @@ export default function TabsTrigger({ tabOptions, activeTab }: TabsButtonProps) 
               buttonRefs.current[index] = el;
             }}
             className={cn(
-              "w-22 z-10 text-sm py-1 transition-none",
+              "w-24 z-10 text-sm py-1 transition-none hover:cursor-pointer",
               activeIndex === index ? "text-background" : "text-muted-foreground",
             )}
             onClick={action}

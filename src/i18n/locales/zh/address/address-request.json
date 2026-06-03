@@ -1,3 +1,26 @@
 {
-  "title": "地址请求"
+  "title": "地址请求",
+  "status": {
+    "pending": "待处理",
+    "processing": "处理中",
+    "completed": "已完成",
+    "failed": "无法处理"
+  },
+  "table": {
+    "content": "请求内容",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间",
+    "status": "状态"
+  },
+  "sidebar": {
+    "content": "请求内容",
+    "requestID": "ID",
+    "requestBy": "用户",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间",
+    "status": "状态",
+    "notes": "备注",
+    "save": "保存",
+    "empty": "点击表格中请求以开始处理"
+  }
 }

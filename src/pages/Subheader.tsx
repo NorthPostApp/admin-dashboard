@@ -17,9 +17,9 @@ export default function Subheader({
   // still in progress. no need to do testing or consolidation now
   return (
     <div className="subheader">
-      <div className="grid grid-cols-3 px-5">
+      <div className="grid grid-cols-4 px-5">
         <h2 className="col-span-1 text-start content-center">{!isMobile && title}</h2>
-        <div className="col-span-1 content-center text-center w-full">
+        <div className="col-span-2 content-center text-center w-full">
           {centralComponent}
         </div>
         <div className="col-span-1 content-center text-end justify-self-end">

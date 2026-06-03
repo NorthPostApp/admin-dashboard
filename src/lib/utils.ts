@@ -29,3 +29,7 @@ export const getPercentage = (numerator: number, denominator: number) => {
   }
   return numerator / denominator;
 };
+
+export const parseDate = (milli: number) => {
+  return new Date(milli).toLocaleDateString();
+};
