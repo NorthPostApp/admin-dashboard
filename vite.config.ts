@@ -7,7 +7,11 @@ import { defineConfig } from "vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), babel({ presets: [reactCompilerPreset()] })],
+  plugins: [
+    react(),
+    tailwindcss(),
+    babel({ presets: process.env.VITEST ? [] : [reactCompilerPreset()] }),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
