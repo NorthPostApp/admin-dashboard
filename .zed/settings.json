@@ -8,5 +8,10 @@
         },
       },
     },
+    "eslint": {
+      "settings": {
+        "onIgnoredFiles": "off",
+      },
+    },
   },
 }
