@@ -46,7 +46,7 @@ export default function Login() {
         toast.success(`${t("toast.welcome")}: ${userDisplayName}`); // will update this
         navigate("/");
       } catch (err) {
-        let errorMessage = t("errors.default");
+        let errorMessage = err instanceof Error ? err.message : t("errors.default");
         if (err instanceof FirebaseError) {
           switch (err.code) {
             case "auth/user-disabled":

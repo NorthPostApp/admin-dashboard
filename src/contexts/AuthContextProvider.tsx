@@ -9,13 +9,14 @@ import { auth } from "@/lib/firebase";
 import { signInAdminUser } from "@/api/user";
 import { clearLocalUserData, updateLocalUserData } from "@/consts/app-config";
 
+const ADMIN_PERMISSION_CLAIM = "admin";
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<string>;
   signOut: () => Promise<void>;
 }
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export default function AuthContextProvider({ children }: { children: React.ReactNode }) {
@@ -24,8 +25,22 @@ export default function AuthContextProvider({ children }: { children: React.Reac
 
   useEffect(() => {
     // subscribes to auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) clearLocalUserData();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        clearLocalUserData();
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      const tokenResult = await user.getIdTokenResult();
+      const claims = tokenResult.claims;
+      if (!claims[ADMIN_PERMISSION_CLAIM]) {
+        clearLocalUserData();
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      console.log(claims);
       setUser(user);
       setLoading(false);
     });
@@ -54,7 +69,7 @@ export default function AuthContextProvider({ children }: { children: React.Reac
       signIn,
       signOut,
     }),
-    [user, loading, signIn, signOut]
+    [user, loading, signIn, signOut],
   );
 
   return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
