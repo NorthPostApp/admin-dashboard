@@ -2,8 +2,14 @@ import type { AddressRequests } from "@/schemas/address-request";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import RequestsTable from "./RequestsTable";
+import type { useAddressRequestContext } from "@/hooks/useAddressRequestContext";
 
-const mockOnSelect = vi.fn();
+const mockUseAddressRequestContext = vi.hoisted(() =>
+  vi.fn<typeof useAddressRequestContext>(),
+);
+vi.mock("@/hooks/useAddressRequestContext", () => ({
+  useAddressRequestContext: mockUseAddressRequestContext,
+}));
 
 const mockRequests: AddressRequests = [
   {
@@ -27,9 +33,15 @@ const mockRequests: AddressRequests = [
 ];
 
 describe("RequestTable", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseAddressRequestContext.mockReturnValue({
+      currentProcessing: undefined,
+      updateCurrentProcessing: vi.fn(),
+    });
+  });
   it("renders table items", () => {
-    render(<RequestsTable requests={mockRequests} onSelect={mockOnSelect} />);
+    render(<RequestsTable requests={mockRequests} />);
     // renders table head
     expect(screen.getByText("ID")).toBeTruthy();
     expect(screen.getByText(/created at/i)).toBeTruthy();
@@ -44,13 +56,12 @@ describe("RequestTable", () => {
   });
 
   it("triggers onSelect", () => {
-    render(
-      <RequestsTable
-        requests={mockRequests}
-        onSelect={mockOnSelect}
-        currSelectedID="id_2"
-      />,
-    );
+    const mockOnSelect = vi.fn();
+    mockUseAddressRequestContext.mockReturnValue({
+      currentProcessing: mockRequests[1],
+      updateCurrentProcessing: mockOnSelect,
+    });
+    render(<RequestsTable requests={mockRequests} />);
     const row = screen.getByText("id_2");
     fireEvent.click(row);
     expect(mockOnSelect).toHaveBeenCalledWith(mockRequests[1]);

@@ -1,10 +1,29 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import ProcessSidebar from "./ProcessSidebar";
 import type { AddressRequests } from "@/schemas/address-request";
 import { parseDate } from "@/lib/utils";
+import type { useAddressRequestContext } from "@/hooks/useAddressRequestContext";
 
 const date = Date.now();
+
+const mockUseAddressRequestContext = vi.hoisted(() =>
+  vi.fn<typeof useAddressRequestContext>(),
+);
+
+vi.mock("@/hooks/useAddressRequestContext", () => ({
+  useAddressRequestContext: mockUseAddressRequestContext,
+}));
+
+const mockAddressRequestContext = (
+  value: Partial<ReturnType<typeof useAddressRequestContext>>,
+) => {
+  mockUseAddressRequestContext.mockReturnValue({
+    currentProcessing: undefined,
+    updateCurrentProcessing: vi.fn(),
+    ...value,
+  });
+};
 
 const mockRequests: AddressRequests = [
   {
@@ -48,15 +67,20 @@ const mockRequests: AddressRequests = [
 ];
 
 describe("ProcessSidebar", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it("empty content", () => {
-    render(<ProcessSidebar request={undefined} />);
+    mockAddressRequestContext({ currentProcessing: undefined });
+    render(<ProcessSidebar />);
     expect(
       screen.getByText("Click a request in the table to start processing"),
     ).toBeTruthy();
   });
 
   it("renders fields", () => {
-    render(<ProcessSidebar request={mockRequests[0]} />);
+    mockAddressRequestContext({ currentProcessing: mockRequests[0] });
+    render(<ProcessSidebar />);
     const status = screen.getByText(/pending/i);
     expect(screen.getByText(/id_1/)).toBeTruthy();
     expect(screen.getByText(/user_1/)).toBeTruthy();
@@ -65,19 +89,22 @@ describe("ProcessSidebar", () => {
   });
 
   it("renders processing", () => {
-    render(<ProcessSidebar request={mockRequests[1]} />);
+    mockAddressRequestContext({ currentProcessing: mockRequests[1] });
+    render(<ProcessSidebar />);
     const status = screen.getByText(/processing/i);
     expect(status.classList.contains("bg-chart-4")).toBeTruthy();
   });
 
   it("renders completed", () => {
-    render(<ProcessSidebar request={mockRequests[2]} />);
+    mockAddressRequestContext({ currentProcessing: mockRequests[2] });
+    render(<ProcessSidebar />);
     const status = screen.getByText(/completed/i);
     expect(status.classList.contains("bg-chart-2")).toBeTruthy();
   });
 
   it("renders failed", () => {
-    render(<ProcessSidebar request={mockRequests[3]} />);
+    mockAddressRequestContext({ currentProcessing: mockRequests[3] });
+    render(<ProcessSidebar />);
     const status = screen.getByText(/failed/i);
     expect(status.classList.contains("bg-chart-1")).toBeTruthy();
   });

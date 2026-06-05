@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ListFilter } from "lucide-react";
 import clsx from "clsx";
@@ -6,7 +6,6 @@ import Subheader from "@/pages/Subheader";
 import { useLocation, useNavigate } from "react-router";
 import {
   ADDRESS_REQUEST_STATUS,
-  type AddressRequest,
   type AddressRequestStatus,
 } from "@/schemas/address-request";
 import { useGetAddressRequestQuery } from "@/hooks/queries/useGetAddressRequestsQuery";
@@ -25,20 +24,10 @@ const styles = {
 export default function AddressRequests() {
   const { t } = useTranslation("address:request");
   const { language } = useAppContext();
-  const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const [showSidebar, setShowSidebar] = useState<boolean>(true);
   const toggleShowSidebar = () => {
     setShowSidebar((prev) => !prev);
   };
-  const [currProcessing, setCurrProcessing] = useState<AddressRequest | undefined>(
-    undefined,
-  );
-  const handleUpdateCurrProcessing = useCallback(
-    (request: AddressRequest | undefined) => {
-      if (!showSidebar) setShowSidebar(true);
-      setCurrProcessing(request);
-    },
-    [setCurrProcessing, setShowSidebar, showSidebar],
-  );
 
   // tab control
   const navigate = useNavigate();
@@ -60,14 +49,6 @@ export default function AddressRequests() {
     action: () => handleHashChange(status),
   }));
 
-  useEffect(() => {
-    if (currProcessing !== undefined) {
-      //eslint-disable-next-line
-      handleUpdateCurrProcessing(undefined);
-    }
-    // eslint-disable-next-line
-  }, [language]);
-
   return (
     <div className="body">
       <Subheader
@@ -81,15 +62,11 @@ export default function AddressRequests() {
       ></Subheader>
       <div className={styles.container}>
         <div className={styles.table}>
-          <RequestsTable
-            requests={requests}
-            onSelect={handleUpdateCurrProcessing}
-            currSelectedID={currProcessing?.id}
-          />
+          <RequestsTable requests={requests} />
         </div>
         {showSidebar && (
           <div className={styles.sidebar}>
-            <ProcessSidebar request={currProcessing} />
+            <ProcessSidebar />
           </div>
         )}
       </div>

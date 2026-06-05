@@ -36,5 +36,10 @@ const AddressRequestsSchema = z.array(AddressRequestSchema);
 type AddressRequest = z.infer<typeof AddressRequestSchema>;
 type AddressRequests = z.infer<typeof AddressRequestsSchema>;
 
-export { ADDRESS_REQUEST_STATUS, AddressRequestSchema, AddressRequestsSchema };
+export {
+  ADDRESS_REQUEST_STATUS,
+  AddressRequestSchema,
+  AddressRequestsSchema,
+  AddressRequestStatusSchema,
+};
 export type { AddressRequest, AddressRequestStatus, AddressRequests };

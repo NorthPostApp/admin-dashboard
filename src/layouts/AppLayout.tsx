@@ -5,26 +5,29 @@ import AppSidebar, { SidebarProvider } from "@/components/sidebar/AppSidebar";
 import AppHeader from "@/components/header/AppHeader";
 import MusicContextProvider from "@/contexts/MusicContextProvider";
 import "./AppLayout.css";
+import AddressRequestContextProvider from "@/contexts/AddressRequestContextProvider";
 
 export default function AppLayout() {
   return (
     <AddressDataContextProvider>
       <NewAddressContextProvider>
-        <MusicContextProvider>
-          <SidebarProvider>
-            <nav>
-              <AppSidebar />
-            </nav>
-            <main className="applayout-main">
-              <AppHeader />
-              <div className="applayout-body__outer">
-                <div className="applayout-body__inner">
-                  <Outlet />
+        <AddressRequestContextProvider>
+          <MusicContextProvider>
+            <SidebarProvider>
+              <nav>
+                <AppSidebar />
+              </nav>
+              <main className="applayout-main">
+                <AppHeader />
+                <div className="applayout-body__outer">
+                  <div className="applayout-body__inner">
+                    <Outlet />
+                  </div>
                 </div>
-              </div>
-            </main>
-          </SidebarProvider>
-        </MusicContextProvider>
+              </main>
+            </SidebarProvider>
+          </MusicContextProvider>
+        </AddressRequestContextProvider>
       </NewAddressContextProvider>
     </AddressDataContextProvider>
   );
