@@ -1,13 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useAddressRequestContext } from "@/hooks/useAddressRequestContext";
 import { cn, parseDate } from "@/lib/utils";
-import type { AddressRequest, AddressRequestStatus } from "@/schemas/address-request";
+import type { AddressRequestStatus } from "@/schemas/address-request";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
-
-type ProcessSidebarProps = {
-  request: AddressRequest | undefined;
-};
 
 const getStatusColor = (status: AddressRequestStatus) => {
   switch (status) {
@@ -36,8 +33,9 @@ const styles = {
     ),
 };
 
-export default function ProcessSidebar({ request }: ProcessSidebarProps) {
+export default function ProcessSidebar() {
   const { t } = useTranslation("address:request");
+  const { currentProcessing: request } = useAddressRequestContext();
   return (
     <div className={styles.body}>
       {!request && (
@@ -79,7 +77,10 @@ export default function ProcessSidebar({ request }: ProcessSidebarProps) {
                 {t("sidebar.save")}
               </Button>
             </div>
-            <Textarea className="focus-visible:ring-0 h-40 resize-none" />
+            <Textarea
+              className="focus-visible:ring-0 h-40 resize-none"
+              defaultValue={request.notes}
+            />
           </div>
         </div>
       )}

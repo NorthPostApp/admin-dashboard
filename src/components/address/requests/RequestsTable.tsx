@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { cn, parseDate } from "@/lib/utils";
-import type { AddressRequest, AddressRequests } from "@/schemas/address-request";
+import type { AddressRequests } from "@/schemas/address-request";
 import {
   Table,
   TableHead,
@@ -10,11 +10,10 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { useAddressRequestContext } from "@/hooks/useAddressRequestContext";
 
 type RequestTableProps = {
   requests: AddressRequests | undefined;
-  onSelect: (request: AddressRequest) => void;
-  currSelectedID?: string | undefined;
 };
 
 const styles = {
@@ -30,12 +29,10 @@ const styles = {
     ),
 };
 
-export default function RequestsTable({
-  requests,
-  onSelect,
-  currSelectedID,
-}: RequestTableProps) {
+export default function RequestsTable({ requests }: RequestTableProps) {
   const { t } = useTranslation("address:request");
+  const { currentProcessing, updateCurrentProcessing } = useAddressRequestContext();
+
   return (
     <div className={styles.body}>
       <Table>
@@ -53,8 +50,8 @@ export default function RequestsTable({
             requests.map((request) => (
               <TableRow
                 key={request.id}
-                className={styles.tbodyRow(currSelectedID === request.id)}
-                onClick={() => onSelect(request)}
+                className={styles.tbodyRow(request.id === currentProcessing?.id)}
+                onClick={() => updateCurrentProcessing(request)}
               >
                 <TableCell className={styles.rowID}>{request.id}</TableCell>
                 <TableCell>{request.content}</TableCell>

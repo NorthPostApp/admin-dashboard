@@ -4,9 +4,9 @@ import type {
 } from "@/schemas/address";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
-import { useAuthContext } from "../useAuthContext";
 import { updateAddress } from "@/api/address";
-import { useAddressDataContext } from "../useAddressDataContext";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useAddressDataContext } from "@/hooks/useAddressDataContext";
 
 export function useUpdateAddressMutation() {
   const { user } = useAuthContext();
