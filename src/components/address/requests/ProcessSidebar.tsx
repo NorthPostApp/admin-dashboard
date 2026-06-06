@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateAddressRequestMutation } from "@/hooks/mutations/useUpdateAddressRequestMutation";
+import { BASE_QUERY_KEYS } from "@/hooks/queries/useGetAddressRequestsQuery";
 import { useAddressRequestContext } from "@/hooks/useAddressRequestContext";
+import { queryClient } from "@/lib/queryClient";
 import { cn, parseDate } from "@/lib/utils";
-import type { AddressRequestStatus } from "@/schemas/address-request";
+import type { AddressRequest, AddressRequestStatus } from "@/schemas/address-request";
 import clsx from "clsx";
+import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 const getStatusColor = (status: AddressRequestStatus) => {
@@ -33,9 +37,31 @@ const styles = {
     ),
 };
 
-export default function ProcessSidebar() {
+export default function ProcessSidebar({ refetchFn }: { refetchFn: () => void }) {
   const { t } = useTranslation("address:request");
-  const { currentProcessing: request } = useAddressRequestContext();
+  const { currentProcessing: request, updateCurrentProcessing } =
+    useAddressRequestContext();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const updateRequests = (response: AddressRequest) => {
+    refetchFn(); // there might be a delay, should test extensively
+    queryClient.invalidateQueries({ queryKey: [...BASE_QUERY_KEYS] });
+    if (request && response.id === request.id) {
+      updateCurrentProcessing(response);
+    }
+  };
+
+  const { mutate: updateMutate, isPending: isUpdatePending } =
+    useUpdateAddressRequestMutation(updateRequests);
+
+  const updateRequestNotes = () => {
+    const newNotes = textareaRef.current?.value;
+    if (newNotes === undefined || !request || newNotes === request.notes) return;
+    const updatedRequest: AddressRequest = { ...request, notes: newNotes };
+    updateCurrentProcessing(updatedRequest);
+    updateMutate(updatedRequest);
+  };
+
   return (
     <div className={styles.body}>
       {!request && (
@@ -73,11 +99,19 @@ export default function ProcessSidebar() {
           <div>
             <div className={styles.subheader}>
               <h2>{t("sidebar.notes")}</h2>
-              <Button variant="outline" className={styles.saveButton}>
-                {t("sidebar.save")}
+              <Button
+                variant="outline"
+                disabled={isUpdatePending}
+                className={styles.saveButton}
+                onClick={() => updateRequestNotes()}
+              >
+                {isUpdatePending ? t("sidebar.saving") : t("sidebar.save")}
               </Button>
             </div>
             <Textarea
+              key={request.id}
+              ref={textareaRef}
+              disabled={isUpdatePending}
               className="focus-visible:ring-0 h-40 resize-none"
               defaultValue={request.notes}
             />
