@@ -39,7 +39,7 @@ export default function AddressRequests() {
   const activeTab = hash.length > 0 ? hash : ADDRESS_REQUEST_STATUS[0];
 
   // get request query
-  const { data: requests } = useGetAddressRequestQuery(
+  const { data: requests, refetch } = useGetAddressRequestQuery(
     language,
     activeTab as AddressRequestStatus,
   );
@@ -66,7 +66,7 @@ export default function AddressRequests() {
         </div>
         {showSidebar && (
           <div className={styles.sidebar}>
-            <ProcessSidebar />
+            <ProcessSidebar refetchFn={refetch} />
           </div>
         )}
       </div>

@@ -21,6 +21,7 @@
     "status": "Status",
     "notes": "Notes",
     "save": "Save",
+    "saving": "Saving",
     "empty": "Click a request in the table to start processing"
   }
 }
