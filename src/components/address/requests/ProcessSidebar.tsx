@@ -46,7 +46,9 @@ export default function ProcessSidebar({ refetchFn }: { refetchFn: () => void })
   const updateRequests = (response: AddressRequest) => {
     refetchFn(); // there might be a delay, should test extensively
     queryClient.invalidateQueries({ queryKey: [...BASE_QUERY_KEYS] });
-    updateCurrentProcessing(response);
+    if (request && response.id === request.id) {
+      updateCurrentProcessing(response);
+    }
   };
 
   const { mutate: updateMutate, isPending: isUpdatePending } =
@@ -54,7 +56,7 @@ export default function ProcessSidebar({ refetchFn }: { refetchFn: () => void })
 
   const updateRequestNotes = () => {
     const newNotes = textareaRef.current?.value;
-    if (!newNotes || !request || newNotes === request.notes) return;
+    if (newNotes === undefined || !request || newNotes === request.notes) return;
     const updatedRequest: AddressRequest = { ...request, notes: newNotes };
     updateCurrentProcessing(updatedRequest);
     updateMutate(updatedRequest);
